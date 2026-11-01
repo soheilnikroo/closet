@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useApiClient, useDisclosure } from "@/shared/hooks";
 import type { CelebrationKind } from "@/shared/ui";
 
-export type TodayViewMode = "error" | "message" | "empty" | "outfit";
+export type TodayViewMode = "message" | "empty" | "outfit";
 
 export function useTodayPage() {
   const { t, i18n } = useTranslation();
@@ -99,13 +99,11 @@ export function useTodayPage() {
   const weather = data?.weather ?? null;
   const alternatives = data?.alternatives ?? [];
 
-  const viewMode: TodayViewMode = error
-    ? "error"
-    : data?.message
-      ? "message"
-      : !isPending && !primary
-        ? "empty"
-        : "outfit";
+  const viewMode: TodayViewMode = data?.message
+    ? "message"
+    : !isPending && !primary
+      ? "empty"
+      : "outfit";
 
   return {
     t,

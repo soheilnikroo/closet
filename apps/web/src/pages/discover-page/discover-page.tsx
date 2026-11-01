@@ -1,4 +1,4 @@
-import type { DiscoverGap } from "@closet/shared";
+import type { WardrobeGap } from "@closet/shared";
 import { motion } from "motion/react";
 
 import { StylistChatSheet } from "@/features";
@@ -20,7 +20,7 @@ function GapList({
   language,
   gapLabel,
 }: {
-  gaps: DiscoverGap[];
+  gaps: WardrobeGap[];
   language: string;
   gapLabel: string;
 }) {
@@ -61,10 +61,11 @@ export function DiscoverPage() {
           </p>
         </Card>
 
+        <Card className="text-sm text-error empty:hidden">{page.error}</Card>
+
         <Match
           value={page.viewMode}
           cases={{
-            error: <Card className="text-sm text-error">{page.error}</Card>,
             empty: (
               <EmptyState
                 variant="balanced"

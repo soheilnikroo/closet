@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { useApiClient, useDisclosure } from "@/shared/hooks";
 
-export type DiscoverViewMode = "error" | "empty" | "gaps" | "loading";
+export type DiscoverViewMode = "empty" | "gaps" | "loading";
 
 export function useDiscoverPage() {
   const { t, i18n } = useTranslation();
@@ -36,13 +36,8 @@ export function useDiscoverPage() {
 
   const gaps = data?.gaps ?? [];
 
-  const viewMode: DiscoverViewMode = error
-    ? "error"
-    : isPending && !data
-      ? "loading"
-      : data && gaps.length === 0
-        ? "empty"
-        : "gaps";
+  const viewMode: DiscoverViewMode =
+    isPending && !data ? "loading" : data && gaps.length === 0 ? "empty" : "gaps";
 
   return {
     t,

@@ -7,7 +7,7 @@ import { useApiClient, useDisclosure } from "@/shared/hooks";
 export const CLOSET_SLOTS = ["top", "bottom", "shoes", "outerwear", "accessory"] as const;
 
 export type ClosetSlot = (typeof CLOSET_SLOTS)[number];
-export type ClosetViewMode = "error" | "empty" | "grid";
+export type ClosetViewMode = "empty" | "grid";
 
 export function useClosetPage() {
   const { t } = useTranslation();
@@ -19,23 +19,25 @@ export function useClosetPage() {
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  function load() {
+  useEffect(() => {
+    let cancelled = false;
     startTransition(async () => {
       setError(null);
       try {
         const result = await api.listItems();
-        setItems(result.items);
+        if (!cancelled) {
+          setItems(result.items);
+        }
       } catch (err) {
-        setError(err instanceof Error ? err.message : t("common.error"));
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : t("common.error"));
+        }
       }
     });
-  }
-
-  useEffect(() => {
-    load();
-    // Initial load only — api/t are stable enough for mount fetch.
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- mount fetch
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [api, t]);
 
   function onUpload(files: FileList | null) {
     const file = files?.[0];
@@ -104,8 +106,7 @@ export function useClosetPage() {
   }
 
   const filtered = slotFilter ? items.filter((item) => item.slot === slotFilter) : items;
-
-  const viewMode: ClosetViewMode = error ? "error" : filtered.length === 0 ? "empty" : "grid";
+  const viewMode: ClosetViewMode = filtered.length === 0 ? "empty" : "grid";
 
   return {
     t,

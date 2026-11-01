@@ -100,10 +100,11 @@ export function TodayPage() {
           onSelect={page.selectOccasion}
         />
 
+        <Card className="text-sm text-error empty:hidden">{page.error}</Card>
+
         <Match
           value={page.viewMode}
           cases={{
-            error: <Card className="text-sm text-error">{page.error}</Card>,
             message: (
               <Card elevated className="space-y-3">
                 <p className="text-sm leading-relaxed text-on-surface-variant">{page.message}</p>

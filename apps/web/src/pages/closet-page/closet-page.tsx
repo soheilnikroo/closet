@@ -91,10 +91,11 @@ export function ClosetPage() {
           onSelectSlot={page.setSlotFilter}
         />
 
+        <Card className="text-sm text-error empty:hidden">{page.error}</Card>
+
         <Match
           value={page.viewMode}
           cases={{
-            error: <Card className="text-sm text-error">{page.error}</Card>,
             empty: (
               <EmptyState
                 variant="wardrobeEmpty"
