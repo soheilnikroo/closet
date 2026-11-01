@@ -23,7 +23,7 @@ describe("DiscoverPage", () => {
     await i18n.changeLanguage("en-GB");
   });
 
-  it("renders wardrobe gaps", async () => {
+  it("renders closet gaps", async () => {
     render(
       <MemoryRouter>
         <I18nextProvider i18n={i18n}>

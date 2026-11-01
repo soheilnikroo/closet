@@ -1,3 +1,4 @@
+export { expandWebCorsOrigins } from "@/shared/http/cors-origins.js";
 export {
   parseBody,
   parseParams,

@@ -34,6 +34,7 @@ import {
 } from "@/modules/index.js";
 import type { Env } from "@/shared/config/index.js";
 import { HttpError, serviceUnavailable } from "@/shared/errors/index.js";
+import { expandWebCorsOrigins } from "@/shared/http/cors-origins.js";
 
 export type AppDeps = {
   env: Env;
@@ -93,7 +94,7 @@ export async function buildApp(deps: AppDeps) {
   });
 
   await app.register(cors, {
-    origin: deps.env.WEB_ORIGIN,
+    origin: expandWebCorsOrigins(deps.env.WEB_ORIGIN),
     credentials: true,
     methods: ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Authorization", "Content-Type", "Accept"],

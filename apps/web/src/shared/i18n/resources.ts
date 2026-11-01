@@ -14,8 +14,9 @@ export const resources = {
       },
       home: {
         title: "Know what to wear",
-        subtitle: "Build a digital wardrobe and get daily outfits from clothes you already own.",
+        subtitle: "Build a digital closet and get daily outfits from clothes you already own.",
         ctaStart: "Get started",
+        ctaOpenApp: "Open app",
         ctaSignIn: "Sign in",
         explore: "Explore the app",
       },
@@ -26,7 +27,7 @@ export const resources = {
       },
       today: {
         title: "Today",
-        placeholder: "Daily outfit recommendations will appear here once your wardrobe is ready.",
+        placeholder: "Daily outfit recommendations will appear here once your closet is ready.",
         emptyTitle: "No outfit yet",
         emptyBody: "Add a few clothes or ask the stylist — your first look will show up here.",
         weather: "Weather",
@@ -48,7 +49,7 @@ export const resources = {
         empty: "Your closet is empty. Add a few photos or start with the sample catalog.",
         emptyTitle: "Your closet awaits",
         emptyBody:
-          "Snap a photo or load samples — building a wardrobe should feel fun, not like chores.",
+          "Snap a photo or load samples — building a closet should feel fun, not like chores.",
         add: "Add clothing",
         delete: "Delete",
         all: "All",
@@ -64,13 +65,13 @@ export const resources = {
       },
       discover: {
         title: "Discover",
-        placeholder: "Wardrobe gaps and shopping ideas will appear here.",
+        placeholder: "Closet gaps and shopping ideas will appear here.",
         intro:
-          "Shopping stays optional. These are practical wardrobe gaps based on what you already own.",
+          "Shopping stays optional. These are practical closet gaps based on what you already own.",
         gapLabel: "Suggested addition",
-        noGaps: "Your wardrobe looks balanced for now. Keep wearing and refining.",
+        noGaps: "Your closet looks balanced for now. Keep wearing and refining.",
         noGapsTitle: "Looking balanced",
-        noGapsBody: "Nice work — your wardrobe covers the essentials for now.",
+        noGapsBody: "Nice work — your closet covers the essentials for now.",
       },
       onboarding: {
         title: "Welcome to Closet",
@@ -104,7 +105,7 @@ export const resources = {
       },
       stylist: {
         title: "Ask the stylist",
-        hint: "Describe the occasion, weather, or vibe. Recommendations use your real wardrobe only.",
+        hint: "Describe the occasion, weather, or vibe. Recommendations use your real closet only.",
         placeholder: "What should I wear tonight?",
         send: "Ask",
       },
@@ -141,6 +142,7 @@ export const resources = {
         title: "بدان چه بپوشی",
         subtitle: "کمد دیجیتال بساز و هر روز از لباس‌هایی که داری، استایل بگیر.",
         ctaStart: "شروع کن",
+        ctaOpenApp: "ورود به برنامه",
         ctaSignIn: "ورود",
         explore: "کاوش در برنامه",
       },

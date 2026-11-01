@@ -6,12 +6,18 @@ import { getNullAuthToken } from "@/app/providers/app-providers.constants.js";
 import type { AppProvidersProps } from "@/app/providers/app-providers.types.js";
 import { ClerkTokenBridge } from "@/app/providers/clerk-token-bridge.js";
 import { AuthTokenContext } from "@/shared/hooks";
-import { getOptionalClerkPublishableKey, initI18n, i18n } from "@/shared/index.js";
+import {
+  getOptionalClerkPublishableKey,
+  initI18n,
+  i18n,
+  isClerkEnabled,
+  POST_AUTH_REDIRECT,
+} from "@/shared/index.js";
 
 export function AppProviders({ children }: AppProvidersProps) {
   const [ready, setReady] = useState(i18n.isInitialized);
   const publishableKey = getOptionalClerkPublishableKey();
-  const clerkEnabled = Boolean(publishableKey) && !publishableKey?.includes("replace_me");
+  const clerkEnabled = isClerkEnabled();
 
   useEffect(() => {
     let cancelled = false;
@@ -40,7 +46,14 @@ export function AppProviders({ children }: AppProvidersProps) {
   }
 
   return (
-    <ClerkProvider publishableKey={publishableKey} afterSignOutUrl="/">
+    <ClerkProvider
+      publishableKey={publishableKey}
+      afterSignOutUrl="/"
+      signInUrl="/sign-in"
+      signUpUrl="/sign-up"
+      signInFallbackRedirectUrl={POST_AUTH_REDIRECT}
+      signUpFallbackRedirectUrl={POST_AUTH_REDIRECT}
+    >
       <ClerkTokenBridge>{withI18n}</ClerkTokenBridge>
     </ClerkProvider>
   );

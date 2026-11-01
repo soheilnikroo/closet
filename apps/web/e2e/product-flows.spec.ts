@@ -298,7 +298,7 @@ async function mockProductApis(page: Page) {
     if (url.includes("/styling/chat")) {
       return route.fulfill({
         json: {
-          reply: "Based on your wardrobe, try a white shirt.",
+          reply: "Based on your closet, try a white shirt.",
           recommendations: [],
         },
       });
@@ -345,7 +345,7 @@ test.describe("product flows", () => {
     await expect(page.getByText(/White shirt|پیراهن/i)).toBeVisible({ timeout: 15_000 });
   });
 
-  test("discover shows wardrobe gaps", async ({ page }) => {
+  test("discover shows closet gaps", async ({ page }) => {
     await mockProductApis(page);
     await page.goto("/discover", { waitUntil: "domcontentloaded" });
 

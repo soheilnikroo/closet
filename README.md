@@ -70,6 +70,16 @@ Clerk is linked to the **Closet** Dashboard application. Refresh keys with `npx 
 - Web runs in **guest mode** (auth screens show a setup hint; shell routes stay explorable)
 - API serves `/health` without Clerk; `/v1/*` requires real Clerk keys + Bearer token
 
+With real Clerk keys, onboarding and shell routes require sign-in. After auth, users return to the page they wanted (or `/today`). Already-signed-in visits to `/sign-in` / `/sign-up` redirect into the app; SSO callback refresh does the same if a session already exists.
+
+In the Clerk Dashboard → **Paths / Redirects**, allow:
+
+- `http://localhost:5173/sso-callback`
+- `http://localhost:5173/sign-in/sso-callback`
+- `http://localhost:5173/sign-up/sso-callback`
+
+(and the `127.0.0.1` variants if you browse that host). Locally prefer empty `VITE_API_BASE_URL` so the Vite `/v1` proxy avoids CORS.
+
 ## Develop
 
 ```bash

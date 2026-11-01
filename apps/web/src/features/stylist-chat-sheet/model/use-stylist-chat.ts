@@ -2,6 +2,7 @@ import type { Recommendation } from "@closet/shared";
 import { useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
 
+import { toChatLocale } from "@/features/stylist-chat-sheet/stylist-chat-sheet.utils.js";
 import { useApiClient } from "@/shared/hooks/use-api-client.js";
 
 export function useStylistChat() {
@@ -26,7 +27,7 @@ export function useStylistChat() {
       try {
         const result = await api.chat({
           message: trimmed,
-          locale: i18n.language === "fa-IR" ? "fa-IR" : "en-GB",
+          locale: toChatLocale(i18n.language),
         });
         setReply(result.reply);
         setRecommendations(result.recommendations);

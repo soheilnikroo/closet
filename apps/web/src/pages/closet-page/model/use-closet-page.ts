@@ -2,12 +2,10 @@ import type { ClothingItem } from "@closet/shared";
 import { useEffect, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
 
+import { CLOSET_SLOTS } from "@/pages/closet-page/closet-page.constants.js";
+import type { ClosetSlot, ClosetViewMode } from "@/pages/closet-page/closet-page.types.js";
 import { useApiClient, useDisclosure } from "@/shared/hooks";
-
-export const CLOSET_SLOTS = ["top", "bottom", "shoes", "outerwear", "accessory"] as const;
-
-export type ClosetSlot = (typeof CLOSET_SLOTS)[number];
-export type ClosetViewMode = "empty" | "grid";
+import { acceptDetectedGarments } from "@/shared/lib";
 
 export function useClosetPage() {
   const { t } = useTranslation();
@@ -51,22 +49,7 @@ export function useClosetPage() {
         const uploaded = await api.uploadMedia(file);
         if (uploaded.media.detections.length > 0) {
           await api.confirmMedia(uploaded.media.id, {
-            garments: uploaded.media.detections.map((garment) => ({
-              tempId: garment.tempId,
-              categorySlug: garment.categorySlug,
-              name: garment.name,
-              primaryColor: garment.primaryColor,
-              colors: garment.colors,
-              pattern: garment.pattern,
-              styleTags: garment.styleTags,
-              seasons: garment.seasons,
-              material: garment.material,
-              formality: garment.formality,
-              fit: garment.fit,
-              warmthLevel: garment.warmthLevel,
-              confidence: garment.confidence,
-              accepted: true,
-            })),
+            garments: acceptDetectedGarments(uploaded.media.detections),
           });
         }
         addSheet.onClose();

@@ -6,7 +6,7 @@ import { Card } from "@/shared/ui/card";
 import type { EmptyStateProps } from "@/shared/ui/empty-state/empty-state.types.js";
 
 export function EmptyState({
-  variant = "wardrobeEmpty",
+  variant = "closetEmpty",
   title,
   description,
   action,

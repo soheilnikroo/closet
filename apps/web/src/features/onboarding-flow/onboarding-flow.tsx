@@ -1,13 +1,11 @@
 import { useOnboardingFlow } from "@/features/onboarding-flow/model/use-onboarding-flow.js";
 import type { OnboardingFlowProps } from "@/features/onboarding-flow/onboarding-flow.types.js";
-import {
-  CityStep,
-  ClothingStep,
-  FirstOutfitStep,
-  ReviewStep,
-  StylesStep,
-  WelcomeStep,
-} from "@/features/onboarding-flow/ui/onboarding-steps.js";
+import { CityStep } from "@/features/onboarding-flow/ui/city-step.js";
+import { ClothingStep } from "@/features/onboarding-flow/ui/clothing-step.js";
+import { FirstOutfitStep } from "@/features/onboarding-flow/ui/first-outfit-step.js";
+import { ReviewStep } from "@/features/onboarding-flow/ui/review-step.js";
+import { StylesStep } from "@/features/onboarding-flow/ui/styles-step.js";
+import { WelcomeStep } from "@/features/onboarding-flow/ui/welcome-step.js";
 import { Match } from "@/shared/lib";
 import { Card, Progress } from "@/shared/ui";
 

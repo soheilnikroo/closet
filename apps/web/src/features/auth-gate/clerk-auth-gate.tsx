@@ -1,25 +1,22 @@
 import { useAuth } from "@clerk/clerk-react";
-import { useTranslation } from "react-i18next";
-import { Navigate } from "react-router";
+import { Navigate, useLocation } from "react-router";
 
-import type { AuthGateProps } from "@/features/auth-gate/auth-gate.types.js";
-import { Progress } from "@/shared/ui";
+import { AuthLoading } from "@/features/auth-gate/auth-loading.js";
+import { buildSignInHref, resolvePostAuthRedirect } from "@/shared/config";
+
+import type { AuthGateProps } from "./auth-gate.types.js";
 
 export function ClerkAuthGate({ children }: AuthGateProps) {
   const { isLoaded, isSignedIn } = useAuth();
-  const { t } = useTranslation();
+  const location = useLocation();
 
   if (!isLoaded) {
-    return (
-      <div className="flex min-h-dvh flex-col items-center justify-center gap-4 px-6">
-        <Progress label={t("auth.loading")} className="max-w-xs" />
-        <p className="text-sm text-on-surface-variant">{t("auth.loading")}</p>
-      </div>
-    );
+    return <AuthLoading />;
   }
 
   if (!isSignedIn) {
-    return <Navigate to="/sign-in" replace />;
+    const returnTo = resolvePostAuthRedirect(`${location.pathname}${location.search}`);
+    return <Navigate to={buildSignInHref(returnTo)} replace />;
   }
 
   return children;

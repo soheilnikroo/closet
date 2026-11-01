@@ -1,12 +1,18 @@
 import { SignIn } from "@clerk/clerk-react";
+import { useLocation, useSearchParams } from "react-router";
 
-import { getOptionalClerkPublishableKey } from "@/shared/config";
+import { ClerkGuestOnly, SsoCallbackPanel } from "@/features/auth-gate";
+import { buildSignUpHref, isClerkEnabled, resolvePostAuthRedirect } from "@/shared/config";
 import { Card } from "@/shared/ui";
 
 export function SignInPage() {
-  const publishableKey = getOptionalClerkPublishableKey();
+  const location = useLocation();
+  const [params] = useSearchParams();
+  const clerkEnabled = isClerkEnabled();
+  const fallbackRedirectUrl = resolvePostAuthRedirect(params.get("redirect_url"));
+  const isSsoCallback = location.pathname.includes("/sso-callback");
 
-  if (!publishableKey || publishableKey.includes("replace_me")) {
+  if (!clerkEnabled) {
     return (
       <div className="mx-auto flex min-h-dvh max-w-lg items-center px-4 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]">
         <Card elevated>
@@ -18,9 +24,20 @@ export function SignInPage() {
     );
   }
 
+  if (isSsoCallback) {
+    return <SsoCallbackPanel fallbackRedirectUrl={fallbackRedirectUrl} />;
+  }
+
   return (
-    <div className="mx-auto flex min-h-dvh max-w-lg items-center justify-center px-4 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]">
-      <SignIn routing="path" path="/sign-in" signUpUrl="/sign-up" />
-    </div>
+    <ClerkGuestOnly redirectTo={fallbackRedirectUrl}>
+      <div className="mx-auto flex min-h-dvh max-w-lg items-center justify-center px-4 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]">
+        <SignIn
+          routing="path"
+          path="/sign-in"
+          signUpUrl={buildSignUpHref(fallbackRedirectUrl)}
+          fallbackRedirectUrl={fallbackRedirectUrl}
+        />
+      </div>
+    </ClerkGuestOnly>
   );
 }

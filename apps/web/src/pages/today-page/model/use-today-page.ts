@@ -2,10 +2,9 @@ import type { Occasion, Recommendation, TodayResponse } from "@closet/shared";
 import { useEffect, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
 
+import type { TodayViewMode } from "@/pages/today-page/today-page.types.js";
 import { useApiClient, useDisclosure } from "@/shared/hooks";
 import type { CelebrationKind } from "@/shared/ui";
-
-export type TodayViewMode = "message" | "empty" | "outfit";
 
 export function useTodayPage() {
   const { t, i18n } = useTranslation();

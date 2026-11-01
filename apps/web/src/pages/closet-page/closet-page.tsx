@@ -1,79 +1,13 @@
-import type { ClothingItem } from "@closet/shared";
 import { motion } from "motion/react";
 
 import { StylistChatSheet } from "@/features";
-import { type ClosetSlot, useClosetPage } from "@/pages/closet-page/model/use-closet-page.js";
-import {
-  fadeUp,
-  Match,
-  pressableCard,
-  softSpring,
-  staggerContainer,
-  staggerItem,
-} from "@/shared/lib";
-import { BottomSheet, Button, Card, Chip, EmptyState, Fab } from "@/shared/ui";
+import { useClosetPage } from "@/pages/closet-page/model/use-closet-page.js";
+import { ClosetAddSheet } from "@/pages/closet-page/ui/closet-add-sheet.js";
+import { ClosetGrid } from "@/pages/closet-page/ui/closet-grid.js";
+import { SlotFilters } from "@/pages/closet-page/ui/slot-filters.js";
+import { fadeUp, Match } from "@/shared/lib";
+import { Button, Card, EmptyState, Fab, FAB_ABOVE_NAV_CLASS } from "@/shared/ui";
 import { AppShell } from "@/widgets/app-shell";
-
-function SlotFilters({
-  slots,
-  slotFilter,
-  allLabel,
-  slotLabel,
-  onSelectAll,
-  onSelectSlot,
-}: {
-  slots: readonly ClosetSlot[];
-  slotFilter: ClosetSlot | null;
-  allLabel: string;
-  slotLabel: (slot: ClosetSlot) => string;
-  onSelectAll: () => void;
-  onSelectSlot: (slot: ClosetSlot) => void;
-}) {
-  return (
-    <div className="-mx-1 flex [scrollbar-width:none] gap-2 overflow-x-auto px-1 pb-1 [&::-webkit-scrollbar]:hidden">
-      <Chip selected={!slotFilter} onClick={onSelectAll}>
-        {allLabel}
-      </Chip>
-      {slots.map((slot) => (
-        <Chip key={slot} selected={slotFilter === slot} onClick={() => onSelectSlot(slot)}>
-          {slotLabel(slot)}
-        </Chip>
-      ))}
-    </div>
-  );
-}
-
-function ClosetGrid({
-  items,
-  busy,
-  deleteLabel,
-  onRemove,
-}: {
-  items: ClothingItem[];
-  busy: boolean;
-  deleteLabel: string;
-  onRemove: (id: string) => void;
-}) {
-  return (
-    <motion.div className="grid grid-cols-2 gap-3" {...staggerContainer}>
-      {items.map((item) => (
-        <motion.div key={item.id} variants={staggerItem.variants} {...pressableCard}>
-          <Card className="h-full space-y-2">
-            <p className="text-xs font-medium text-on-surface-variant capitalize">{item.slot}</p>
-            <p className="text-sm font-semibold text-on-surface">{item.name}</p>
-            <p className="text-xs text-on-surface-variant">
-              {item.primaryColor}
-              {item.styleTags[0] ? ` · ${item.styleTags[0]}` : ""}
-            </p>
-            <Button size="sm" variant="text" disabled={busy} onClick={() => onRemove(item.id)}>
-              {deleteLabel}
-            </Button>
-          </Card>
-        </motion.div>
-      ))}
-    </motion.div>
-  );
-}
 
 export function ClosetPage() {
   const page = useClosetPage();
@@ -97,7 +31,7 @@ export function ClosetPage() {
           cases={{
             empty: (
               <EmptyState
-                variant="wardrobeEmpty"
+                variant="closetEmpty"
                 title={page.t("closet.emptyTitle")}
                 description={page.t("closet.emptyBody")}
                 action={
@@ -120,43 +54,25 @@ export function ClosetPage() {
 
         <Fab
           label={page.t("closet.add")}
-          className="fixed end-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))] z-20"
+          className={FAB_ABOVE_NAV_CLASS}
           onClick={page.addSheet.onOpen}
         >
           +
         </Fab>
       </motion.div>
 
-      <BottomSheet
+      <ClosetAddSheet
         open={page.addSheet.open}
         title={page.t("closet.add")}
+        uploadHint={page.t("closet.uploadHint")}
+        sampleLabel={page.t("closet.useSample")}
+        stylistLabel={page.t("stylist.title")}
+        busy={page.busy}
         onClose={page.addSheet.onClose}
-      >
-        <div className="space-y-3">
-          <motion.label
-            className="block touch-manipulation rounded-2xl border border-dashed border-outline-variant/80 bg-surface-container-low px-4 py-6 text-center text-sm transition-colors select-none hover:border-primary/40 hover:bg-primary/5"
-            whileTap={{ scale: 0.99 }}
-            transition={softSpring}
-          >
-            <span className="font-medium text-on-surface-variant">
-              {page.t("closet.uploadHint")}
-            </span>
-            <input
-              type="file"
-              accept="image/*"
-              capture="environment"
-              className="mt-3 block w-full text-base"
-              onChange={(event) => page.onUpload(event.target.files)}
-            />
-          </motion.label>
-          <Button fullWidth variant="tonal" disabled={page.busy} onClick={page.seedSamples}>
-            {page.t("closet.useSample")}
-          </Button>
-          <Button fullWidth variant="text" onClick={page.chat.onOpen}>
-            {page.t("stylist.title")}
-          </Button>
-        </div>
-      </BottomSheet>
+        onUpload={page.onUpload}
+        onSample={page.seedSamples}
+        onOpenStylist={page.chat.onOpen}
+      />
 
       <StylistChatSheet open={page.chat.open} onClose={page.chat.onClose} />
     </AppShell>

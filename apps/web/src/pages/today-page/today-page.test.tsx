@@ -23,7 +23,7 @@ describe("TodayPage", () => {
     await i18n.changeLanguage("en-GB");
   });
 
-  it("shows wardrobe guidance when no outfit exists", async () => {
+  it("shows closet guidance when no outfit exists", async () => {
     render(
       <MemoryRouter>
         <I18nextProvider i18n={i18n}>

@@ -1,6 +1,6 @@
 import { useMotionValue, useReducedMotion, useTransform, type PanInfo } from "motion/react";
 
-const SWIPE_THRESHOLD = 110;
+import { SWIPE_THRESHOLD } from "@/features/outfit-card/outfit-card.constants.js";
 
 type UseOutfitSwipeOptions = {
   enabled: boolean;

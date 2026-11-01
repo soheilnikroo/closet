@@ -1,13 +1,9 @@
-import type { WeatherSnapshot } from "@closet/shared";
 import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 
+import type { TodayWeatherCardProps } from "@/pages/today-page/ui/today-weather-card.types.js";
 import { softSpring } from "@/shared/lib";
 import { Card } from "@/shared/ui";
-
-type TodayWeatherCardProps = {
-  weather: WeatherSnapshot;
-};
 
 export function TodayWeatherCard({ weather }: TodayWeatherCardProps) {
   const { t } = useTranslation();

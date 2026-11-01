@@ -5,7 +5,7 @@ export const pwaManifest = {
   id: "/",
   name: "Closet",
   short_name: "Closet",
-  description: "Your personal AI stylist and digital wardrobe",
+  description: "Your personal AI stylist and digital closet",
   theme_color: "#f7fbf2",
   background_color: "#f7fbf2",
   display: "standalone",

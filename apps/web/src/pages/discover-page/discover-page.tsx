@@ -1,52 +1,11 @@
-import type { WardrobeGap } from "@closet/shared";
 import { motion } from "motion/react";
 
 import { StylistChatSheet } from "@/features";
 import { useDiscoverPage } from "@/pages/discover-page/model/use-discover-page.js";
-import {
-  fadeUp,
-  localeLabel,
-  Match,
-  pressableCard,
-  staggerContainer,
-  staggerItem,
-} from "@/shared/lib";
-import { Card, EmptyState, Fab } from "@/shared/ui";
+import { GapList } from "@/pages/discover-page/ui/gap-list.js";
+import { fadeUp, Match } from "@/shared/lib";
+import { Card, EmptyState, Fab, FAB_ABOVE_NAV_CLASS } from "@/shared/ui";
 import { AppShell } from "@/widgets/app-shell";
-
-function GapList({
-  gaps,
-  language,
-  gapLabel,
-}: {
-  gaps: WardrobeGap[];
-  language: string;
-  gapLabel: string;
-}) {
-  return (
-    <motion.div className="space-y-3 empty:hidden" {...staggerContainer}>
-      {gaps.map((gap) => (
-        <motion.div
-          key={`${gap.categorySlug}-${gap.priority}`}
-          variants={staggerItem.variants}
-          {...pressableCard}
-        >
-          <Card className="space-y-2">
-            <p className="text-xs font-semibold tracking-[0.14em] text-on-surface-variant uppercase">
-              {gapLabel}
-            </p>
-            <h3 className="font-display text-xl font-semibold text-on-surface">
-              {localeLabel(language, gap.categoryName, gap.categoryNameFa)}
-            </h3>
-            <p className="text-sm leading-relaxed text-on-surface-variant">
-              {localeLabel(language, gap.reason, gap.reasonFa)}
-            </p>
-          </Card>
-        </motion.div>
-      ))}
-    </motion.div>
-  );
-}
 
 export function DiscoverPage() {
   const page = useDiscoverPage();
@@ -85,7 +44,7 @@ export function DiscoverPage() {
 
         <Fab
           label={page.t("stylist.title")}
-          className="fixed end-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))] z-20"
+          className={FAB_ABOVE_NAV_CLASS}
           onClick={page.chat.onOpen}
         >
           AI

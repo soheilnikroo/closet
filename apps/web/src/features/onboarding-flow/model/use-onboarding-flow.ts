@@ -2,19 +2,13 @@ import type { DetectedGarment, Recommendation, StyleTag } from "@closet/shared";
 import { useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
 
-import { type OnboardingStep } from "@/features/onboarding-flow/onboarding-flow.constants.js";
-import type { OnboardingFlowProps } from "@/features/onboarding-flow/onboarding-flow.types.js";
+import { STEP_PROGRESS } from "@/features/onboarding-flow/onboarding-flow.constants.js";
+import type {
+  OnboardingFlowProps,
+  OnboardingStep,
+} from "@/features/onboarding-flow/onboarding-flow.types.js";
 import { useApiClient } from "@/shared/hooks";
-
-const STEP_PROGRESS: Record<OnboardingStep, number> = {
-  welcome: 10,
-  styles: 25,
-  city: 40,
-  clothing: 55,
-  review: 70,
-  first_outfit: 85,
-  feedback: 95,
-};
+import { acceptDetectedGarments } from "@/shared/lib";
 
 export function useOnboardingFlow({ onComplete }: OnboardingFlowProps) {
   const { t, i18n } = useTranslation();
@@ -135,7 +129,7 @@ export function useOnboardingFlow({ onComplete }: OnboardingFlowProps) {
       setError(null);
       try {
         await api.confirmMedia(mediaId, {
-          garments: detections.map((garment) => ({ ...garment, accepted: true })),
+          garments: acceptDetectedGarments(detections),
         });
         await generateFirstOutfit();
       } catch (err) {

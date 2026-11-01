@@ -3,8 +3,11 @@ import { useTranslation } from "react-i18next";
 
 import { useOutfitSwipe } from "@/features/outfit-card/model/use-outfit-swipe.js";
 import type { OutfitCardProps } from "@/features/outfit-card/outfit-card.types.js";
-import { softSpring, staggerContainer, staggerItem } from "@/shared/lib";
-import { Button, Card, Chip } from "@/shared/ui";
+import { OutfitActions } from "@/features/outfit-card/ui/outfit-actions.js";
+import { OutfitItemsGrid } from "@/features/outfit-card/ui/outfit-items-grid.js";
+import { SwipeBadges } from "@/features/outfit-card/ui/swipe-badges.js";
+import { softSpring } from "@/shared/lib";
+import { Card, Chip } from "@/shared/ui";
 
 export function OutfitCard({
   recommendation,
@@ -35,24 +38,12 @@ export function OutfitCard({
     >
       <div className="empty:hidden">
         {swipe.canSwipe ? (
-          <>
-            <motion.div
-              className="pointer-events-none absolute inset-x-4 top-5 z-20 flex justify-start"
-              style={{ opacity: swipe.likeOpacity }}
-            >
-              <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold tracking-wide text-on-primary uppercase shadow-elevation-2">
-                {t("today.like")}
-              </span>
-            </motion.div>
-            <motion.div
-              className="pointer-events-none absolute inset-x-4 top-5 z-20 flex justify-end"
-              style={{ opacity: swipe.dislikeOpacity }}
-            >
-              <span className="rounded-full bg-inverse-surface px-3 py-1 text-xs font-bold tracking-wide text-inverse-on-surface uppercase shadow-elevation-2">
-                {t("today.dislike")}
-              </span>
-            </motion.div>
-          </>
+          <SwipeBadges
+            likeLabel={t("today.like")}
+            dislikeLabel={t("today.dislike")}
+            likeOpacity={swipe.likeOpacity}
+            dislikeOpacity={swipe.dislikeOpacity}
+          />
         ) : null}
       </div>
 
@@ -77,44 +68,23 @@ export function OutfitCard({
           {swipe.canSwipe ? t("today.swipeHint") : null}
         </p>
 
-        <motion.ul className="grid grid-cols-2 gap-2" {...staggerContainer}>
-          {recommendation.outfit.items.map((entry) => (
-            <motion.li
-              key={`${entry.clothingItemId}-${entry.role}`}
-              className="rounded-lg bg-surface-container px-3 py-3"
-              variants={staggerItem.variants}
-              whileHover={{ y: -1 }}
-              transition={softSpring}
-            >
-              <p className="text-xs font-medium text-on-surface-variant capitalize">{entry.role}</p>
-              <p className="mt-0.5 text-sm font-semibold text-on-surface">
-                {entry.item?.name ?? entry.clothingItemId.slice(0, 8)}
-              </p>
-              <p className="mt-1 text-xs text-on-surface-variant empty:hidden">
-                {entry.item?.primaryColor}
-              </p>
-            </motion.li>
-          ))}
-        </motion.ul>
+        <OutfitItemsGrid items={recommendation.outfit.items} />
 
         <p className="text-sm leading-relaxed text-on-surface-variant">
           {recommendation.explanation}
         </p>
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-          <Button size="sm" disabled={busy} onClick={onLike}>
-            {t("today.like")}
-          </Button>
-          <Button size="sm" variant="tonal" disabled={busy} onClick={onDislike}>
-            {t("today.dislike")}
-          </Button>
-          <Button size="sm" variant="outlined" disabled={busy} onClick={onSave}>
-            {t("today.save")}
-          </Button>
-          <Button size="sm" variant="text" disabled={busy} onClick={onRegenerate}>
-            {t("today.regenerate")}
-          </Button>
-        </div>
+        <OutfitActions
+          busy={busy}
+          likeLabel={t("today.like")}
+          dislikeLabel={t("today.dislike")}
+          saveLabel={t("today.save")}
+          regenerateLabel={t("today.regenerate")}
+          onLike={onLike}
+          onDislike={onDislike}
+          onSave={onSave}
+          onRegenerate={onRegenerate}
+        />
       </Card>
     </motion.div>
   );

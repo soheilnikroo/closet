@@ -4,3 +4,4 @@ export * from "@/shared/lib/api-client/index.js";
 export * from "@/shared/lib/jalali/index.js";
 export * from "@/shared/lib/match.js";
 export * from "@/shared/lib/locale-label.js";
+export * from "@/shared/lib/media/index.js";
