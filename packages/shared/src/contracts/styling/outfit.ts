@@ -5,9 +5,9 @@ import {
   outfitItemRoleSchema,
   recommendationTypeSchema,
   styleTagSchema,
-} from "../common/enums.js";
-import { clothingItemSchema } from "../wardrobe/clothing-item.js";
-import { weatherSnapshotSchema } from "../weather/weather-snapshot.js";
+} from "@/contracts/common/enums.js";
+import { clothingItemSchema } from "@/contracts/wardrobe/clothing-item.js";
+import { weatherSnapshotSchema } from "@/contracts/weather/weather-snapshot.js";
 
 export const outfitItemSchema = z.object({
   clothingItemId: z.string().uuid(),

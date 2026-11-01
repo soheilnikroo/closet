@@ -1,10 +1,10 @@
 import Fastify from "fastify";
 import { describe, expect, it, vi } from "vitest";
 
-import type { Env } from "../../shared/config/index.js";
-import type { UsersService } from "../users/users-service.js";
-import { registerStylingRoutes } from "./styling-routes.js";
-import type { StylingService } from "./styling-service.js";
+import { registerStylingRoutes } from "@/modules/styling/styling-routes.js";
+import type { StylingService } from "@/modules/styling/styling-service.js";
+import type { UsersService } from "@/modules/users/users-service.js";
+import type { Env } from "@/shared/config/index.js";
 
 describe("styling routes", () => {
   it("returns today payload", async () => {

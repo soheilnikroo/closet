@@ -5,12 +5,11 @@ import { MemoryRouter } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { StylistChatSheet } from "@/features/stylist-chat-sheet";
+import { ClosetPage } from "@/pages/closet-page/closet-page.js";
+import { DiscoverPage } from "@/pages/discover-page/discover-page.js";
+import { TodayPage } from "@/pages/today-page/today-page.js";
 import { i18n, initI18n } from "@/shared/i18n/i18n.js";
 import { createMockApiClient } from "@/shared/testing/mock-api.js";
-
-import { ClosetPage } from "./closet-page/closet-page.js";
-import { DiscoverPage } from "./discover-page/discover-page.js";
-import { TodayPage } from "./today-page/today-page.js";
 
 const mockApi = createMockApiClient({
   listItems: vi.fn().mockRejectedValue(new Error("closet failed")),

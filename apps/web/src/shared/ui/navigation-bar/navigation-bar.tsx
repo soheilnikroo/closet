@@ -2,8 +2,7 @@ import { motion } from "motion/react";
 import { NavLink } from "react-router";
 
 import { cn, navIndicator } from "@/shared/lib";
-
-import type { NavigationBarProps } from "./navigation-bar.types.js";
+import type { NavigationBarProps } from "@/shared/ui/navigation-bar/navigation-bar.types.js";
 
 /**
  * Material 3 navigation bar — full-bleed surface-container, active indicator pill,

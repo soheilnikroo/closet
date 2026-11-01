@@ -2,9 +2,8 @@ import { useAuth } from "@clerk/clerk-react";
 import { useTranslation } from "react-i18next";
 import { Navigate } from "react-router";
 
+import type { AuthGateProps } from "@/features/auth-gate/auth-gate.types.js";
 import { Progress } from "@/shared/ui";
-
-import type { AuthGateProps } from "./auth-gate.types.js";
 
 export function ClerkAuthGate({ children }: AuthGateProps) {
   const { isLoaded, isSignedIn } = useAuth();

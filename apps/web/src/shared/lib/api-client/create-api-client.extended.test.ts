@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { createApiClient } from "./create-api-client.js";
+import { createApiClient } from "@/shared/lib/api-client/create-api-client.js";
 
 describe("createApiClient product endpoints", () => {
   it("calls authenticated wardrobe and styling endpoints", async () => {

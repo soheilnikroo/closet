@@ -1,6 +1,6 @@
 import { doublePrecision, integer, pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
-import { citiesTable } from "./cities.js";
+import { citiesTable } from "@/infrastructure/database/schema/cities.js";
 
 export const weatherSnapshotsTable = pgTable("weather_snapshots", {
   id: uuid("id").defaultRandom().primaryKey(),

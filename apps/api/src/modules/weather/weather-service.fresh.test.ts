@@ -5,10 +5,10 @@ import {
   citiesTable,
   weatherSnapshotsTable,
   type Database,
-} from "../../infrastructure/database/index.js";
-import { createMockWeatherClient } from "../../infrastructure/weather/index.js";
-import { createTestDatabase } from "../../shared/testing/test-db.js";
-import { createWeatherService } from "./weather-service.js";
+} from "@/infrastructure/database/index.js";
+import { createMockWeatherClient } from "@/infrastructure/weather/index.js";
+import { createWeatherService } from "@/modules/weather/weather-service.js";
+import { createTestDatabase } from "@/shared/testing/test-db.js";
 
 describe("weather service fresh fetch", () => {
   let db: Database;

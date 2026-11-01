@@ -1,4 +1,4 @@
-export { citySchema, type City } from "./city.js";
+export { citySchema, type City } from "@/contracts/profile/city.js";
 export {
   styleProfileSchema,
   updateStyleProfileRequestSchema,
@@ -6,7 +6,7 @@ export {
   type StyleProfile,
   type UpdateStyleProfileRequest,
   type StyleProfileResponse,
-} from "./style-profile.js";
+} from "@/contracts/profile/style-profile.js";
 export {
   userProfileSchema,
   updateUserProfileRequestSchema,
@@ -16,4 +16,4 @@ export {
   type UpdateUserProfileRequest,
   type UserProfileResponse,
   type UpdateMeRequest,
-} from "./user-profile.js";
+} from "@/contracts/profile/user-profile.js";

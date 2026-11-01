@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { buildAuthHeader, createApiClient } from "./create-api-client.js";
+import { buildAuthHeader, createApiClient } from "@/shared/lib/api-client/create-api-client.js";
 
 describe("buildAuthHeader", () => {
   it("returns an authorization header when a token exists", () => {

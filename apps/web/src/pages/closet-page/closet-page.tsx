@@ -2,6 +2,7 @@ import type { ClothingItem } from "@closet/shared";
 import { motion } from "motion/react";
 
 import { StylistChatSheet } from "@/features";
+import { type ClosetSlot, useClosetPage } from "@/pages/closet-page/model/use-closet-page.js";
 import {
   fadeUp,
   Match,
@@ -12,8 +13,6 @@ import {
 } from "@/shared/lib";
 import { BottomSheet, Button, Card, Chip, EmptyState, Fab } from "@/shared/ui";
 import { AppShell } from "@/widgets/app-shell";
-
-import { type ClosetSlot, useClosetPage } from "./model/use-closet-page.js";
 
 function SlotFilters({
   slots,

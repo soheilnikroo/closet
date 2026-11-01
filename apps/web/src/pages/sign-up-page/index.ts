@@ -1,1 +1,1 @@
-export { SignUpPage } from "./sign-up-page.js";
+export { SignUpPage } from "@/pages/sign-up-page/sign-up-page.js";

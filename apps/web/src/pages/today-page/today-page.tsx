@@ -2,12 +2,11 @@ import type { Occasion, Recommendation } from "@closet/shared";
 import { motion } from "motion/react";
 
 import { OutfitCard, StylistChatSheet } from "@/features";
+import { useTodayPage } from "@/pages/today-page/model/use-today-page.js";
+import { TodayWeatherCard } from "@/pages/today-page/ui/today-weather-card.js";
 import { fadeUp, localeLabel, Match, staggerContainer, staggerItem } from "@/shared/lib";
 import { Button, Card, CelebrationBurst, Chip, EmptyState, Fab } from "@/shared/ui";
 import { AppShell } from "@/widgets/app-shell";
-
-import { useTodayPage } from "./model/use-today-page.js";
-import { TodayWeatherCard } from "./ui/today-weather-card.js";
 
 function OccasionChips({
   occasions,

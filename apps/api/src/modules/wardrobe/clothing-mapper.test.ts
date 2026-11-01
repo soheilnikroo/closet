@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import type { ClothingCategoryRow, ClothingItemRow } from "../../infrastructure/database/index.js";
-import { mapClothingItem } from "./clothing-mapper.js";
+import type { ClothingCategoryRow, ClothingItemRow } from "@/infrastructure/database/index.js";
+import { mapClothingItem } from "@/modules/wardrobe/clothing-mapper.js";
 
 describe("mapClothingItem", () => {
   it("maps db rows into the shared clothing contract", () => {

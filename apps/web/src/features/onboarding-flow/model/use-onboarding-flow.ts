@@ -2,10 +2,9 @@ import type { DetectedGarment, Recommendation, StyleTag } from "@closet/shared";
 import { useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
 
+import { type OnboardingStep } from "@/features/onboarding-flow/onboarding-flow.constants.js";
+import type { OnboardingFlowProps } from "@/features/onboarding-flow/onboarding-flow.types.js";
 import { useApiClient } from "@/shared/hooks";
-
-import { type OnboardingStep } from "../onboarding-flow.constants.js";
-import type { OnboardingFlowProps } from "../onboarding-flow.types.js";
 
 const STEP_PROGRESS: Record<OnboardingStep, number> = {
   welcome: 10,

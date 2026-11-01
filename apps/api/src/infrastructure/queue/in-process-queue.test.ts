@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { createInProcessJobQueue } from "./in-process-queue.js";
+import { createInProcessJobQueue } from "@/infrastructure/queue/in-process-queue.js";
 
 describe("createInProcessJobQueue", () => {
   it("runs registered handlers", async () => {

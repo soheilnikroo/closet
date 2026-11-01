@@ -1,1 +1,1 @@
-export { StylistChatSheet } from "./stylist-chat-sheet.js";
+export { StylistChatSheet } from "@/features/stylist-chat-sheet/stylist-chat-sheet.js";

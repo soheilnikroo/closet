@@ -1,8 +1,16 @@
 import { eq } from "drizzle-orm";
 
-import type { Database } from "../client.js";
-import { citiesTable, clothingCategoriesTable, occasionsTable } from "../schema/index.js";
-import { CLOTHING_CATEGORIES, IRAN_CITIES, OCCASIONS } from "./index.js";
+import type { Database } from "@/infrastructure/database/client.js";
+import {
+  citiesTable,
+  clothingCategoriesTable,
+  occasionsTable,
+} from "@/infrastructure/database/schema/index.js";
+import {
+  CLOTHING_CATEGORIES,
+  IRAN_CITIES,
+  OCCASIONS,
+} from "@/infrastructure/database/seeds/index.js";
 
 export async function runSeeds(db: Database): Promise<void> {
   for (const city of IRAN_CITIES) {

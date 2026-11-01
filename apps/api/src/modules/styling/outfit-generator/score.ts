@@ -1,6 +1,6 @@
 import type { ClothingItem, StyleProfile, WeatherSnapshot } from "@closet/shared";
 
-import { SCORE_WEIGHTS, type OutfitCandidate } from "./types.js";
+import { SCORE_WEIGHTS, type OutfitCandidate } from "@/modules/styling/outfit-generator/types.js";
 
 const NEUTRALS = new Set([
   "black",

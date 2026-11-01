@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { discoverGapsResponseSchema } from "./gaps.js";
+import { discoverGapsResponseSchema } from "@/contracts/discover/gaps.js";
 
 describe("discover gaps contract", () => {
   it("accepts gap payloads", () => {

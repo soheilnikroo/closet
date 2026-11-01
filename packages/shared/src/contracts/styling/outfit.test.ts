@@ -4,7 +4,7 @@ import {
   createRecommendationRequestSchema,
   feedbackRequestSchema,
   todayResponseSchema,
-} from "./outfit.js";
+} from "@/contracts/styling/outfit.js";
 
 describe("styling contracts", () => {
   it("accepts recommendation and feedback payloads", () => {

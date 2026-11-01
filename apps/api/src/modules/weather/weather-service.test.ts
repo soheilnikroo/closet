@@ -1,10 +1,10 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import type { Database } from "../../infrastructure/database/index.js";
-import { createMockWeatherClient } from "../../infrastructure/weather/index.js";
-import { createTestDatabase } from "../../shared/testing/test-db.js";
-import { createProfileService } from "../users/profile-service.js";
-import { createWeatherService } from "./weather-service.js";
+import type { Database } from "@/infrastructure/database/index.js";
+import { createMockWeatherClient } from "@/infrastructure/weather/index.js";
+import { createProfileService } from "@/modules/users/profile-service.js";
+import { createWeatherService } from "@/modules/weather/weather-service.js";
+import { createTestDatabase } from "@/shared/testing/test-db.js";
 
 describe("createWeatherService", () => {
   let db: Database;

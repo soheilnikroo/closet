@@ -1,1 +1,6 @@
-export { getWebEnv, getOptionalClerkPublishableKey, getApiBaseUrl, type WebEnv } from "./env.js";
+export {
+  getWebEnv,
+  getOptionalClerkPublishableKey,
+  getApiBaseUrl,
+  type WebEnv,
+} from "@/shared/config/env.js";

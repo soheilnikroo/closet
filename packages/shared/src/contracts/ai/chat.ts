@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { recommendationSchema } from "../styling/outfit.js";
+import { recommendationSchema } from "@/contracts/styling/outfit.js";
 
 export const stylistChatRequestSchema = z.object({
   message: z.string().min(1).max(2000),

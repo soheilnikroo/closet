@@ -1,1 +1,1 @@
-export { ClosetPage } from "./closet-page.js";
+export { ClosetPage } from "@/pages/closet-page/closet-page.js";

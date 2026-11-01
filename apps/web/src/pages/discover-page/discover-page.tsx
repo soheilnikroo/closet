@@ -2,6 +2,7 @@ import type { WardrobeGap } from "@closet/shared";
 import { motion } from "motion/react";
 
 import { StylistChatSheet } from "@/features";
+import { useDiscoverPage } from "@/pages/discover-page/model/use-discover-page.js";
 import {
   fadeUp,
   localeLabel,
@@ -12,8 +13,6 @@ import {
 } from "@/shared/lib";
 import { Card, EmptyState, Fab } from "@/shared/ui";
 import { AppShell } from "@/widgets/app-shell";
-
-import { useDiscoverPage } from "./model/use-discover-page.js";
 
 function GapList({
   gaps,

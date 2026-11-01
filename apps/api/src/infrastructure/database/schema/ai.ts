@@ -1,7 +1,7 @@
 import { integer, pgEnum, pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
-import { usersTable } from "./users.js";
-import { mediaAssetsTable } from "./wardrobe.js";
+import { usersTable } from "@/infrastructure/database/schema/users.js";
+import { mediaAssetsTable } from "@/infrastructure/database/schema/wardrobe.js";
 
 export const aiJobTypeEnum = pgEnum("ai_job_type", [
   "clothing_vision",

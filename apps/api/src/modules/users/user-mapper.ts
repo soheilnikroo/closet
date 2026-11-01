@@ -1,6 +1,6 @@
 import type { User } from "@closet/shared";
 
-import type { UserRow } from "../../infrastructure/database/index.js";
+import type { UserRow } from "@/infrastructure/database/index.js";
 
 export function mapUserRowToUser(row: UserRow): User {
   return {

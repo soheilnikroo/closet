@@ -1,2 +1,2 @@
-export { createWeatherService, type WeatherService } from "./weather-service.js";
-export { registerWeatherRoutes, type WeatherRoutesDeps } from "./weather-routes.js";
+export { createWeatherService, type WeatherService } from "@/modules/weather/weather-service.js";
+export { registerWeatherRoutes, type WeatherRoutesDeps } from "@/modules/weather/weather-routes.js";

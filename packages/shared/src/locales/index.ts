@@ -5,4 +5,4 @@ export {
   getTextDirection,
   type SupportedLocale,
   type TextDirection,
-} from "./supported-locales.js";
+} from "@/locales/supported-locales.js";

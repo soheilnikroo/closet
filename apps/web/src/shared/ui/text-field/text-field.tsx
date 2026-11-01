@@ -1,6 +1,5 @@
 import { cn } from "@/shared/lib";
-
-import type { TextFieldProps } from "./text-field.types.js";
+import type { TextFieldProps } from "@/shared/ui/text-field/text-field.types.js";
 
 /**
  * Material 3 outlined text field — 56dp height, outline / primary focus.

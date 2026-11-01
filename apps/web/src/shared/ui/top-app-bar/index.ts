@@ -1,2 +1,2 @@
-export { TopAppBar } from "./top-app-bar.js";
-export type { TopAppBarProps } from "./top-app-bar.types.js";
+export { TopAppBar } from "@/shared/ui/top-app-bar/top-app-bar.js";
+export type { TopAppBarProps } from "@/shared/ui/top-app-bar/top-app-bar.types.js";

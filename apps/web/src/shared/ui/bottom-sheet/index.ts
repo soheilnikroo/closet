@@ -1,2 +1,2 @@
-export { BottomSheet } from "./bottom-sheet.js";
-export type { BottomSheetProps } from "./bottom-sheet.types.js";
+export { BottomSheet } from "@/shared/ui/bottom-sheet/bottom-sheet.js";
+export type { BottomSheetProps } from "@/shared/ui/bottom-sheet/bottom-sheet.types.js";

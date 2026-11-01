@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { apiErrorSchema } from "./api-error.js";
+import { apiErrorSchema } from "@/contracts/errors/api-error.js";
 
 describe("apiErrorSchema", () => {
   it("accepts domain error codes", () => {

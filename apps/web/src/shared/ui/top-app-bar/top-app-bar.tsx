@@ -1,6 +1,5 @@
 import { cn } from "@/shared/lib";
-
-import type { TopAppBarProps } from "./top-app-bar.types.js";
+import type { TopAppBarProps } from "@/shared/ui/top-app-bar/top-app-bar.types.js";
 
 /**
  * Material 3 small top app bar — 64dp + safe-area, surface, title-large, no elevation.

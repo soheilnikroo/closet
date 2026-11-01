@@ -1,7 +1,7 @@
 import type { FastifyRequest } from "fastify";
 import { describe, expect, it } from "vitest";
 
-import { getAuthFromRequest } from "./get-auth.js";
+import { getAuthFromRequest } from "@/shared/auth/get-auth.js";
 
 describe("getAuthFromRequest", () => {
   it("reads userId from request.auth()", () => {

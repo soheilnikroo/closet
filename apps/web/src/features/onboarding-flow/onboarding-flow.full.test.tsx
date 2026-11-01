@@ -3,10 +3,9 @@ import userEvent from "@testing-library/user-event";
 import { I18nextProvider } from "react-i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { OnboardingFlow } from "@/features/onboarding-flow/onboarding-flow.js";
 import { i18n, initI18n } from "@/shared/i18n/i18n.js";
 import { createMockApiClient } from "@/shared/testing/mock-api.js";
-
-import { OnboardingFlow } from "./onboarding-flow.js";
 
 const mockApi = createMockApiClient();
 

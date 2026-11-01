@@ -4,10 +4,9 @@ import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { DiscoverPage } from "@/pages/discover-page/discover-page.js";
 import { i18n, initI18n } from "@/shared/i18n/i18n.js";
 import { createMockApiClient } from "@/shared/testing/mock-api.js";
-
-import { DiscoverPage } from "./discover-page.js";
 
 const mockApi = createMockApiClient({
   getDiscoverGaps: vi.fn().mockResolvedValue({ gaps: [], itemCount: 0 }),

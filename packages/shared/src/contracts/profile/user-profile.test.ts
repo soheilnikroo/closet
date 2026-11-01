@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { updateStyleProfileRequestSchema, userProfileSchema } from "./index.js";
+import { updateStyleProfileRequestSchema, userProfileSchema } from "@/contracts/profile/index.js";
 
 describe("profile contracts", () => {
   it("parses user profiles and style updates", () => {

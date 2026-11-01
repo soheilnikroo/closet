@@ -1,1 +1,1 @@
-export { healthResponseSchema, type HealthResponse } from "./health-response.js";
+export { healthResponseSchema, type HealthResponse } from "@/contracts/health/health-response.js";

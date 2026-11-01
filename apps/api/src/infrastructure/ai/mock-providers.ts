@@ -1,6 +1,6 @@
 import type { DetectedGarment } from "@closet/shared";
 
-import type { AiProviders, LlmProvider, VisionProvider } from "./types.js";
+import type { AiProviders, LlmProvider, VisionProvider } from "@/infrastructure/ai/types.js";
 
 const MOCK_DETECTIONS: DetectedGarment[] = [
   {

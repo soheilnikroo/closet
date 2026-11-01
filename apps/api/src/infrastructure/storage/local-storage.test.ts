@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { createLocalObjectStorage } from "./local-storage.js";
+import { createLocalObjectStorage } from "@/infrastructure/storage/local-storage.js";
 
 describe("createLocalObjectStorage", () => {
   let dir = "";

@@ -1,9 +1,9 @@
 import { createClerkClient } from "@clerk/fastify";
 import type { User } from "@closet/shared";
 
-import type { Env } from "../../shared/config/index.js";
-import { unauthorized } from "../../shared/errors/index.js";
-import type { UsersService } from "./users-service.js";
+import type { UsersService } from "@/modules/users/users-service.js";
+import type { Env } from "@/shared/config/index.js";
+import { unauthorized } from "@/shared/errors/index.js";
 
 export async function ensureUserFromClerkId(
   clerkUserId: string | null,

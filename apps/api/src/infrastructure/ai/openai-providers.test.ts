@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { Env } from "../../shared/config/index.js";
-import { createOpenAiProviders } from "./openai-providers.js";
+import { createOpenAiProviders } from "@/infrastructure/ai/openai-providers.js";
+import type { Env } from "@/shared/config/index.js";
 
 describe("openai providers", () => {
   afterEach(() => {

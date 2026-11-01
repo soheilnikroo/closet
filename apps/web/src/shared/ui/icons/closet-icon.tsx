@@ -1,5 +1,5 @@
-import { BaseIcon } from "./base-icon.js";
-import type { IconProps } from "./icon.types.js";
+import { BaseIcon } from "@/shared/ui/icons/base-icon.js";
+import type { IconProps } from "@/shared/ui/icons/icon.types.js";
 
 export function ClosetIcon(props: IconProps) {
   return (

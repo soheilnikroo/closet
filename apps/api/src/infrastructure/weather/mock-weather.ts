@@ -1,4 +1,4 @@
-import type { WeatherClient } from "./types.js";
+import type { WeatherClient } from "@/infrastructure/weather/types.js";
 
 export function createMockWeatherClient(): WeatherClient {
   return {

@@ -1,10 +1,10 @@
 import Fastify from "fastify";
 import { describe, expect, it, vi } from "vitest";
 
-import type { Env } from "../../shared/config/index.js";
-import type { UsersService } from "../users/users-service.js";
-import { registerDiscoverRoutes } from "./discover-routes.js";
-import type { DiscoverService } from "./discover-service.js";
+import { registerDiscoverRoutes } from "@/modules/shopping/discover-routes.js";
+import type { DiscoverService } from "@/modules/shopping/discover-service.js";
+import type { UsersService } from "@/modules/users/users-service.js";
+import type { Env } from "@/shared/config/index.js";
 
 describe("discover routes", () => {
   it("returns gaps", async () => {

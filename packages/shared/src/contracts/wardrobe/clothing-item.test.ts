@@ -4,7 +4,7 @@ import {
   clothingItemSchema,
   createClothingItemRequestSchema,
   updateClothingItemRequestSchema,
-} from "./clothing-item.js";
+} from "@/contracts/wardrobe/clothing-item.js";
 
 const validItem = {
   id: "00000000-0000-4000-8000-000000000001",

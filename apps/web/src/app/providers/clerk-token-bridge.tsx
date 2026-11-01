@@ -1,9 +1,8 @@
 import { useAuth } from "@clerk/clerk-react";
 import { useMemo } from "react";
 
+import type { ClerkTokenBridgeProps } from "@/app/providers/clerk-token-bridge.types.js";
 import { AuthTokenContext, type GetAuthToken } from "@/shared/hooks";
-
-import type { ClerkTokenBridgeProps } from "./clerk-token-bridge.types.js";
 
 export function ClerkTokenBridge({ children }: ClerkTokenBridgeProps) {
   const { getToken } = useAuth();

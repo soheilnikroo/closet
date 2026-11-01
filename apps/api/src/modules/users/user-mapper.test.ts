@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { mapUserRowToUser } from "./user-mapper.js";
+import { mapUserRowToUser } from "@/modules/users/user-mapper.js";
 
 describe("mapUserRowToUser", () => {
   it("maps database timestamps to ISO strings", () => {

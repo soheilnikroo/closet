@@ -1,6 +1,5 @@
 import { cn } from "@/shared/lib";
-
-import type { CardProps } from "./card.types.js";
+import type { CardProps } from "@/shared/ui/card/card.types.js";
 
 /**
  * Material 3 cards — filled (surface-container-highest) or elevated (surface + elevation 1).

@@ -5,5 +5,5 @@ export {
   persistLocale,
   applyDocumentLocale,
   i18n,
-} from "./i18n.js";
-export { resources } from "./resources.js";
+} from "@/shared/i18n/i18n.js";
+export { resources } from "@/shared/i18n/resources.js";

@@ -1,6 +1,6 @@
 import { clothingItemSchema, type ClothingItem } from "@closet/shared";
 
-import type { ClothingCategoryRow, ClothingItemRow } from "../../infrastructure/database/index.js";
+import type { ClothingCategoryRow, ClothingItemRow } from "@/infrastructure/database/index.js";
 
 export function mapClothingItem(
   item: ClothingItemRow,

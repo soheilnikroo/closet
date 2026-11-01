@@ -1,1 +1,1 @@
-export { OnboardingFlow } from "./onboarding-flow.js";
+export { OnboardingFlow } from "@/features/onboarding-flow/onboarding-flow.js";

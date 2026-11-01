@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { fitPreferenceSchema, styleTagSchema } from "../common/enums.js";
+import { fitPreferenceSchema, styleTagSchema } from "@/contracts/common/enums.js";
 
 export const styleProfileSchema = z.object({
   userId: z.string().uuid(),

@@ -1,9 +1,8 @@
 import { useTranslation } from "react-i18next";
 
+import { useStylistChat } from "@/features/stylist-chat-sheet/model/use-stylist-chat.js";
+import type { StylistChatSheetProps } from "@/features/stylist-chat-sheet/stylist-chat-sheet.types.js";
 import { BottomSheet, Button, TextField } from "@/shared/ui";
-
-import { useStylistChat } from "./model/use-stylist-chat.js";
-import type { StylistChatSheetProps } from "./stylist-chat-sheet.types.js";
 
 export function StylistChatSheet({ open, onClose }: StylistChatSheetProps) {
   const { t } = useTranslation();

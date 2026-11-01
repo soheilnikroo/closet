@@ -11,14 +11,14 @@ import { eq } from "drizzle-orm";
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 
-import { usersTable, type Database } from "../../infrastructure/database/index.js";
-import { getAuthFromRequest, type AuthGetter } from "../../shared/auth/index.js";
-import type { Env } from "../../shared/config/index.js";
-import { validationError } from "../../shared/errors/index.js";
-import { ensureUserFromClerkId } from "./ensure-user.js";
-import type { ProfileService } from "./profile-service.js";
-import { mapUserRowToUser } from "./user-mapper.js";
-import type { UsersService } from "./users-service.js";
+import { usersTable, type Database } from "@/infrastructure/database/index.js";
+import { ensureUserFromClerkId } from "@/modules/users/ensure-user.js";
+import type { ProfileService } from "@/modules/users/profile-service.js";
+import { mapUserRowToUser } from "@/modules/users/user-mapper.js";
+import type { UsersService } from "@/modules/users/users-service.js";
+import { getAuthFromRequest, type AuthGetter } from "@/shared/auth/index.js";
+import type { Env } from "@/shared/config/index.js";
+import { validationError } from "@/shared/errors/index.js";
 
 export type ProfileRoutesDeps = {
   db: Database;

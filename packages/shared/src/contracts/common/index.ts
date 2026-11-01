@@ -25,4 +25,4 @@ export {
   type RecommendationType,
   type AiJobType,
   type AiJobStatus,
-} from "./enums.js";
+} from "@/contracts/common/enums.js";

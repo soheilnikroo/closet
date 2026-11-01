@@ -1,12 +1,12 @@
 import Fastify from "fastify";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import type { Env } from "../shared/config/index.js";
-import { registerDiscoverRoutes } from "./shopping/discover-routes.js";
-import { registerStylingRoutes } from "./styling/styling-routes.js";
-import { registerProfileRoutes } from "./users/profile-routes.js";
-import { registerWardrobeRoutes } from "./wardrobe/wardrobe-routes.js";
-import { registerWeatherRoutes } from "./weather/weather-routes.js";
+import { registerDiscoverRoutes } from "@/modules/shopping/discover-routes.js";
+import { registerStylingRoutes } from "@/modules/styling/styling-routes.js";
+import { registerProfileRoutes } from "@/modules/users/profile-routes.js";
+import { registerWardrobeRoutes } from "@/modules/wardrobe/wardrobe-routes.js";
+import { registerWeatherRoutes } from "@/modules/weather/weather-routes.js";
+import type { Env } from "@/shared/config/index.js";
 
 const user = {
   id: "00000000-0000-4000-8000-000000000001",

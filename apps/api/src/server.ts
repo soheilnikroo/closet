@@ -1,5 +1,5 @@
-import { buildApp } from "./app.js";
-import { loadEnv } from "./shared/config/index.js";
+import { buildApp } from "@/app.js";
+import { loadEnv } from "@/shared/config/index.js";
 
 async function main(): Promise<void> {
   const env = loadEnv();

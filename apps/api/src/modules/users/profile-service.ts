@@ -15,8 +15,8 @@ import {
   userProfilesTable,
   userStyleProfilesTable,
   type Database,
-} from "../../infrastructure/database/index.js";
-import { notFound } from "../../shared/errors/index.js";
+} from "@/infrastructure/database/index.js";
+import { notFound } from "@/shared/errors/index.js";
 
 export type ProfileService = {
   ensureDefaults: (userId: string) => Promise<void>;

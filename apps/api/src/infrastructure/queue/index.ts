@@ -14,4 +14,4 @@ export {
   createInProcessJobQueue,
   type InProcessJobQueue,
   type JobHandler,
-} from "./in-process-queue.js";
+} from "@/infrastructure/queue/in-process-queue.js";

@@ -18,8 +18,8 @@ vi.mock("@clerk/fastify", () => ({
   }),
 }));
 
-import type { Env } from "../../shared/config/index.js";
-import { registerUsersRoutes } from "./users-routes.js";
+import { registerUsersRoutes } from "@/modules/users/users-routes.js";
+import type { Env } from "@/shared/config/index.js";
 
 describe("users routes", () => {
   beforeEach(() => {

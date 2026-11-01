@@ -5,7 +5,7 @@ import {
   getTextDirection,
   isSupportedLocale,
   supportedLocales,
-} from "./supported-locales.js";
+} from "@/locales/supported-locales.js";
 
 describe("supported locales", () => {
   it("includes en-GB and fa-IR", () => {

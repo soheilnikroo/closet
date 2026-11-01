@@ -3,4 +3,4 @@ export {
   weatherResponseSchema,
   type WeatherSnapshot,
   type WeatherResponse,
-} from "./weather-snapshot.js";
+} from "@/contracts/weather/weather-snapshot.js";

@@ -11,7 +11,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import { usersTable } from "./users.js";
+import { usersTable } from "@/infrastructure/database/schema/users.js";
 
 export const clothingStatusEnum = pgEnum("clothing_status", ["active", "archived", "deleted"]);
 export const mediaProcessingStatusEnum = pgEnum("media_processing_status", [

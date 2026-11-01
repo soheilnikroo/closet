@@ -9,4 +9,4 @@ export {
   wardrobeTooLimited,
   mediaProcessingFailed,
   mediaNotReady,
-} from "./http-error.js";
+} from "@/shared/errors/http-error.js";

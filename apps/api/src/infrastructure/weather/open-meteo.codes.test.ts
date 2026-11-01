@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { createOpenMeteoWeatherClient } from "./open-meteo.js";
+import { createOpenMeteoWeatherClient } from "@/infrastructure/weather/open-meteo.js";
 
 describe("open-meteo weather codes", () => {
   afterEach(() => {

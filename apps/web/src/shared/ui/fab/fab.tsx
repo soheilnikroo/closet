@@ -1,8 +1,7 @@
 import { motion } from "motion/react";
 
 import { cn, softSpring } from "@/shared/lib";
-
-import type { FabProps } from "./fab.types.js";
+import type { FabProps } from "@/shared/ui/fab/fab.types.js";
 
 /**
  * Material 3 FAB — 56dp, primary-container, large corner (16dp), elevation 3.

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { Chip } from "./chip.js";
+import { Chip } from "@/shared/ui/chip/chip.js";
 
 const meta = {
   title: "Design System/Chip",

@@ -1,2 +1,2 @@
-export * from "./user/index.js";
-export * from "./clothing/index.js";
+export * from "@/entities/user/index.js";
+export * from "@/entities/clothing/index.js";

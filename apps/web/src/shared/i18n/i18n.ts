@@ -7,7 +7,7 @@ import {
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import { resources } from "./resources.js";
+import { resources } from "@/shared/i18n/resources.js";
 
 const STORAGE_KEY = "closet.locale";
 

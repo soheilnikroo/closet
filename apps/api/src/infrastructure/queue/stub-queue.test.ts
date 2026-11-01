@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createStubJobQueue } from "./index.js";
+import { createStubJobQueue } from "@/infrastructure/queue/index.js";
 
 describe("createStubJobQueue", () => {
   it("throws until configured", async () => {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { WeatherClient, WeatherFetchResult } from "./types.js";
+import type { WeatherClient, WeatherFetchResult } from "@/infrastructure/weather/types.js";
 
 const openMeteoResponseSchema = z.object({
   current: z

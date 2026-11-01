@@ -1,8 +1,7 @@
 import { AnimatePresence, motion } from "motion/react";
 
 import { softSpring } from "@/shared/lib";
-
-import type { BottomSheetProps } from "./bottom-sheet.types.js";
+import type { BottomSheetProps } from "@/shared/ui/bottom-sheet/bottom-sheet.types.js";
 
 /**
  * Material 3 modal bottom sheet — scrim + surface-container-low, extra-large top corners.

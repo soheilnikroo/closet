@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { BottomSheet } from "./bottom-sheet.js";
+import { BottomSheet } from "@/shared/ui/bottom-sheet/bottom-sheet.js";
 
 describe("BottomSheet", () => {
   it("renders nothing meaningful when closed", () => {

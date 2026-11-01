@@ -4,20 +4,16 @@ import path from "node:path";
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { createMockAiProviders } from "../../infrastructure/ai/index.js";
-import type { Database } from "../../infrastructure/database/index.js";
-import { createInProcessJobQueue } from "../../infrastructure/queue/index.js";
-import { createLocalObjectStorage } from "../../infrastructure/storage/index.js";
-import { createMockWeatherClient } from "../../infrastructure/weather/index.js";
-import {
-  createTestDatabase,
-  createTestUser,
-  deleteTestUser,
-} from "../../shared/testing/test-db.js";
-import { createProfileService } from "../users/profile-service.js";
-import { createWardrobeService } from "../wardrobe/wardrobe-service.js";
-import { createWeatherService } from "../weather/weather-service.js";
-import { createStylingService } from "./styling-service.js";
+import { createMockAiProviders } from "@/infrastructure/ai/index.js";
+import type { Database } from "@/infrastructure/database/index.js";
+import { createInProcessJobQueue } from "@/infrastructure/queue/index.js";
+import { createLocalObjectStorage } from "@/infrastructure/storage/index.js";
+import { createMockWeatherClient } from "@/infrastructure/weather/index.js";
+import { createStylingService } from "@/modules/styling/styling-service.js";
+import { createProfileService } from "@/modules/users/profile-service.js";
+import { createWardrobeService } from "@/modules/wardrobe/wardrobe-service.js";
+import { createWeatherService } from "@/modules/weather/weather-service.js";
+import { createTestDatabase, createTestUser, deleteTestUser } from "@/shared/testing/test-db.js";
 
 describe("createStylingService", () => {
   let db: Database;

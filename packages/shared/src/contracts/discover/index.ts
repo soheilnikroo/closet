@@ -3,4 +3,4 @@ export {
   discoverGapsResponseSchema,
   type WardrobeGap,
   type DiscoverGapsResponse,
-} from "./gaps.js";
+} from "@/contracts/discover/gaps.js";

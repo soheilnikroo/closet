@@ -13,7 +13,7 @@ import {
 import { and, eq, ne } from "drizzle-orm";
 import { z } from "zod";
 
-import type { AiProviders } from "../../infrastructure/ai/index.js";
+import type { AiProviders } from "@/infrastructure/ai/index.js";
 import {
   aiProcessingJobsTable,
   clothingCategoriesTable,
@@ -22,17 +22,17 @@ import {
   mediaAssetsTable,
   wardrobesTable,
   type Database,
-} from "../../infrastructure/database/index.js";
-import type { InProcessJobQueue } from "../../infrastructure/queue/index.js";
-import type { LocalObjectStorage } from "../../infrastructure/storage/index.js";
+} from "@/infrastructure/database/index.js";
+import type { InProcessJobQueue } from "@/infrastructure/queue/index.js";
+import type { LocalObjectStorage } from "@/infrastructure/storage/index.js";
+import { mapClothingItem } from "@/modules/wardrobe/clothing-mapper.js";
+import { SAMPLE_CATALOG_ITEMS } from "@/modules/wardrobe/sample-catalog.js";
 import {
   mediaNotReady,
   mediaProcessingFailed,
   notFound,
   validationError,
-} from "../../shared/errors/index.js";
-import { mapClothingItem } from "./clothing-mapper.js";
-import { SAMPLE_CATALOG_ITEMS } from "./sample-catalog.js";
+} from "@/shared/errors/index.js";
 
 export type WardrobeService = {
   ensureWardrobe: (userId: string) => Promise<string>;
@@ -274,7 +274,9 @@ export function createWardrobeService(deps: {
         );
 
       const images = await db.select().from(clothingImagesTable);
-      const imageByItem = new Map(images.map((img) => [img.clothingItemId, img.mediaAssetId]));
+      const imageByItem = new Map<string, string>(
+        images.map((img) => [img.clothingItemId, img.mediaAssetId]),
+      );
 
       let items = rows.map((row) => {
         const mediaId = imageByItem.get(row.item.id);

@@ -10,7 +10,7 @@ import {
   unauthorized,
   validationError,
   wardrobeTooLimited,
-} from "./http-error.js";
+} from "@/shared/errors/http-error.js";
 
 describe("http errors", () => {
   it("builds typed errors", () => {

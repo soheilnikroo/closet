@@ -1,2 +1,2 @@
-export { Card } from "./card.js";
-export type { CardProps } from "./card.types.js";
+export { Card } from "@/shared/ui/card/card.js";
+export type { CardProps } from "@/shared/ui/card/card.types.js";

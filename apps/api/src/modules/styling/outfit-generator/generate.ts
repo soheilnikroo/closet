@@ -1,7 +1,7 @@
 import type { ClothingItem } from "@closet/shared";
 
-import { outfitSignature, scoreOutfit } from "./score.js";
-import type { GeneratorInput, OutfitCandidate } from "./types.js";
+import { outfitSignature, scoreOutfit } from "@/modules/styling/outfit-generator/score.js";
+import type { GeneratorInput, OutfitCandidate } from "@/modules/styling/outfit-generator/types.js";
 
 function bySlot(items: ClothingItem[], slot: ClothingItem["slot"]): ClothingItem[] {
   return items.filter((item) => item.slot === slot && item.status === "active");

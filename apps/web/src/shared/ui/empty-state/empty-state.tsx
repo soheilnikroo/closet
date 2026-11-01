@@ -3,8 +3,7 @@ import { motion } from "motion/react";
 import { cn, fadeUp } from "@/shared/lib";
 import { AnimatedScene } from "@/shared/ui/animated-scene";
 import { Card } from "@/shared/ui/card";
-
-import type { EmptyStateProps } from "./empty-state.types.js";
+import type { EmptyStateProps } from "@/shared/ui/empty-state/empty-state.types.js";
 
 export function EmptyState({
   variant = "wardrobeEmpty",

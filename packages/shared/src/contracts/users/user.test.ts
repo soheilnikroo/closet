@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { meResponseSchema, userSchema } from "./index.js";
+import { meResponseSchema, userSchema } from "@/contracts/users/index.js";
 
 describe("user contracts", () => {
   it("accepts user and me payloads", () => {

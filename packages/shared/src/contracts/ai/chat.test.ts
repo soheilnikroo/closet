@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { stylistChatRequestSchema, stylistChatResponseSchema } from "./chat.js";
+import { stylistChatRequestSchema, stylistChatResponseSchema } from "@/contracts/ai/chat.js";
 
 describe("ai chat contracts", () => {
   it("validates chat request/response", () => {

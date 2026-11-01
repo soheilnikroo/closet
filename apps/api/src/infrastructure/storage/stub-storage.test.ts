@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createStubObjectStorage } from "./index.js";
+import { createStubObjectStorage } from "@/infrastructure/storage/index.js";
 
 describe("createStubObjectStorage", () => {
   it("throws until configured", async () => {

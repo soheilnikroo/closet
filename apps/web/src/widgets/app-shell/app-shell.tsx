@@ -10,8 +10,7 @@ import {
   TodayIcon,
   TopAppBar,
 } from "@/shared/ui";
-
-import type { AppShellProps } from "./app-shell.types.js";
+import type { AppShellProps } from "@/widgets/app-shell/app-shell.types.js";
 
 /**
  * Compact-window M3 app scaffold: top app bar + scrollable body + navigation bar.

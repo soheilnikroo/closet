@@ -9,8 +9,8 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import { citiesTable } from "./cities.js";
-import { usersTable } from "./users.js";
+import { citiesTable } from "@/infrastructure/database/schema/cities.js";
+import { usersTable } from "@/infrastructure/database/schema/users.js";
 
 export const temperaturePreferenceEnum = pgEnum("temperature_preference", [
   "celsius",

@@ -7,7 +7,7 @@ import {
   patternSchema,
   seasonSchema,
   styleTagSchema,
-} from "../common/enums.js";
+} from "@/contracts/common/enums.js";
 
 export const detectedGarmentSchema = z.object({
   tempId: z.string().min(1),

@@ -1,8 +1,13 @@
 import { detectedGarmentSchema } from "@closet/shared";
 import { z } from "zod";
 
-import type { Env } from "../../shared/config/index.js";
-import type { AiProviders, LlmProvider, StylistIntent, VisionProvider } from "./types.js";
+import type {
+  AiProviders,
+  LlmProvider,
+  StylistIntent,
+  VisionProvider,
+} from "@/infrastructure/ai/types.js";
+import type { Env } from "@/shared/config/index.js";
 
 const detectionsSchema = z.object({
   garments: z.array(detectedGarmentSchema),

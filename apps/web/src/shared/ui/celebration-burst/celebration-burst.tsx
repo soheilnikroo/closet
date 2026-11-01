@@ -2,8 +2,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useEffect } from "react";
 
 import { softSpring } from "@/shared/lib";
-
-import type { CelebrationBurstProps } from "./celebration-burst.types.js";
+import type { CelebrationBurstProps } from "@/shared/ui/celebration-burst/celebration-burst.types.js";
 
 /**
  * Quiet brand celebration — SVG check / heart with a few soft green sparks.

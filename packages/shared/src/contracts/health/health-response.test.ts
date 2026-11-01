@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { healthResponseSchema } from "./health-response.js";
+import { healthResponseSchema } from "@/contracts/health/health-response.js";
 
 describe("healthResponseSchema", () => {
   it("accepts a valid health payload", () => {

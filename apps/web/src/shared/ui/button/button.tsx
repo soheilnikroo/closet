@@ -1,9 +1,8 @@
 import { motion } from "motion/react";
 
 import { cn, scaleTap } from "@/shared/lib";
-
-import { buttonSizeClass, buttonVariantClass } from "./button.constants.js";
-import type { ButtonProps } from "./button.types.js";
+import { buttonSizeClass, buttonVariantClass } from "@/shared/ui/button/button.constants.js";
+import type { ButtonProps } from "@/shared/ui/button/button.types.js";
 
 export function Button({
   children,

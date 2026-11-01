@@ -9,9 +9,9 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-import { usersTable } from "./users.js";
-import { clothingItemsTable } from "./wardrobe.js";
-import { weatherSnapshotsTable } from "./weather.js";
+import { usersTable } from "@/infrastructure/database/schema/users.js";
+import { clothingItemsTable } from "@/infrastructure/database/schema/wardrobe.js";
+import { weatherSnapshotsTable } from "@/infrastructure/database/schema/weather.js";
 
 export const outfitItemRoleEnum = pgEnum("outfit_item_role", [
   "top",

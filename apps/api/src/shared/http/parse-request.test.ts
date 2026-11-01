@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 
-import { asString, idParamSchema, parseBody, parseParams, parseQuery } from "./parse-request.js";
+import {
+  asString,
+  idParamSchema,
+  parseBody,
+  parseParams,
+  parseQuery,
+} from "@/shared/http/parse-request.js";
 
 describe("parse-request helpers", () => {
   it("parses body, params, and query", () => {

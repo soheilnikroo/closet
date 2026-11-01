@@ -17,8 +17,8 @@ vi.mock("@clerk/fastify", () => ({
   }),
 }));
 
-import type { Env } from "../../shared/config/index.js";
-import { ensureUserFromClerkId } from "./ensure-user.js";
+import { ensureUserFromClerkId } from "@/modules/users/ensure-user.js";
+import type { Env } from "@/shared/config/index.js";
 
 describe("ensureUserFromClerkId", () => {
   it("throws when unauthenticated", async () => {

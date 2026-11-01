@@ -9,4 +9,4 @@ export {
   staggerContainer,
   staggerItem,
   navIndicator,
-} from "./presets.js";
+} from "@/shared/lib/motion/presets.js";

@@ -5,4 +5,4 @@ export {
   type StylistChatRequest,
   type StylistChatResponse,
   type AiProcessingJob,
-} from "./chat.js";
+} from "@/contracts/ai/chat.js";

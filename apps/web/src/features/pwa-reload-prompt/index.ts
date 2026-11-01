@@ -1,1 +1,1 @@
-export { PwaReloadPrompt } from "./pwa-reload-prompt.js";
+export { PwaReloadPrompt } from "@/features/pwa-reload-prompt/pwa-reload-prompt.js";

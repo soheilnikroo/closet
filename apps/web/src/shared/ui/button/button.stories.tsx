@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { Button } from "./button.js";
+import { Button } from "@/shared/ui/button/button.js";
 
 const meta = {
   title: "Design System/Button",

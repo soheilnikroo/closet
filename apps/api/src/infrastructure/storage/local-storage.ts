@@ -1,7 +1,7 @@
 import { mkdir, unlink, writeFile, readFile } from "node:fs/promises";
 import path from "node:path";
 
-import type { ObjectStorage } from "./index.js";
+import type { ObjectStorage } from "@/infrastructure/storage/object-storage.types.js";
 
 export type LocalObjectStorage = ObjectStorage & {
   getObject: (key: string) => Promise<Uint8Array>;

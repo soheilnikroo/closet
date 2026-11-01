@@ -1,1 +1,1 @@
-export { formatJalaliPlaceholder, type JalaliDateParts } from "./jalali.js";
+export { formatJalaliPlaceholder, type JalaliDateParts } from "@/shared/lib/jalali/jalali.js";

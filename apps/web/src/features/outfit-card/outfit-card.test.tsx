@@ -3,9 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { I18nextProvider } from "react-i18next";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { OutfitCard } from "@/features/outfit-card/outfit-card.js";
 import { i18n, initI18n } from "@/shared/i18n/i18n.js";
-
-import { OutfitCard } from "./outfit-card.js";
 
 describe("OutfitCard", () => {
   beforeEach(async () => {

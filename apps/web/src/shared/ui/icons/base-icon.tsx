@@ -1,4 +1,4 @@
-import type { BaseIconProps } from "./base-icon.types.js";
+import type { BaseIconProps } from "@/shared/ui/icons/base-icon.types.js";
 
 export function BaseIcon({ children, ...props }: BaseIconProps) {
   return (

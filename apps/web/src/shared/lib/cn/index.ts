@@ -1,1 +1,1 @@
-export { cn } from "./cn.js";
+export { cn } from "@/shared/lib/cn/cn.js";

@@ -1,7 +1,6 @@
-export type ObjectStorage = {
-  putObject: (key: string, body: Uint8Array, contentType: string) => Promise<void>;
-  deleteObject: (key: string) => Promise<void>;
-};
+import type { ObjectStorage } from "@/infrastructure/storage/object-storage.types.js";
+
+export type { ObjectStorage } from "@/infrastructure/storage/object-storage.types.js";
 
 export function createStubObjectStorage(): ObjectStorage {
   return {
@@ -14,4 +13,7 @@ export function createStubObjectStorage(): ObjectStorage {
   };
 }
 
-export { createLocalObjectStorage, type LocalObjectStorage } from "./local-storage.js";
+export {
+  createLocalObjectStorage,
+  type LocalObjectStorage,
+} from "@/infrastructure/storage/local-storage.js";

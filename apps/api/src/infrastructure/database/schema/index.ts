@@ -4,8 +4,8 @@ export {
   userStatusEnum,
   type UserRow,
   type NewUserRow,
-} from "./users.js";
-export { citiesTable, type CityRow } from "./cities.js";
+} from "@/infrastructure/database/schema/users.js";
+export { citiesTable, type CityRow } from "@/infrastructure/database/schema/cities.js";
 export {
   temperaturePreferenceEnum,
   onboardingStepEnum,
@@ -15,7 +15,7 @@ export {
   userPreferencesTable,
   type UserProfileRow,
   type UserStyleProfileRow,
-} from "./profiles.js";
+} from "@/infrastructure/database/schema/profiles.js";
 export {
   clothingStatusEnum,
   mediaProcessingStatusEnum,
@@ -32,8 +32,11 @@ export {
   type ClothingCategoryRow,
   type ClothingItemRow,
   type MediaAssetRow,
-} from "./wardrobe.js";
-export { weatherSnapshotsTable, type WeatherSnapshotRow } from "./weather.js";
+} from "@/infrastructure/database/schema/wardrobe.js";
+export {
+  weatherSnapshotsTable,
+  type WeatherSnapshotRow,
+} from "@/infrastructure/database/schema/weather.js";
 export {
   outfitItemRoleEnum,
   recommendationTypeEnum,
@@ -46,10 +49,10 @@ export {
   type OccasionRow,
   type OutfitRow,
   type OutfitRecommendationRow,
-} from "./styling.js";
+} from "@/infrastructure/database/schema/styling.js";
 export {
   aiJobTypeEnum,
   aiJobStatusEnum,
   aiProcessingJobsTable,
   type AiProcessingJobRow,
-} from "./ai.js";
+} from "@/infrastructure/database/schema/ai.js";

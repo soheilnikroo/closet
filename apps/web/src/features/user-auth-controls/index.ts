@@ -1,1 +1,1 @@
-export { UserAuthControls } from "./user-auth-controls.js";
+export { UserAuthControls } from "@/features/user-auth-controls/user-auth-controls.js";

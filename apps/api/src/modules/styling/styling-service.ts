@@ -14,7 +14,7 @@ import {
 } from "@closet/shared";
 import { and, desc, eq } from "drizzle-orm";
 
-import type { AiProviders } from "../../infrastructure/ai/index.js";
+import type { AiProviders } from "@/infrastructure/ai/index.js";
 import {
   occasionsTable,
   outfitFeedbackTable,
@@ -22,16 +22,16 @@ import {
   outfitRecommendationsTable,
   outfitsTable,
   type Database,
-} from "../../infrastructure/database/index.js";
-import { notFound, wardrobeTooLimited } from "../../shared/errors/index.js";
-import type { ProfileService } from "../users/profile-service.js";
-import type { WardrobeService } from "../wardrobe/wardrobe-service.js";
-import type { WeatherService } from "../weather/weather-service.js";
+} from "@/infrastructure/database/index.js";
 import {
   generateOutfitCandidates,
   outfitSignature,
   type OutfitCandidate,
-} from "./outfit-generator/index.js";
+} from "@/modules/styling/outfit-generator/index.js";
+import type { ProfileService } from "@/modules/users/profile-service.js";
+import type { WardrobeService } from "@/modules/wardrobe/wardrobe-service.js";
+import type { WeatherService } from "@/modules/weather/weather-service.js";
+import { notFound, wardrobeTooLimited } from "@/shared/errors/index.js";
 
 export type StylingService = {
   listOccasions: () => Promise<Occasion[]>;

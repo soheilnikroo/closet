@@ -2,14 +2,14 @@ import { weatherResponseSchema } from "@closet/shared";
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 
-import { getAuthFromRequest, type AuthGetter } from "../../shared/auth/index.js";
-import type { Env } from "../../shared/config/index.js";
-import { validationError } from "../../shared/errors/index.js";
-import { parseQuery } from "../../shared/http/index.js";
-import { ensureUserFromClerkId } from "../users/ensure-user.js";
-import type { ProfileService } from "../users/profile-service.js";
-import type { UsersService } from "../users/users-service.js";
-import type { WeatherService } from "./weather-service.js";
+import { ensureUserFromClerkId } from "@/modules/users/ensure-user.js";
+import type { ProfileService } from "@/modules/users/profile-service.js";
+import type { UsersService } from "@/modules/users/users-service.js";
+import type { WeatherService } from "@/modules/weather/weather-service.js";
+import { getAuthFromRequest, type AuthGetter } from "@/shared/auth/index.js";
+import type { Env } from "@/shared/config/index.js";
+import { validationError } from "@/shared/errors/index.js";
+import { parseQuery } from "@/shared/http/index.js";
 
 export type WeatherRoutesDeps = {
   env: Env;

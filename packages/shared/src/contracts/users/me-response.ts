@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { userSchema } from "./user.js";
+import { userSchema } from "@/contracts/users/user.js";
 
 export const meResponseSchema = z.object({
   user: userSchema,

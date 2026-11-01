@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { createMockAiProviders } from "./mock-providers.js";
+import { createMockAiProviders } from "@/infrastructure/ai/mock-providers.js";
 
 describe("createMockAiProviders", () => {
   const providers = createMockAiProviders();

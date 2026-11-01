@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { weatherResponseSchema, weatherSnapshotSchema } from "./weather-snapshot.js";
+import {
+  weatherResponseSchema,
+  weatherSnapshotSchema,
+} from "@/contracts/weather/weather-snapshot.js";
 
 describe("weather contracts", () => {
   it("accepts weather snapshots", () => {

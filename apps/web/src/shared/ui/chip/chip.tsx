@@ -1,8 +1,7 @@
 import { motion } from "motion/react";
 
 import { cn, softSpring } from "@/shared/lib";
-
-import type { ChipProps } from "./chip.types.js";
+import type { ChipProps } from "@/shared/ui/chip/chip.types.js";
 
 /**
  * Material 3 filter chip — 32dp height, outline / secondary-container selected.

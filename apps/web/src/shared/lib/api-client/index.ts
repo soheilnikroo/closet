@@ -3,4 +3,4 @@ export {
   buildAuthHeader,
   type ApiClient,
   type ApiClientOptions,
-} from "./create-api-client.js";
+} from "@/shared/lib/api-client/create-api-client.js";

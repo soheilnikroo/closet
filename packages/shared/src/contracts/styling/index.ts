@@ -23,4 +23,4 @@ export {
   type ReplaceItemResponse,
   type Occasion,
   type OccasionsResponse,
-} from "./outfit.js";
+} from "@/contracts/styling/outfit.js";

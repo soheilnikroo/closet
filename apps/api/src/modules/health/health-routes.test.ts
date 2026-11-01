@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { buildApp } from "../../app.js";
-import { loadEnv } from "../../shared/config/index.js";
+import { buildApp } from "@/app.js";
+import { loadEnv } from "@/shared/config/index.js";
 
 describe("health routes", () => {
   it("returns ok from /health", async () => {

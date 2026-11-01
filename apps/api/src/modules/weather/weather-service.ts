@@ -5,9 +5,9 @@ import {
   citiesTable,
   weatherSnapshotsTable,
   type Database,
-} from "../../infrastructure/database/index.js";
-import type { WeatherClient } from "../../infrastructure/weather/index.js";
-import { notFound } from "../../shared/errors/index.js";
+} from "@/infrastructure/database/index.js";
+import type { WeatherClient } from "@/infrastructure/weather/index.js";
+import { notFound } from "@/shared/errors/index.js";
 
 const CACHE_MS = 45 * 60 * 1000;
 

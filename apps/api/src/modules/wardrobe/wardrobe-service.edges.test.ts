@@ -4,18 +4,14 @@ import path from "node:path";
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import { createMockAiProviders } from "../../infrastructure/ai/index.js";
-import type { AiProviders } from "../../infrastructure/ai/index.js";
-import type { Database } from "../../infrastructure/database/index.js";
-import { createInProcessJobQueue } from "../../infrastructure/queue/index.js";
-import { createLocalObjectStorage } from "../../infrastructure/storage/index.js";
-import { HttpError } from "../../shared/errors/http-error.js";
-import {
-  createTestDatabase,
-  createTestUser,
-  deleteTestUser,
-} from "../../shared/testing/test-db.js";
-import { createWardrobeService } from "./wardrobe-service.js";
+import { createMockAiProviders } from "@/infrastructure/ai/index.js";
+import type { AiProviders } from "@/infrastructure/ai/index.js";
+import type { Database } from "@/infrastructure/database/index.js";
+import { createInProcessJobQueue } from "@/infrastructure/queue/index.js";
+import { createLocalObjectStorage } from "@/infrastructure/storage/index.js";
+import { createWardrobeService } from "@/modules/wardrobe/wardrobe-service.js";
+import { HttpError } from "@/shared/errors/http-error.js";
+import { createTestDatabase, createTestUser, deleteTestUser } from "@/shared/testing/test-db.js";
 
 function failingVisionProviders(): AiProviders {
   const base = createMockAiProviders();

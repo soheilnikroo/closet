@@ -1,1 +1,1 @@
-export { loadEnv, hasOpenAiKey, hasS3Config, type Env } from "./env.js";
+export { loadEnv, hasOpenAiKey, hasS3Config, type Env } from "@/shared/config/env.js";

@@ -1,1 +1,1 @@
-export { TodayPage } from "./today-page.js";
+export { TodayPage } from "@/pages/today-page/today-page.js";

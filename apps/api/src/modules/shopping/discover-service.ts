@@ -1,6 +1,6 @@
 import type { DiscoverGapsResponse, WardrobeGap } from "@closet/shared";
 
-import type { WardrobeService } from "../wardrobe/wardrobe-service.js";
+import type { WardrobeService } from "@/modules/wardrobe/wardrobe-service.js";
 
 const GAP_RULES: Array<{
   slot: "top" | "bottom" | "shoes" | "outerwear" | "accessory";

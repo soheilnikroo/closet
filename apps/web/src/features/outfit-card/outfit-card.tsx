@@ -1,12 +1,10 @@
-import { motion, useMotionValue, useReducedMotion, useTransform, type PanInfo } from "motion/react";
+import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 
+import { useOutfitSwipe } from "@/features/outfit-card/model/use-outfit-swipe.js";
+import type { OutfitCardProps } from "@/features/outfit-card/outfit-card.types.js";
 import { softSpring, staggerContainer, staggerItem } from "@/shared/lib";
 import { Button, Card, Chip } from "@/shared/ui";
-
-import type { OutfitCardProps } from "./outfit-card.types.js";
-
-const SWIPE_THRESHOLD = 110;
 
 export function OutfitCard({
   recommendation,
@@ -18,58 +16,45 @@ export function OutfitCard({
   swipeable = true,
 }: OutfitCardProps) {
   const { t } = useTranslation();
-  const reduceMotion = useReducedMotion();
-  const x = useMotionValue(0);
-  const rotate = useTransform(x, [-220, 0, 220], [-10, 0, 10]);
-  const likeOpacity = useTransform(x, [40, SWIPE_THRESHOLD], [0, 1]);
-  const dislikeOpacity = useTransform(x, [-SWIPE_THRESHOLD, -40], [1, 0]);
-
-  const canSwipe = Boolean(swipeable && !busy && !reduceMotion && (onLike || onDislike));
-
-  function handleDragEnd(_: unknown, info: PanInfo) {
-    if (!canSwipe) {
-      return;
-    }
-    if (info.offset.x > SWIPE_THRESHOLD) {
-      onLike?.();
-      return;
-    }
-    if (info.offset.x < -SWIPE_THRESHOLD) {
-      onDislike?.();
-    }
-  }
+  const swipe = useOutfitSwipe({
+    enabled: swipeable && !busy,
+    onLike,
+    onDislike,
+  });
 
   return (
     <motion.div
       className="relative touch-pan-y"
-      style={canSwipe ? { x, rotate } : undefined}
-      drag={canSwipe ? "x" : false}
+      style={swipe.canSwipe ? { x: swipe.x, rotate: swipe.rotate } : undefined}
+      drag={swipe.canSwipe ? "x" : false}
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.92}
-      onDragEnd={handleDragEnd}
+      onDragEnd={swipe.handleDragEnd}
       transition={softSpring}
-      whileTap={canSwipe ? { cursor: "grabbing" } : undefined}
+      whileTap={swipe.canSwipe ? { cursor: "grabbing" } : undefined}
     >
-      {canSwipe ? (
-        <>
-          <motion.div
-            className="pointer-events-none absolute inset-x-4 top-5 z-20 flex justify-start"
-            style={{ opacity: likeOpacity }}
-          >
-            <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold tracking-wide text-on-primary uppercase shadow-elevation-2">
-              {t("today.like")}
-            </span>
-          </motion.div>
-          <motion.div
-            className="pointer-events-none absolute inset-x-4 top-5 z-20 flex justify-end"
-            style={{ opacity: dislikeOpacity }}
-          >
-            <span className="rounded-full bg-inverse-surface px-3 py-1 text-xs font-bold tracking-wide text-inverse-on-surface uppercase shadow-elevation-2">
-              {t("today.dislike")}
-            </span>
-          </motion.div>
-        </>
-      ) : null}
+      <div className="empty:hidden">
+        {swipe.canSwipe ? (
+          <>
+            <motion.div
+              className="pointer-events-none absolute inset-x-4 top-5 z-20 flex justify-start"
+              style={{ opacity: swipe.likeOpacity }}
+            >
+              <span className="rounded-full bg-primary px-3 py-1 text-xs font-bold tracking-wide text-on-primary uppercase shadow-elevation-2">
+                {t("today.like")}
+              </span>
+            </motion.div>
+            <motion.div
+              className="pointer-events-none absolute inset-x-4 top-5 z-20 flex justify-end"
+              style={{ opacity: swipe.dislikeOpacity }}
+            >
+              <span className="rounded-full bg-inverse-surface px-3 py-1 text-xs font-bold tracking-wide text-inverse-on-surface uppercase shadow-elevation-2">
+                {t("today.dislike")}
+              </span>
+            </motion.div>
+          </>
+        ) : null}
+      </div>
 
       <Card elevated className="space-y-4 select-none">
         <div className="flex items-start justify-between gap-3">
@@ -81,16 +66,16 @@ export function OutfitCard({
               {recommendation.outfit.name ?? t("today.outfitLabel")}
             </h2>
           </div>
-          {recommendation.outfit.style ? (
-            <Chip selected>{recommendation.outfit.style.replaceAll("_", " ")}</Chip>
-          ) : null}
+          <div className="empty:hidden">
+            {recommendation.outfit.style ? (
+              <Chip selected>{recommendation.outfit.style.replaceAll("_", " ")}</Chip>
+            ) : null}
+          </div>
         </div>
 
-        {canSwipe ? (
-          <p className="md-label-small rounded-full bg-secondary-container px-3 py-1.5 text-center text-on-secondary-container">
-            {t("today.swipeHint")}
-          </p>
-        ) : null}
+        <p className="md-label-small rounded-full bg-secondary-container px-3 py-1.5 text-center text-on-secondary-container empty:hidden">
+          {swipe.canSwipe ? t("today.swipeHint") : null}
+        </p>
 
         <motion.ul className="grid grid-cols-2 gap-2" {...staggerContainer}>
           {recommendation.outfit.items.map((entry) => (
@@ -105,9 +90,9 @@ export function OutfitCard({
               <p className="mt-0.5 text-sm font-semibold text-on-surface">
                 {entry.item?.name ?? entry.clothingItemId.slice(0, 8)}
               </p>
-              {entry.item?.primaryColor ? (
-                <p className="mt-1 text-xs text-on-surface-variant">{entry.item.primaryColor}</p>
-              ) : null}
+              <p className="mt-1 text-xs text-on-surface-variant empty:hidden">
+                {entry.item?.primaryColor}
+              </p>
             </motion.li>
           ))}
         </motion.ul>

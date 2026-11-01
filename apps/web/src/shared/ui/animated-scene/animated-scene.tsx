@@ -1,8 +1,7 @@
 import { motion, useReducedMotion } from "motion/react";
 
 import { cn, softSpring } from "@/shared/lib";
-
-import type { AnimatedSceneProps } from "./animated-scene.types.js";
+import type { AnimatedSceneProps } from "@/shared/ui/animated-scene/animated-scene.types.js";
 
 /**
  * Calm brand illustrations — soft green palette via CSS variables, gentle motion only.

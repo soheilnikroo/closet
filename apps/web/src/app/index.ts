@@ -1,1 +1,1 @@
-export * from "./providers/index.js";
+export * from "@/app/providers/index.js";

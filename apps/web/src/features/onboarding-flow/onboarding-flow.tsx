@@ -1,8 +1,5 @@
-import { Match } from "@/shared/lib";
-import { Card, Progress } from "@/shared/ui";
-
-import { useOnboardingFlow } from "./model/use-onboarding-flow.js";
-import type { OnboardingFlowProps } from "./onboarding-flow.types.js";
+import { useOnboardingFlow } from "@/features/onboarding-flow/model/use-onboarding-flow.js";
+import type { OnboardingFlowProps } from "@/features/onboarding-flow/onboarding-flow.types.js";
 import {
   CityStep,
   ClothingStep,
@@ -10,7 +7,9 @@ import {
   ReviewStep,
   StylesStep,
   WelcomeStep,
-} from "./ui/onboarding-steps.js";
+} from "@/features/onboarding-flow/ui/onboarding-steps.js";
+import { Match } from "@/shared/lib";
+import { Card, Progress } from "@/shared/ui";
 
 export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
   const flow = useOnboardingFlow({ onComplete });

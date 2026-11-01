@@ -1,11 +1,11 @@
 import { discoverGapsResponseSchema } from "@closet/shared";
 import type { FastifyInstance } from "fastify";
 
-import { getAuthFromRequest, type AuthGetter } from "../../shared/auth/index.js";
-import type { Env } from "../../shared/config/index.js";
-import { ensureUserFromClerkId } from "../users/ensure-user.js";
-import type { UsersService } from "../users/users-service.js";
-import type { DiscoverService } from "./discover-service.js";
+import type { DiscoverService } from "@/modules/shopping/discover-service.js";
+import { ensureUserFromClerkId } from "@/modules/users/ensure-user.js";
+import type { UsersService } from "@/modules/users/users-service.js";
+import { getAuthFromRequest, type AuthGetter } from "@/shared/auth/index.js";
+import type { Env } from "@/shared/config/index.js";
 
 export type DiscoverRoutesDeps = {
   env: Env;

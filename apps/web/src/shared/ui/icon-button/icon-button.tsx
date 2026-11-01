@@ -1,8 +1,7 @@
 import { motion } from "motion/react";
 
 import { cn, softSpring } from "@/shared/lib";
-
-import type { IconButtonProps } from "./icon-button.types.js";
+import type { IconButtonProps } from "@/shared/ui/icon-button/icon-button.types.js";
 
 /**
  * Material 3 standard icon button — 40dp visual, 48dp touch target.

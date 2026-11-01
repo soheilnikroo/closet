@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { createApiClient } from "./create-api-client.js";
+import { createApiClient } from "@/shared/lib/api-client/create-api-client.js";
 
 const profile = {
   userId: "00000000-0000-4000-8000-000000000001",

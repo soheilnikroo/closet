@@ -1,1 +1,1 @@
-export { DiscoverPage } from "./discover-page.js";
+export { DiscoverPage } from "@/pages/discover-page/discover-page.js";

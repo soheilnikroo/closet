@@ -1,6 +1,5 @@
 import { cn } from "@/shared/lib";
-
-import type { SnackbarProps } from "./snackbar.types.js";
+import type { SnackbarProps } from "@/shared/ui/snackbar/snackbar.types.js";
 
 /** Material 3 snackbar — inverse-surface, 4dp corners, single-line body. */
 export function Snackbar({ message, action, className }: SnackbarProps) {

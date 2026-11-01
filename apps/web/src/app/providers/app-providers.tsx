@@ -2,12 +2,11 @@ import { ClerkProvider } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { I18nextProvider } from "react-i18next";
 
+import { getNullAuthToken } from "@/app/providers/app-providers.constants.js";
+import type { AppProvidersProps } from "@/app/providers/app-providers.types.js";
+import { ClerkTokenBridge } from "@/app/providers/clerk-token-bridge.js";
 import { AuthTokenContext } from "@/shared/hooks";
 import { getOptionalClerkPublishableKey, initI18n, i18n } from "@/shared/index.js";
-
-import { getNullAuthToken } from "./app-providers.constants.js";
-import type { AppProvidersProps } from "./app-providers.types.js";
-import { ClerkTokenBridge } from "./clerk-token-bridge.js";
 
 export function AppProviders({ children }: AppProvidersProps) {
   const [ready, setReady] = useState(i18n.isInitialized);

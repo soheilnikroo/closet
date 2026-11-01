@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { loadEnv } from "./env.js";
+import { loadEnv } from "@/shared/config/env.js";
 
 describe("loadEnv", () => {
   it("parses a valid environment", () => {

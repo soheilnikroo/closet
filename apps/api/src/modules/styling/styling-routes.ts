@@ -12,13 +12,13 @@ import {
 } from "@closet/shared";
 import type { FastifyInstance } from "fastify";
 
-import { getAuthFromRequest, type AuthGetter } from "../../shared/auth/index.js";
-import type { Env } from "../../shared/config/index.js";
-import { validationError } from "../../shared/errors/index.js";
-import { idParamSchema, parseParams } from "../../shared/http/index.js";
-import { ensureUserFromClerkId } from "../users/ensure-user.js";
-import type { UsersService } from "../users/users-service.js";
-import type { StylingService } from "./styling-service.js";
+import type { StylingService } from "@/modules/styling/styling-service.js";
+import { ensureUserFromClerkId } from "@/modules/users/ensure-user.js";
+import type { UsersService } from "@/modules/users/users-service.js";
+import { getAuthFromRequest, type AuthGetter } from "@/shared/auth/index.js";
+import type { Env } from "@/shared/config/index.js";
+import { validationError } from "@/shared/errors/index.js";
+import { idParamSchema, parseParams } from "@/shared/http/index.js";
 
 export type StylingRoutesDeps = {
   env: Env;

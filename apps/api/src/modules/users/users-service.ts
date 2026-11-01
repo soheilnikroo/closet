@@ -1,8 +1,8 @@
 import type { User } from "@closet/shared";
 import { eq } from "drizzle-orm";
 
-import { usersTable, type Database } from "../../infrastructure/database/index.js";
-import { mapUserRowToUser } from "./user-mapper.js";
+import { usersTable, type Database } from "@/infrastructure/database/index.js";
+import { mapUserRowToUser } from "@/modules/users/user-mapper.js";
 
 export type UpsertUserInput = {
   clerkUserId: string;

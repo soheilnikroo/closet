@@ -1,10 +1,10 @@
 import Fastify from "fastify";
 import { describe, expect, it, vi } from "vitest";
 
-import type { Env } from "../../shared/config/index.js";
-import type { UsersService } from "../users/users-service.js";
-import { registerWardrobeRoutes } from "./wardrobe-routes.js";
-import type { WardrobeService } from "./wardrobe-service.js";
+import type { UsersService } from "@/modules/users/users-service.js";
+import { registerWardrobeRoutes } from "@/modules/wardrobe/wardrobe-routes.js";
+import type { WardrobeService } from "@/modules/wardrobe/wardrobe-service.js";
+import type { Env } from "@/shared/config/index.js";
 
 describe("wardrobe routes", () => {
   it("lists items for an authenticated user", async () => {

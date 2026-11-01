@@ -13,7 +13,7 @@ export {
   type ClothingItemsResponse,
   type ClothingItemResponse,
   type ClothingCategoriesResponse,
-} from "./clothing-item.js";
+} from "@/contracts/wardrobe/clothing-item.js";
 export {
   detectedGarmentSchema,
   mediaAssetSchema,
@@ -27,4 +27,4 @@ export {
   type ConfirmMediaRequest,
   type ConfirmMediaResponse,
   type SampleCatalogResponse,
-} from "./media.js";
+} from "@/contracts/wardrobe/media.js";

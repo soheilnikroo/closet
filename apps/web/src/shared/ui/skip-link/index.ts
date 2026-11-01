@@ -1,2 +1,2 @@
-export { SkipLink } from "./skip-link.js";
-export type { SkipLinkProps } from "./skip-link.types.js";
+export { SkipLink } from "@/shared/ui/skip-link/skip-link.js";
+export type { SkipLinkProps } from "@/shared/ui/skip-link/skip-link.types.js";

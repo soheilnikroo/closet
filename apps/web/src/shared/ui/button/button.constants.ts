@@ -1,4 +1,4 @@
-import type { ButtonSize, ButtonVariant } from "./button.types.js";
+import type { ButtonSize, ButtonVariant } from "@/shared/ui/button/button.types.js";
 
 export const buttonVariantClass: Record<ButtonVariant, string> = {
   filled: "bg-primary text-on-primary shadow-elevation-1",

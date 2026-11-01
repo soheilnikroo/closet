@@ -16,7 +16,7 @@ import {
   createWeatherClient,
   runSeeds,
   type Database,
-} from "./infrastructure/index.js";
+} from "@/infrastructure/index.js";
 import {
   createDiscoverService,
   createProfileService,
@@ -31,9 +31,9 @@ import {
   registerUsersRoutes,
   registerWardrobeRoutes,
   registerWeatherRoutes,
-} from "./modules/index.js";
-import type { Env } from "./shared/config/index.js";
-import { HttpError, serviceUnavailable } from "./shared/errors/index.js";
+} from "@/modules/index.js";
+import type { Env } from "@/shared/config/index.js";
+import { HttpError, serviceUnavailable } from "@/shared/errors/index.js";
 
 export type AppDeps = {
   env: Env;

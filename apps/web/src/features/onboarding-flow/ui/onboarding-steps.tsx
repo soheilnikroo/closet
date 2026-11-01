@@ -1,10 +1,9 @@
 import type { DetectedGarment, Recommendation, StyleTag } from "@closet/shared";
 import { motion } from "motion/react";
 
+import { STYLE_OPTIONS } from "@/features/onboarding-flow/onboarding-flow.constants.js";
 import { fadeUp, localeLabel } from "@/shared/lib";
 import { AnimatedScene, Button, Card, Chip, TextField } from "@/shared/ui";
-
-import { STYLE_OPTIONS } from "../onboarding-flow.constants.js";
 
 type SharedStepProps = {
   busy: boolean;

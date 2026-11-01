@@ -1,8 +1,7 @@
 import { motion } from "motion/react";
 
 import { cn, softSpring } from "@/shared/lib";
-
-import type { ProgressProps } from "./progress.types.js";
+import type { ProgressProps } from "@/shared/ui/progress/progress.types.js";
 
 /** Material 3 linear progress indicator — 4dp track. */
 export function Progress({ value, label = "Loading", className }: ProgressProps) {

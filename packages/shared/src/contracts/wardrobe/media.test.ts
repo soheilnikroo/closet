@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { confirmMediaRequestSchema, mediaAssetSchema } from "./media.js";
+import { confirmMediaRequestSchema, mediaAssetSchema } from "@/contracts/wardrobe/media.js";
 
 describe("media contracts", () => {
   it("accepts media assets and confirm payloads", () => {

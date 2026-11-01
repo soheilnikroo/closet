@@ -1,12 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
-import type { Database } from "../../infrastructure/database/index.js";
-import {
-  createTestDatabase,
-  createTestUser,
-  deleteTestUser,
-} from "../../shared/testing/test-db.js";
-import { createProfileService } from "./profile-service.js";
+import type { Database } from "@/infrastructure/database/index.js";
+import { createProfileService } from "@/modules/users/profile-service.js";
+import { createTestDatabase, createTestUser, deleteTestUser } from "@/shared/testing/test-db.js";
 
 describe("createProfileService", () => {
   let db: Database;

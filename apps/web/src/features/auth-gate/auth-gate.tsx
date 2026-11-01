@@ -1,7 +1,6 @@
+import type { AuthGateProps } from "@/features/auth-gate/auth-gate.types.js";
+import { ClerkAuthGate } from "@/features/auth-gate/clerk-auth-gate.js";
 import { getOptionalClerkPublishableKey } from "@/shared/config";
-
-import type { AuthGateProps } from "./auth-gate.types.js";
-import { ClerkAuthGate } from "./clerk-auth-gate.js";
 
 /**
  * Protects a route subtree when Clerk is configured.

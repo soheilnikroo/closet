@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { cn } from "./cn.js";
+import { cn } from "@/shared/lib/cn/cn.js";
 
 describe("cn", () => {
   it("joins truthy class names", () => {

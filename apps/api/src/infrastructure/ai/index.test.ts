@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import type { Env } from "../../shared/config/index.js";
-import { createAiProviders } from "./index.js";
+import { createAiProviders } from "@/infrastructure/ai/index.js";
+import type { Env } from "@/shared/config/index.js";
 
 describe("createAiProviders", () => {
   it("falls back to mock providers without an API key", () => {

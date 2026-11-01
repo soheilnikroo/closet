@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 
-import { createDatabase, usersTable, type Database } from "../../infrastructure/database/index.js";
-import { runSeeds } from "../../infrastructure/database/seeds/run-seeds.js";
+import { createDatabase, usersTable, type Database } from "@/infrastructure/database/index.js";
+import { runSeeds } from "@/infrastructure/database/seeds/run-seeds.js";
 
 export async function createTestDatabase(): Promise<Database> {
   const db = createDatabase(

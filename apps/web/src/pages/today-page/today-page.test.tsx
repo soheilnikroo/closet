@@ -3,10 +3,9 @@ import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { TodayPage } from "@/pages/today-page/today-page.js";
 import { i18n, initI18n } from "@/shared/i18n/i18n.js";
 import { createMockApiClient } from "@/shared/testing/mock-api.js";
-
-import { TodayPage } from "./today-page.js";
 
 const mockApi = createMockApiClient();
 

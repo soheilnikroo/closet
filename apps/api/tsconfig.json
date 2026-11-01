@@ -4,7 +4,10 @@
     "rootDir": ".",
     "noEmit": true,
     "types": ["node"],
-    "lib": ["ES2022"]
+    "lib": ["ES2022"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
   "include": ["src", "drizzle.config.ts", "vitest.config.ts", "scripts"],
   "references": [{ "path": "../../packages/shared" }]

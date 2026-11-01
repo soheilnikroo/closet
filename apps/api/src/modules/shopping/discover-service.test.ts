@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
-import type { WardrobeService } from "../wardrobe/wardrobe-service.js";
-import { createDiscoverService } from "./discover-service.js";
+import { createDiscoverService } from "@/modules/shopping/discover-service.js";
+import type { WardrobeService } from "@/modules/wardrobe/wardrobe-service.js";
 
 function clothing(partial: {
   id: string;

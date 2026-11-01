@@ -1,9 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
-import type { Env } from "../../shared/config/index.js";
-import { createWeatherClient } from "./index.js";
-import { createMockWeatherClient } from "./mock-weather.js";
-import { createOpenMeteoWeatherClient } from "./open-meteo.js";
+import { createWeatherClient } from "@/infrastructure/weather/index.js";
+import { createMockWeatherClient } from "@/infrastructure/weather/mock-weather.js";
+import { createOpenMeteoWeatherClient } from "@/infrastructure/weather/open-meteo.js";
+import type { Env } from "@/shared/config/index.js";
 
 describe("weather clients", () => {
   afterEach(() => {

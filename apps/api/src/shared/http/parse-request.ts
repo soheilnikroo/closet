@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { validationError } from "../errors/index.js";
+import { validationError } from "@/shared/errors/index.js";
 
 export function parseBody<T>(schema: z.ZodType<T>, body: unknown): T {
   const parsed = schema.safeParse(body);

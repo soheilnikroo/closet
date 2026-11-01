@@ -1,10 +1,9 @@
 import type { SupportedLocale } from "@closet/shared";
 import { useTranslation } from "react-i18next";
 
+import { resolveCurrentLocale } from "@/features/locale-switcher/locale-switcher.utils.js";
 import { changeLocale } from "@/shared/i18n";
 import { Chip } from "@/shared/ui";
-
-import { resolveCurrentLocale } from "./locale-switcher.utils.js";
 
 export function LocaleSwitcher() {
   const { i18n, t } = useTranslation();

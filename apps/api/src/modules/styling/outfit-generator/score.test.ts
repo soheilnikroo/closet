@@ -1,7 +1,7 @@
 import type { ClothingItem, StyleProfile, WeatherSnapshot } from "@closet/shared";
 import { describe, expect, it } from "vitest";
 
-import { outfitSignature, scoreOutfit } from "./score.js";
+import { outfitSignature, scoreOutfit } from "@/modules/styling/outfit-generator/score.js";
 
 function item(
   partial: Pick<ClothingItem, "id" | "slot" | "name" | "primaryColor"> & Partial<ClothingItem>,

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { formatJalaliPlaceholder } from "./jalali.js";
+import { formatJalaliPlaceholder } from "@/shared/lib/jalali/jalali.js";
 
 describe("formatJalaliPlaceholder", () => {
   it("returns a non-empty localized string", () => {

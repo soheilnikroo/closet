@@ -1,1 +1,1 @@
-export * from "./app-shell/index.js";
+export * from "@/widgets/app-shell/index.js";
