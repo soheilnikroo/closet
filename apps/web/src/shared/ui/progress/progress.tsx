@@ -1,7 +1,10 @@
-import { cn } from "@/shared/lib";
+import { motion } from "motion/react";
+
+import { cn, softSpring } from "@/shared/lib";
 
 import type { ProgressProps } from "./progress.types.js";
 
+/** Material 3 linear progress indicator — 4dp track. */
 export function Progress({ value, label = "Loading", className }: ProgressProps) {
   const isIndeterminate = value === undefined;
 
@@ -20,9 +23,11 @@ export function Progress({ value, label = "Loading", className }: ProgressProps)
       {isIndeterminate ? (
         <span className="absolute inset-y-0 w-1/3 animate-pulse rounded-full bg-primary" />
       ) : (
-        <span
-          className="absolute inset-y-0 left-0 rounded-full bg-primary transition-[width] duration-300"
-          style={{ width: `${Math.min(100, Math.max(0, value))}%` }}
+        <motion.span
+          className="absolute inset-y-0 start-0 rounded-full bg-primary"
+          initial={false}
+          animate={{ width: `${Math.min(100, Math.max(0, value))}%` }}
+          transition={softSpring}
         />
       )}
     </div>

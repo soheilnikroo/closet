@@ -2,6 +2,9 @@ import { cn } from "@/shared/lib";
 
 import type { TextFieldProps } from "./text-field.types.js";
 
+/**
+ * Material 3 outlined text field — 56dp height, outline / primary focus.
+ */
 export function TextField({
   label,
   supportingText,
@@ -18,27 +21,27 @@ export function TextField({
       : undefined;
 
   return (
-    <label className="flex w-full flex-col gap-1.5">
-      <span className="text-sm font-medium text-on-surface-variant">{label}</span>
+    <label className="flex w-full flex-col gap-1">
+      <span className="md-body-medium px-1 text-on-surface-variant">{label}</span>
       <input
         id={fieldId}
         aria-invalid={Boolean(errorText)}
         aria-describedby={describedBy}
         className={cn(
-          "h-12 rounded-md border bg-surface-container-lowest px-3 text-on-surface outline-none transition-shadow",
+          "h-14 rounded-sm border bg-surface px-4 text-on-surface outline-none transition-[border-color,box-shadow] duration-150",
           errorText
-            ? "border-error focus:shadow-[0_0_0_2px_var(--md-sys-color-error)]"
-            : "border-outline focus:border-primary focus:shadow-[0_0_0_2px_var(--md-sys-color-primary)]",
+            ? "border-error focus:border-error focus:shadow-[inset_0_0_0_1px_var(--md-sys-color-error)]"
+            : "border-outline focus:border-primary focus:shadow-[inset_0_0_0_1px_var(--md-sys-color-primary)]",
           className,
         )}
         {...props}
       />
       {errorText ? (
-        <span id={`${fieldId}-error`} className="text-xs text-error">
+        <span id={`${fieldId}-error`} className="md-body-medium px-1 text-error">
           {errorText}
         </span>
       ) : supportingText ? (
-        <span id={`${fieldId}-support`} className="text-xs text-on-surface-variant">
+        <span id={`${fieldId}-support`} className="md-body-medium px-1 text-on-surface-variant">
           {supportingText}
         </span>
       ) : null}

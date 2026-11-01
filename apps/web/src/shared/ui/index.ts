@@ -10,3 +10,7 @@ export * from "./snackbar/index.js";
 export * from "./progress/index.js";
 export * from "./skip-link/index.js";
 export * from "./icons/index.js";
+export * from "./bottom-sheet/index.js";
+export * from "./animated-scene/index.js";
+export * from "./empty-state/index.js";
+export * from "./celebration-burst/index.js";

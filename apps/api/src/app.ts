@@ -1,12 +1,37 @@
+import path from "node:path";
+
 import { clerkPlugin } from "@clerk/fastify";
 import { apiErrorSchema } from "@closet/shared";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
+import multipart from "@fastify/multipart";
 import rateLimit from "@fastify/rate-limit";
 import Fastify from "fastify";
 
-import { createDatabase, type Database } from "./infrastructure/database/index.js";
-import { createUsersService, registerHealthRoutes, registerUsersRoutes } from "./modules/index.js";
+import {
+  createAiProviders,
+  createDatabase,
+  createInProcessJobQueue,
+  createLocalObjectStorage,
+  createWeatherClient,
+  runSeeds,
+  type Database,
+} from "./infrastructure/index.js";
+import {
+  createDiscoverService,
+  createProfileService,
+  createStylingService,
+  createUsersService,
+  createWardrobeService,
+  createWeatherService,
+  registerDiscoverRoutes,
+  registerHealthRoutes,
+  registerProfileRoutes,
+  registerStylingRoutes,
+  registerUsersRoutes,
+  registerWardrobeRoutes,
+  registerWeatherRoutes,
+} from "./modules/index.js";
 import type { Env } from "./shared/config/index.js";
 import { HttpError, serviceUnavailable } from "./shared/errors/index.js";
 
@@ -27,7 +52,6 @@ function hasRealClerkKeys(env: Env): boolean {
 export async function buildApp(deps: AppDeps) {
   const app = Fastify({
     logger: deps.env.NODE_ENV !== "test",
-    // Do not trust spoofed X-Forwarded-* unless behind a known proxy
     trustProxy: deps.env.NODE_ENV === "production",
   });
 
@@ -38,10 +62,32 @@ export async function buildApp(deps: AppDeps) {
   }
 
   const db = deps.db ?? createDatabase(deps.env.DATABASE_URL);
+  await runSeeds(db);
+
+  const storage = createLocalObjectStorage(
+    path.isAbsolute(deps.env.LOCAL_STORAGE_DIR)
+      ? deps.env.LOCAL_STORAGE_DIR
+      : path.resolve(process.cwd(), deps.env.LOCAL_STORAGE_DIR),
+  );
+  const queue = createInProcessJobQueue();
+  const ai = createAiProviders(deps.env);
+  const weatherClient = createWeatherClient(deps.env);
+
   const usersService = createUsersService(db);
+  const profileService = createProfileService(db);
+  const wardrobeService = createWardrobeService({ db, storage, queue, ai });
+  wardrobeService.registerVisionWorker();
+  const weatherService = createWeatherService({ db, weatherClient });
+  const stylingService = createStylingService({
+    db,
+    wardrobeService,
+    profileService,
+    weatherService,
+    ai,
+  });
+  const discoverService = createDiscoverService(wardrobeService);
 
   await app.register(helmet, {
-    // SPA + Clerk assets; tighten CSP further when a production host is fixed
     contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false,
   });
@@ -58,6 +104,13 @@ export async function buildApp(deps: AppDeps) {
     max: deps.env.NODE_ENV === "test" ? 10_000 : 120,
     timeWindow: "1 minute",
     allowList: deps.env.NODE_ENV === "test" ? ["127.0.0.1", "::1"] : [],
+  });
+
+  await app.register(multipart, {
+    limits: {
+      fileSize: 12 * 1024 * 1024,
+      files: 1,
+    },
   });
 
   app.setErrorHandler((error, _request, reply) => {
@@ -101,6 +154,33 @@ export async function buildApp(deps: AppDeps) {
     await registerUsersRoutes(protectedScope, {
       usersService,
       env: deps.env,
+    });
+    await registerProfileRoutes(protectedScope, {
+      db,
+      env: deps.env,
+      usersService,
+      profileService,
+    });
+    await registerWardrobeRoutes(protectedScope, {
+      env: deps.env,
+      usersService,
+      wardrobeService,
+    });
+    await registerStylingRoutes(protectedScope, {
+      env: deps.env,
+      usersService,
+      stylingService,
+    });
+    await registerWeatherRoutes(protectedScope, {
+      env: deps.env,
+      usersService,
+      profileService,
+      weatherService,
+    });
+    await registerDiscoverRoutes(protectedScope, {
+      env: deps.env,
+      usersService,
+      discoverService,
     });
   });
 

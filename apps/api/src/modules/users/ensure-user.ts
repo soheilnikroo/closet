@@ -1,0 +1,49 @@
+import { createClerkClient } from "@clerk/fastify";
+import type { User } from "@closet/shared";
+
+import type { Env } from "../../shared/config/index.js";
+import { unauthorized } from "../../shared/errors/index.js";
+import type { UsersService } from "./users-service.js";
+
+export async function ensureUserFromClerkId(
+  clerkUserId: string | null,
+  usersService: UsersService,
+  env: Env,
+): Promise<User> {
+  if (!clerkUserId) {
+    throw unauthorized();
+  }
+
+  const existing = await usersService.getByClerkUserId(clerkUserId);
+  if (existing) {
+    return existing;
+  }
+
+  const clerkClient = createClerkClient({
+    secretKey: env.CLERK_SECRET_KEY,
+    publishableKey: env.CLERK_PUBLISHABLE_KEY,
+  });
+
+  const clerkUser = await clerkClient.users.getUser(clerkUserId);
+  const primaryEmail =
+    clerkUser.emailAddresses.find((entry) => entry.id === clerkUser.primaryEmailAddressId)
+      ?.emailAddress ??
+    clerkUser.emailAddresses[0]?.emailAddress ??
+    null;
+  const primaryPhone =
+    clerkUser.phoneNumbers.find((entry) => entry.id === clerkUser.primaryPhoneNumberId)
+      ?.phoneNumber ??
+    clerkUser.phoneNumbers[0]?.phoneNumber ??
+    null;
+
+  return usersService.upsertFromClerk({
+    clerkUserId,
+    email: primaryEmail,
+    phone: primaryPhone,
+    displayName:
+      [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") ||
+      clerkUser.username ||
+      null,
+    avatarUrl: clerkUser.imageUrl || null,
+  });
+}

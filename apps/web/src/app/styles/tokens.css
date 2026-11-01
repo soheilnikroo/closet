@@ -1,5 +1,5 @@
 :root {
-  /* MD3 seed: green */
+  /* —— Color (M3 soft green — brand) —— */
   --md-sys-color-primary: #2f6a3a;
   --md-sys-color-on-primary: #ffffff;
   --md-sys-color-primary-container: #b6f2b8;
@@ -31,13 +31,25 @@
   --md-sys-color-surface-container: #ebefe6;
   --md-sys-color-surface-container-high: #e5e9e0;
   --md-sys-color-surface-container-highest: #dfe3da;
+  --md-sys-color-surface-dim: #d7dbd2;
+  --md-sys-color-surface-bright: #f7fbf2;
+  --md-sys-color-surface-tint: #2f6a3a;
 
   --md-sys-color-outline: #717970;
   --md-sys-color-outline-variant: #c1c9be;
   --md-sys-color-inverse-surface: #2d322c;
   --md-sys-color-inverse-on-surface: #eef2e9;
   --md-sys-color-inverse-primary: #9bd59e;
+  --md-sys-color-scrim: #000000;
+  --md-sys-color-shadow: #000000;
 
+  /* —— State layers (M3) —— */
+  --md-sys-state-hover-opacity: 0.08;
+  --md-sys-state-focus-opacity: 0.1;
+  --md-sys-state-pressed-opacity: 0.1;
+  --md-sys-state-dragged-opacity: 0.16;
+
+  /* —— Shape (M3 dp corners) —— */
   --md-sys-shape-corner-none: 0px;
   --md-sys-shape-corner-extra-small: 4px;
   --md-sys-shape-corner-small: 8px;
@@ -46,11 +58,15 @@
   --md-sys-shape-corner-extra-large: 28px;
   --md-sys-shape-corner-full: 9999px;
 
+  /* —— Elevation —— */
   --md-sys-elevation-level0: none;
-  --md-sys-elevation-level1: 0 1px 2px rgb(0 0 0 / 0.08), 0 1px 3px 1px rgb(0 0 0 / 0.04);
-  --md-sys-elevation-level2: 0 1px 2px rgb(0 0 0 / 0.1), 0 2px 6px 2px rgb(0 0 0 / 0.06);
-  --md-sys-elevation-level3: 0 4px 8px 3px rgb(0 0 0 / 0.08), 0 1px 3px rgb(0 0 0 / 0.1);
+  --md-sys-elevation-level1: 0 1px 2px rgb(24 29 24 / 0.08), 0 1px 3px 1px rgb(24 29 24 / 0.05);
+  --md-sys-elevation-level2: 0 1px 2px rgb(24 29 24 / 0.1), 0 2px 6px 2px rgb(24 29 24 / 0.07);
+  --md-sys-elevation-level3: 0 4px 8px 3px rgb(24 29 24 / 0.1), 0 1px 3px rgb(24 29 24 / 0.1);
+  --md-sys-elevation-level4: 0 6px 10px 4px rgb(24 29 24 / 0.11), 0 2px 3px rgb(24 29 24 / 0.09);
+  --md-sys-elevation-level5: 0 8px 12px 6px rgb(24 29 24 / 0.12), 0 4px 4px rgb(24 29 24 / 0.09);
 
+  /* —— Motion (M3) —— */
   --md-sys-motion-duration-short1: 50ms;
   --md-sys-motion-duration-short2: 100ms;
   --md-sys-motion-duration-short3: 150ms;
@@ -65,9 +81,46 @@
   --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
   --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
   --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --md-sys-motion-easing-legacy: cubic-bezier(0.4, 0, 0.2, 1);
 
-  --font-display: "Fraunces", "Times New Roman", serif;
-  --font-body: "Manrope", "Avenir Next", sans-serif;
+  /* —— Type scale (M3) —— */
+  --md-sys-typescale-display-large-size: 3.5625rem;
+  --md-sys-typescale-display-large-line: 4rem;
+  --md-sys-typescale-headline-large-size: 2rem;
+  --md-sys-typescale-headline-large-line: 2.5rem;
+  --md-sys-typescale-headline-medium-size: 1.75rem;
+  --md-sys-typescale-headline-medium-line: 2.25rem;
+  --md-sys-typescale-headline-small-size: 1.5rem;
+  --md-sys-typescale-headline-small-line: 2rem;
+  --md-sys-typescale-title-large-size: 1.375rem;
+  --md-sys-typescale-title-large-line: 1.75rem;
+  --md-sys-typescale-title-medium-size: 1rem;
+  --md-sys-typescale-title-medium-line: 1.5rem;
+  --md-sys-typescale-title-small-size: 0.875rem;
+  --md-sys-typescale-title-small-line: 1.25rem;
+  --md-sys-typescale-body-large-size: 1rem;
+  --md-sys-typescale-body-large-line: 1.5rem;
+  --md-sys-typescale-body-medium-size: 0.875rem;
+  --md-sys-typescale-body-medium-line: 1.25rem;
+  --md-sys-typescale-body-small-size: 0.75rem;
+  --md-sys-typescale-body-small-line: 1rem;
+  --md-sys-typescale-label-large-size: 0.875rem;
+  --md-sys-typescale-label-large-line: 1.25rem;
+  --md-sys-typescale-label-medium-size: 0.75rem;
+  --md-sys-typescale-label-medium-line: 1rem;
+  --md-sys-typescale-label-small-size: 0.6875rem;
+  --md-sys-typescale-label-small-line: 1rem;
+
+  /* —— Layout —— */
+  --md-sys-spacing-touch-target: 3rem;
+  --md-comp-nav-bar-height: 5rem;
+  --md-comp-top-app-bar-height: 4rem;
+  --md-comp-fab-size: 3.5rem;
+  --md-comp-button-height: 2.5rem;
+  --md-comp-chip-height: 2rem;
+
+  --font-display: "Outfit", "Avenir Next", sans-serif;
+  --font-body: "Figtree", "Avenir Next", sans-serif;
   --font-persian: "Vazirmatn", "Tahoma", sans-serif;
 }
 

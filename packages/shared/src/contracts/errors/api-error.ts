@@ -8,6 +8,9 @@ export const apiErrorCodeSchema = z.enum([
   "conflict",
   "service_unavailable",
   "internal_error",
+  "wardrobe_too_limited",
+  "media_processing_failed",
+  "media_not_ready",
 ]);
 
 export const apiErrorSchema = z.object({

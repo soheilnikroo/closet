@@ -8,6 +8,17 @@ const envSchema = z.object({
   WEB_ORIGIN: z.string().url(),
   CLERK_PUBLISHABLE_KEY: z.string().min(1),
   CLERK_SECRET_KEY: z.string().min(1),
+  LOCAL_STORAGE_DIR: z.string().default(".data/storage"),
+  OPENAI_API_KEY: z.string().optional(),
+  OPENAI_BASE_URL: z.string().url().optional(),
+  OPENAI_VISION_MODEL: z.string().default("gpt-4o-mini"),
+  OPENAI_CHAT_MODEL: z.string().default("gpt-4o-mini"),
+  WEATHER_PROVIDER: z.enum(["open-meteo", "mock"]).default("open-meteo"),
+  S3_ENDPOINT: z.string().url().optional(),
+  S3_BUCKET: z.string().optional(),
+  S3_ACCESS_KEY: z.string().optional(),
+  S3_SECRET_KEY: z.string().optional(),
+  S3_REGION: z.string().default("us-east-1"),
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -23,4 +34,12 @@ export function loadEnv(source: Record<string, string | undefined> = process.env
   }
 
   return parsed.data;
+}
+
+export function hasOpenAiKey(env: Env): boolean {
+  return Boolean(env.OPENAI_API_KEY && env.OPENAI_API_KEY.length > 8);
+}
+
+export function hasS3Config(env: Env): boolean {
+  return Boolean(env.S3_ENDPOINT && env.S3_BUCKET && env.S3_ACCESS_KEY && env.S3_SECRET_KEY);
 }

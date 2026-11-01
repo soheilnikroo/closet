@@ -10,6 +10,12 @@
   }
 }
 
+@custom-variant active {
+  &:active {
+    @slot;
+  }
+}
+
 @theme inline {
   --color-primary: var(--md-sys-color-primary);
   --color-on-primary: var(--md-sys-color-on-primary);
@@ -48,6 +54,7 @@
   --color-inverse-surface: var(--md-sys-color-inverse-surface);
   --color-inverse-on-surface: var(--md-sys-color-inverse-on-surface);
   --color-inverse-primary: var(--md-sys-color-inverse-primary);
+  --color-scrim: var(--md-sys-color-scrim);
 
   --radius-xs: var(--md-sys-shape-corner-extra-small);
   --radius-sm: var(--md-sys-shape-corner-small);
@@ -63,6 +70,10 @@
   --shadow-elevation-1: var(--md-sys-elevation-level1);
   --shadow-elevation-2: var(--md-sys-elevation-level2);
   --shadow-elevation-3: var(--md-sys-elevation-level3);
+  --shadow-elevation-4: var(--md-sys-elevation-level4);
+  --shadow-elevation-5: var(--md-sys-elevation-level5);
+
+  --spacing-touch: var(--md-sys-spacing-touch-target);
 }
 
 @layer base {
@@ -71,6 +82,7 @@
   }
 
   html {
+    height: 100%;
     -webkit-tap-highlight-color: transparent;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
@@ -81,15 +93,112 @@
   body {
     margin: 0;
     min-height: 100%;
+    min-height: 100dvh;
   }
 
   body {
     font-family: var(--font-body);
-    background: var(--md-sys-color-background);
-    color: var(--md-sys-color-on-background);
+    font-size: var(--md-sys-typescale-body-large-size);
+    line-height: var(--md-sys-typescale-body-large-line);
+    background: var(--md-sys-color-surface);
+    color: var(--md-sys-color-on-surface);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overscroll-behavior: none;
+  }
+
+  :root[lang="fa-IR"] body,
+  :root[dir="rtl"] body {
+    font-feature-settings: "ss01";
+    line-height: 1.7;
+  }
+
+  #root,
+  #app {
+    min-height: 100dvh;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  :root[lang="fa-IR"] .font-display,
+  :root[dir="rtl"] .font-display {
+    letter-spacing: 0;
+    font-feature-settings: "ss01";
+  }
+
+  /* M3 type utilities */
+  .md-title-large {
+    font-family: var(--font-display);
+    font-size: var(--md-sys-typescale-title-large-size);
+    line-height: var(--md-sys-typescale-title-large-line);
+    font-weight: 500;
+  }
+
+  .md-title-medium {
+    font-size: var(--md-sys-typescale-title-medium-size);
+    line-height: var(--md-sys-typescale-title-medium-line);
+    font-weight: 500;
+  }
+
+  .md-body-medium {
+    font-size: var(--md-sys-typescale-body-medium-size);
+    line-height: var(--md-sys-typescale-body-medium-line);
+  }
+
+  .md-label-large {
+    font-size: var(--md-sys-typescale-label-large-size);
+    line-height: var(--md-sys-typescale-label-large-line);
+    font-weight: 500;
+  }
+
+  .md-label-medium {
+    font-size: var(--md-sys-typescale-label-medium-size);
+    line-height: var(--md-sys-typescale-label-medium-line);
+    font-weight: 500;
+  }
+
+  .md-label-small {
+    font-size: var(--md-sys-typescale-label-small-size);
+    line-height: var(--md-sys-typescale-label-small-line);
+    font-weight: 500;
+  }
+
+  /**
+   * M3 state layer: content-color overlay at fixed opacities.
+   * Place on interactive surfaces; uses currentColor for the layer.
+   */
+  .md-state-layer {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .md-state-layer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: currentColor;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .md-state-layer:hover:not(:disabled)::after {
+      opacity: var(--md-sys-state-hover-opacity);
+    }
+  }
+
+  .md-state-layer:focus-visible:not(:disabled)::after {
+    opacity: var(--md-sys-state-focus-opacity);
+  }
+
+  .md-state-layer:active:not(:disabled)::after {
+    opacity: var(--md-sys-state-pressed-opacity);
   }
 
   button,
@@ -99,7 +208,6 @@
     font: inherit;
   }
 
-  /* iOS zooms inputs under 16px; never disable zoom — fix the font size instead */
   @media (pointer: coarse) {
     input,
     textarea,
@@ -130,7 +238,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--md-sys-color-primary);
+    outline: 3px solid var(--md-sys-color-secondary);
     outline-offset: 2px;
   }
 
@@ -143,8 +251,8 @@
     background: var(--md-sys-color-primary);
     color: var(--md-sys-color-on-primary);
     padding: 0.625rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: var(--md-sys-typescale-label-large-size);
+    font-weight: 500;
     text-decoration: none;
     transform: translateY(-200%);
   }
@@ -162,5 +270,41 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+}
+
+/* Native-feeling route changes (React Router viewTransition) */
+@supports (view-transition-name: none) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 280ms;
+    animation-timing-function: var(--md-sys-motion-easing-emphasized);
+  }
+
+  ::view-transition-old(root) {
+    animation-name: closet-vt-fade-out;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: closet-vt-fade-in;
+  }
+
+  ::view-transition-group(app-nav),
+  ::view-transition-group(app-brand) {
+    animation-duration: 280ms;
+  }
+}
+
+@keyframes closet-vt-fade-out {
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+}
+
+@keyframes closet-vt-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
   }
 }

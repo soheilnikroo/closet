@@ -13,3 +13,5 @@ export function createStubObjectStorage(): ObjectStorage {
     },
   };
 }
+
+export { createLocalObjectStorage, type LocalObjectStorage } from "./local-storage.js";

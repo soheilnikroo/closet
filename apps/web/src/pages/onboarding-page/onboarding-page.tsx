@@ -1,25 +1,23 @@
 import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
 
-import { LocaleSwitcher } from "@/features/locale-switcher";
+import { LocaleSwitcher, OnboardingFlow } from "@/features";
+import { useAppNavigate } from "@/shared/hooks";
 import { fadeUp } from "@/shared/lib";
-import { Button, Card, TopAppBar } from "@/shared/ui";
+import { TopAppBar } from "@/shared/ui";
 
 export function OnboardingPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-lg flex-col bg-surface">
+    <div className="mx-auto flex h-dvh w-full max-w-lg flex-col overflow-hidden bg-surface">
       <TopAppBar title={t("onboarding.title")} trailing={<LocaleSwitcher />} />
-      <motion.main className="flex flex-1 flex-col px-4 pt-4 pb-10" {...fadeUp}>
-        <Card elevated className="space-y-4">
-          <p className="text-sm leading-relaxed text-on-surface-variant">{t("onboarding.body")}</p>
-          <Button fullWidth onClick={() => void navigate("/today")}>
-            {t("onboarding.continue")}
-          </Button>
-        </Card>
+      <motion.main
+        className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain px-4 pt-3 pb-[max(1.5rem,env(safe-area-inset-bottom,0px))]"
+        {...fadeUp}
+      >
+        <OnboardingFlow onComplete={() => navigate("/today")} />
       </motion.main>
     </div>
   );

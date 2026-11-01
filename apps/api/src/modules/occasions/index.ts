@@ -1,1 +1,1 @@
-export const occasionsModuleName = "occasions" as const;
+export const occasionsModuleName = "occasions";

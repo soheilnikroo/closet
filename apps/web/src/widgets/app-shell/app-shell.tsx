@@ -13,16 +13,20 @@ import {
 
 import type { AppShellProps } from "./app-shell.types.js";
 
+/**
+ * Compact-window M3 app scaffold: top app bar + scrollable body + navigation bar.
+ * Edge-to-edge with safe-area padding; 100dvh shell like a native activity.
+ */
 export function AppShell({ title, children }: AppShellProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-lg flex-col overscroll-y-contain bg-surface">
+    <div className="mx-auto flex h-dvh w-full max-w-lg flex-col overflow-hidden overscroll-none bg-surface">
       <SkipLink label={t("a11y.skipToContent")} />
       <TopAppBar
         title={title}
         trailing={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-0.5">
             <LocaleSwitcher />
             <UserAuthControls />
           </div>
@@ -31,7 +35,10 @@ export function AppShell({ title, children }: AppShellProps) {
       <main
         id="main-content"
         tabIndex={-1}
-        className="flex-1 overflow-y-auto overscroll-y-contain px-4 pt-2 pb-[calc(7rem+env(safe-area-inset-bottom,0px))] outline-none"
+        className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain px-4 pt-2 pb-3 outline-none"
+        style={{
+          paddingBottom: "calc(5rem + env(safe-area-inset-bottom, 0px) + 0.75rem)",
+        }}
       >
         {children}
       </main>

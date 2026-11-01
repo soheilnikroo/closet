@@ -1,4 +1,1 @@
-/**
- * Clothing entity placeholder for future domain models and UI pieces.
- */
-export const clothingEntityName = "clothing" as const;
+export type { ClothingItem, ClothingCategory, DetectedGarment } from "@closet/shared";

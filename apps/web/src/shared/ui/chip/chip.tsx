@@ -1,9 +1,12 @@
 import { motion } from "motion/react";
 
-import { cn, scaleTap } from "@/shared/lib";
+import { cn, softSpring } from "@/shared/lib";
 
 import type { ChipProps } from "./chip.types.js";
 
+/**
+ * Material 3 filter chip — 32dp height, outline / secondary-container selected.
+ */
 export function Chip({
   children,
   className,
@@ -16,17 +19,17 @@ export function Chip({
       type={type}
       aria-pressed={selected}
       className={cn(
-        "inline-flex min-h-11 touch-manipulation select-none items-center rounded-lg border px-3 text-sm font-medium transition-colors",
+        "md-state-layer inline-flex h-8 min-h-8 shrink-0 touch-manipulation select-none items-center rounded-full border px-4 md-label-large",
         selected
           ? "border-transparent bg-secondary-container text-on-secondary-container"
           : "border-outline-variant bg-surface text-on-surface-variant",
         className,
       )}
-      whileTap={scaleTap.whileTap}
-      transition={scaleTap.transition}
+      whileTap={{ scale: 0.97 }}
+      transition={softSpring}
       {...props}
     >
-      {children}
+      <span className="relative z-10">{children}</span>
     </motion.button>
   );
 }

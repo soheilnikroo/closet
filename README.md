@@ -109,6 +109,22 @@ Web is installable via **vite-plugin-pwa** (Workbox) + **@vite-pwa/assets-genera
 
 MD3-inspired tokens live in `apps/web/src/app/styles/tokens.css` with a green primary seed. Primitives are under `apps/web/src/shared/ui` with Storybook coverage for Button and Chip to start.
 
-## Next milestones
+## Release 1 product surface
 
-See the product PRD: wardrobe upload, outfit engine, weather, stylist chat, and Discover shopping are intentionally out of this foundation.
+End-to-end MVP is implemented on this foundation:
+
+- Onboarding (skippable style + city → add clothes / sample catalog → first outfit + feedback)
+- My Closet (photo upload + mock/OpenAI vision → confirm → CRUD)
+- Today (deterministic outfit engine, weather via Open-Meteo/mock, like/dislike/save/regenerate)
+- Contextual stylist chat (intent parsing + wardrobe-only recommendations)
+- Discover gaps stub (no store scraping)
+
+### Optional integrations
+
+| Capability    | Env                                             | Fallback                               |
+| ------------- | ----------------------------------------------- | -------------------------------------- |
+| Vision / LLM  | `OPENAI_API_KEY` (+ optional `OPENAI_BASE_URL`) | Deterministic mock providers           |
+| Weather       | `WEATHER_PROVIDER=open-meteo`                   | `mock` fixed snapshot / test mode      |
+| Media storage | `LOCAL_STORAGE_DIR` (default) or `S3_*`         | Local filesystem under `.data/storage` |
+
+Product APIs under `/v1/*` still require real Clerk keys. Seeds (Iran cities, clothing categories, occasions) run on API boot.

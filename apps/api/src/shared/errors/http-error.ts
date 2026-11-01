@@ -29,3 +29,25 @@ export function notFound(message = "Resource not found"): HttpError {
 export function serviceUnavailable(message = "Service unavailable"): HttpError {
   return new HttpError(503, "service_unavailable", message);
 }
+
+export function validationError(message = "Validation failed", details?: unknown): HttpError {
+  return new HttpError(400, "validation_error", message, details);
+}
+
+export function conflict(message = "Conflict"): HttpError {
+  return new HttpError(409, "conflict", message);
+}
+
+export function wardrobeTooLimited(
+  message = "Wardrobe is too limited for this recommendation",
+): HttpError {
+  return new HttpError(422, "wardrobe_too_limited", message);
+}
+
+export function mediaProcessingFailed(message = "Media processing failed"): HttpError {
+  return new HttpError(422, "media_processing_failed", message);
+}
+
+export function mediaNotReady(message = "Media is not ready yet"): HttpError {
+  return new HttpError(409, "media_not_ready", message);
+}

@@ -1,62 +1,98 @@
+import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
 
 import { LocaleSwitcher } from "@/features/locale-switcher";
 import { UserAuthControls } from "@/features/user-auth-controls";
-import { fadeUp } from "@/shared/lib";
-import { Button, Card, SkipLink } from "@/shared/ui";
+import { getOptionalClerkPublishableKey } from "@/shared/config";
+import { useAppNavigate } from "@/shared/hooks";
+import { fadeUp, softSpring } from "@/shared/lib";
+import { AnimatedScene, Button, SkipLink } from "@/shared/ui";
 
+/**
+ * Landing composition: brand + story up top, one clear primary action in the
+ * thumb zone. Header stays light — no duplicated Get started / Sign in.
+ */
 export function HomePage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
+  const publishableKey = getOptionalClerkPublishableKey();
+  const clerkEnabled = Boolean(publishableKey) && !publishableKey?.includes("replace_me");
 
   return (
-    <div className="relative mx-auto flex min-h-svh w-full max-w-lg flex-col overflow-hidden px-5 pt-[max(1.5rem,env(safe-area-inset-top,0px))] pb-[max(2.5rem,env(safe-area-inset-bottom,0px))]">
+    <div className="mx-auto flex h-dvh w-full max-w-lg flex-col overflow-hidden bg-surface">
       <SkipLink label={t("a11y.skipToContent")} />
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgb(182_242_184/0.55),transparent_45%),radial-gradient(circle_at_90%_20%,rgb(188_235_242/0.4),transparent_40%),linear-gradient(180deg,var(--md-sys-color-surface),var(--md-sys-color-surface-container-low))]"
-        aria-hidden
-      />
 
-      <div className="relative z-10 flex items-center justify-between gap-3">
-        <p className="font-display text-2xl font-semibold tracking-tight text-primary">
+      <header className="flex shrink-0 items-center justify-between gap-3 px-5 pt-[max(1rem,env(safe-area-inset-top,0px))] pb-2">
+        <motion.p
+          className="md-title-large text-primary"
+          style={{ viewTransitionName: "app-brand" }}
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={softSpring}
+        >
           {t("brand")}
-        </p>
-        <div className="flex items-center gap-2">
+        </motion.p>
+        <div className="flex items-center gap-1">
           <LocaleSwitcher />
-          <UserAuthControls />
+          {clerkEnabled ? (
+            <SignedIn>
+              <UserAuthControls />
+            </SignedIn>
+          ) : null}
         </div>
-      </div>
+      </header>
 
-      <motion.div
+      <motion.main
         id="main-content"
         tabIndex={-1}
-        className="relative z-10 mt-16 flex flex-1 flex-col outline-none"
+        className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain px-5 outline-none"
         {...fadeUp}
       >
-        <p className="text-sm font-medium tracking-[0.18em] text-on-surface-variant uppercase">
-          {t("tagline")}
-        </p>
-        <h1 className="mt-3 max-w-[14ch] font-display text-4xl leading-tight font-semibold text-on-surface">
-          {t("home.title")}
-        </h1>
-        <p className="mt-4 max-w-prose text-base leading-relaxed text-on-surface-variant">
-          {t("home.subtitle")}
-        </p>
+        <div className="flex flex-1 flex-col justify-center py-4">
+          <p className="md-label-medium tracking-[0.1em] text-on-surface-variant uppercase">
+            {t("tagline")}
+          </p>
+          <h1 className="mt-3 max-w-[12ch] font-display text-[2.25rem] leading-[1.15] font-medium text-on-surface">
+            {t("home.title")}
+          </h1>
+          <p className="md-body-medium mt-3 max-w-[36ch] text-on-surface-variant">
+            {t("home.subtitle")}
+          </p>
 
-        <Card elevated className="mt-10 space-y-4">
-          <Button fullWidth onClick={() => void navigate("/onboarding")}>
+          <div className="mt-10 flex justify-center">
+            <AnimatedScene variant="wardrobeEmpty" className="w-44" label={t("brand")} />
+          </div>
+        </div>
+      </motion.main>
+
+      <footer className="shrink-0 border-t border-outline-variant/35 bg-surface-container-low/80 px-5 pt-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] backdrop-blur-md">
+        <div className="mx-auto flex w-full max-w-lg flex-col items-stretch gap-1.5">
+          <Button fullWidth size="lg" onClick={() => navigate("/onboarding")}>
             {t("home.ctaStart")}
           </Button>
-          <Button variant="outlined" fullWidth onClick={() => void navigate("/sign-in")}>
-            {t("home.ctaSignIn")}
-          </Button>
-          <Button variant="text" fullWidth onClick={() => void navigate("/today")}>
+
+          {clerkEnabled ? (
+            <SignedOut>
+              <Button fullWidth variant="text" onClick={() => navigate("/sign-in")}>
+                {t("home.ctaSignIn")}
+              </Button>
+            </SignedOut>
+          ) : (
+            <Button fullWidth variant="text" onClick={() => navigate("/sign-in")}>
+              {t("home.ctaSignIn")}
+            </Button>
+          )}
+
+          <button
+            type="button"
+            className="md-label-large touch-manipulation py-2.5 text-center text-on-surface-variant underline-offset-4 hover:text-primary hover:underline"
+            onClick={() => navigate("/today")}
+          >
             {t("home.explore")}
-          </Button>
-        </Card>
-      </motion.div>
+          </button>
+        </div>
+      </footer>
     </div>
   );
 }

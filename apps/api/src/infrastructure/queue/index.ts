@@ -9,3 +9,9 @@ export function createStubJobQueue(): JobQueue {
     },
   };
 }
+
+export {
+  createInProcessJobQueue,
+  type InProcessJobQueue,
+  type JobHandler,
+} from "./in-process-queue.js";

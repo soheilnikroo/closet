@@ -1,1 +1,12 @@
-export { motionDurations, motionEasings, fadeUp, scaleTap, navIndicator } from "./presets.js";
+export {
+  motionDurations,
+  motionEasings,
+  softSpring,
+  snappySpring,
+  fadeUp,
+  scaleTap,
+  pressableCard,
+  staggerContainer,
+  staggerItem,
+  navIndicator,
+} from "./presets.js";

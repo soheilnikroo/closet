@@ -20,17 +20,17 @@ export function Button({
       type={type}
       disabled={disabled}
       className={cn(
-        "inline-flex touch-manipulation select-none items-center justify-center gap-2 rounded-full font-medium transition-[filter,background-color] duration-150 disabled:cursor-not-allowed disabled:opacity-40",
+        "md-state-layer inline-flex touch-manipulation select-none items-center justify-center gap-2 rounded-full font-medium disabled:cursor-not-allowed disabled:opacity-38",
         buttonVariantClass[variant],
         buttonSizeClass[size],
         fullWidth && "w-full",
         className,
       )}
-      whileTap={scaleTap.whileTap}
+      whileTap={disabled ? undefined : scaleTap.whileTap}
       transition={scaleTap.transition}
       {...props}
     >
-      {children}
+      <span className="relative z-10 inline-flex items-center gap-2">{children}</span>
     </motion.button>
   );
 }

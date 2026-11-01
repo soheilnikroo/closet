@@ -14,7 +14,7 @@ export const links = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=Manrope:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Outfit:wght@500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap",
   },
   { rel: "stylesheet", href: appStyles },
   { rel: "icon", href: "/favicon.ico", sizes: "48x48" },
@@ -37,12 +37,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#f7fbf2" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="Closet" />
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="bg-surface text-on-surface antialiased">
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -55,8 +55,11 @@ export function HydrateFallback() {
   return (
     <div className="flex min-h-dvh items-center justify-center bg-surface text-on-surface">
       <div className="flex flex-col items-center gap-3">
-        <div className="size-10 animate-pulse rounded-full bg-primary/30" aria-hidden />
-        <p className="text-sm text-on-surface-variant">Loading…</p>
+        <div
+          className="size-11 animate-pulse rounded-full bg-primary/25 shadow-elevation-1"
+          aria-hidden
+        />
+        <p className="font-display text-sm font-medium text-on-surface-variant">Loading…</p>
       </div>
     </div>
   );

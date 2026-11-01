@@ -42,3 +42,6 @@ storybook-static
 # OS / misc
 *.local
 .turbo
+
+# Local object storage / uploads
+.data

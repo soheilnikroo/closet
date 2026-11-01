@@ -1,9 +1,12 @@
 import { motion } from "motion/react";
 
-import { cn, scaleTap } from "@/shared/lib";
+import { cn, softSpring } from "@/shared/lib";
 
 import type { FabProps } from "./fab.types.js";
 
+/**
+ * Material 3 FAB — 56dp, primary-container, large corner (16dp), elevation 3.
+ */
 export function Fab({
   children,
   className,
@@ -17,16 +20,16 @@ export function Fab({
       type={type}
       aria-label={label}
       className={cn(
-        "inline-flex touch-manipulation select-none items-center justify-center gap-2 bg-primary-container text-on-primary-container shadow-elevation-3 transition-[filter] duration-150 hover:brightness-105",
+        "md-state-layer inline-flex touch-manipulation select-none items-center justify-center gap-2 bg-primary-container text-on-primary-container shadow-elevation-3",
         extended ? "h-14 rounded-2xl px-5" : "size-14 rounded-2xl",
         className,
       )}
-      whileTap={scaleTap.whileTap}
-      transition={scaleTap.transition}
+      whileTap={{ scale: 0.96 }}
+      transition={softSpring}
       {...props}
     >
-      {children}
-      {extended ? <span className="font-medium">{label}</span> : null}
+      <span className="relative z-10 text-base font-medium tracking-tight">{children}</span>
+      {extended ? <span className="md-label-large relative z-10">{label}</span> : null}
     </motion.button>
   );
 }

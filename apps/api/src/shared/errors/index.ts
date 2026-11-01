@@ -1,1 +1,12 @@
-export { HttpError, unauthorized, forbidden, notFound, serviceUnavailable } from "./http-error.js";
+export {
+  HttpError,
+  unauthorized,
+  forbidden,
+  notFound,
+  serviceUnavailable,
+  validationError,
+  conflict,
+  wardrobeTooLimited,
+  mediaProcessingFailed,
+  mediaNotReady,
+} from "./http-error.js";

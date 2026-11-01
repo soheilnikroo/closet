@@ -15,6 +15,7 @@
     "fmt:check": "oxfmt --check apps packages commitlint.config.js knip.json .oxlintrc.json .oxfmtrc.json",
     "typecheck": "pnpm run -r --if-present typecheck",
     "test": "pnpm run -r --if-present test",
+    "test:coverage": "pnpm run -r --if-present test:coverage",
     "test:e2e": "pnpm --filter @closet/web test:e2e",
     "storybook": "pnpm --filter @closet/web storybook",
     "build-storybook": "pnpm --filter @closet/web build-storybook",

@@ -1,9 +1,10 @@
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 import { useTranslation } from "react-i18next";
 
 import { getOptionalClerkPublishableKey } from "@/shared/config";
 import { Button } from "@/shared/ui";
 
+/** Compact header auth — sign-in when signed out, avatar when signed in. No Get started here. */
 export function UserAuthControls() {
   const { t } = useTranslation();
   const publishableKey = getOptionalClerkPublishableKey();
@@ -14,18 +15,13 @@ export function UserAuthControls() {
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       <SignedOut>
         <SignInButton mode="modal">
           <Button size="sm" variant="text">
             {t("home.ctaSignIn")}
           </Button>
         </SignInButton>
-        <SignUpButton mode="modal">
-          <Button size="sm" variant="tonal">
-            {t("home.ctaStart")}
-          </Button>
-        </SignUpButton>
       </SignedOut>
       <SignedIn>
         <UserButton afterSignOutUrl="/" />
