@@ -1,0 +1,70 @@
+---
+description: One public export per TSX file; types/hooks/utils/constants in sibling files under the same folder
+globs: apps/web/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# TSX single-export folders
+
+Every React component lives in its **own folder**. The `.tsx` file exports **one** thing (the component). Types, hooks, utils, and constants are sibling files in that folder. Sub-components follow the same rule in nested folders or sibling `.tsx` files under the parent folder.
+
+## Layout
+
+```text
+button/
+  button.tsx              # export function Button only
+  button.types.ts         # ButtonProps, ButtonVariant, …
+  button.constants.ts     # maps, class tables, magic values
+  button.hooks.ts         # optional local hooks
+  button.utils.ts         # optional pure helpers
+  index.ts                # re-export component + public types
+```
+
+Sub-component example:
+
+```text
+auth-gate/
+  auth-gate.tsx
+  auth-gate.types.ts
+  clerk-auth-gate.tsx     # one export: ClerkAuthGate
+  index.ts
+```
+
+## Rules
+
+- **One public runtime export per `.tsx`** — the component (named export preferred).
+- **No `export type` / `export const` / helpers in the same `.tsx`** — move to `*.types.ts`, `*.constants.ts`, `*.hooks.ts`, `*.utils.ts`.
+- **Import types into the component** from `./name.types.js` (keep `.js` extensions).
+- **`index.ts`** re-exports the component and any public types consumers need.
+- **Sub-components** get their own `.tsx` (and sibling files if they have types/constants). Do not define a second component in the parent `.tsx`.
+
+## Exceptions
+
+- `*.stories.tsx` — Storybook story exports
+- `*.test.tsx` — test suites
+- `app/routes/**`, `app/root.tsx` — React Router route module API
+- `index.ts` barrels
+
+## ❌ Bad
+
+```tsx
+// button.tsx
+export type ButtonProps = { … };
+export function Button() { … }
+const variantClass = { … }; // constants belong in button.constants.ts
+```
+
+## ✅ Good
+
+```tsx
+// button.types.ts
+export type ButtonProps = { … };
+
+// button.constants.ts
+export const variantClass = { … };
+
+// button.tsx
+import type { ButtonProps } from "./button.types.js";
+import { variantClass } from "./button.constants.js";
+export function Button(props: ButtonProps) { … }
+```

@@ -1,29 +1,50 @@
 {
   "name": "closet",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "prepare": "husky",
+    "dev": "pnpm run --parallel --filter @closet/web --filter @closet/api dev",
+    "dev:web": "pnpm --filter @closet/web dev",
+    "dev:api": "pnpm --filter @closet/api dev",
+    "build": "pnpm run --filter @closet/shared build && pnpm run --filter @closet/api build && pnpm run --filter @closet/web build",
+    "lint": "oxlint --type-aware apps packages",
+    "lint:fix": "oxlint --type-aware --fix apps packages",
+    "fmt": "oxfmt apps packages commitlint.config.js knip.json .oxlintrc.json .oxfmtrc.json",
+    "fmt:check": "oxfmt --check apps packages commitlint.config.js knip.json .oxlintrc.json .oxfmtrc.json",
+    "typecheck": "pnpm run -r --if-present typecheck",
+    "test": "pnpm run -r --if-present test",
+    "test:e2e": "pnpm --filter @closet/web test:e2e",
+    "storybook": "pnpm --filter @closet/web storybook",
+    "build-storybook": "pnpm --filter @closet/web build-storybook",
+    "knip": "knip",
+    "db:generate": "pnpm --filter @closet/api db:generate",
+    "db:migrate": "pnpm --filter @closet/api db:migrate",
+    "db:studio": "pnpm --filter @closet/api db:studio",
+    "docker:up": "PATH=\"/Applications/Docker.app/Contents/Resources/bin:$HOME/.orbstack/bin:/usr/local/bin:/opt/homebrew/bin:$PATH\" docker compose up -d",
+    "docker:down": "PATH=\"/Applications/Docker.app/Contents/Resources/bin:$HOME/.orbstack/bin:/usr/local/bin:/opt/homebrew/bin:$PATH\" docker compose down",
+    "check": "pnpm fmt:check && pnpm lint && pnpm typecheck && pnpm test && pnpm knip"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.7",
-    "@rolldown/plugin-babel": "^0.2.4",
-    "@types/babel__core": "^7.20.5",
-    "@types/node": "^24.19.2",
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
-    "babel-plugin-react-compiler": "^1.0.0",
-    "oxlint": "^1.89.0",
-    "typescript": "~7.0.2",
-    "vite": "^8.3.5"
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@commitlint/types": "^21.2.3",
+    "@types/node": "catalog:",
+    "husky": "^9.1.7",
+    "knip": "^6.44.1",
+    "lint-staged": "^17.6.0",
+    "oxfmt": "^0.75.0",
+    "oxlint": "^1.90.0",
+    "oxlint-tsgolint": "^7.0.2005",
+    "typescript": "catalog:"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs,cjs,json,jsonc,md,yml,yaml,css,html}": [
+      "oxfmt --no-error-on-unmatched-pattern"
+    ],
+    "*.{js,jsx,ts,tsx,mjs,cjs}": [
+      "oxlint --type-aware --fix"
+    ]
   }
 }

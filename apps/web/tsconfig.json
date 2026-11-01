@@ -1,0 +1,29 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "jsx": "react-jsx",
+    "rootDirs": [".", "./.react-router/types"],
+    "types": ["vite/client", "node"],
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "~/*": ["./*"]
+    }
+  },
+  "include": [
+    "app/**/*",
+    "src/**/*",
+    ".react-router/types/**/*",
+    ".storybook/**/*",
+    "vite.config.ts",
+    "vite-tsconfig-paths.ts",
+    "vite.proxy.ts",
+    "vitest.config.ts",
+    "playwright.config.ts",
+    "react-router.config.ts",
+    "pwa.manifest.ts",
+    "pwa-assets.config.ts"
+  ]
+}

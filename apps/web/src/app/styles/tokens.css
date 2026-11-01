@@ -1,0 +1,78 @@
+:root {
+  /* MD3 seed: green */
+  --md-sys-color-primary: #2f6a3a;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #b6f2b8;
+  --md-sys-color-on-primary-container: #00210a;
+
+  --md-sys-color-secondary: #516351;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #d4e8d1;
+  --md-sys-color-on-secondary-container: #0f1f12;
+
+  --md-sys-color-tertiary: #39656c;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #bcebf2;
+  --md-sys-color-on-tertiary-container: #001f24;
+
+  --md-sys-color-error: #ba1a1a;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #ffdad6;
+  --md-sys-color-on-error-container: #410002;
+
+  --md-sys-color-background: #f7fbf2;
+  --md-sys-color-on-background: #181d18;
+  --md-sys-color-surface: #f7fbf2;
+  --md-sys-color-on-surface: #181d18;
+  --md-sys-color-surface-variant: #dde5d9;
+  --md-sys-color-on-surface-variant: #414941;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #f1f5ec;
+  --md-sys-color-surface-container: #ebefe6;
+  --md-sys-color-surface-container-high: #e5e9e0;
+  --md-sys-color-surface-container-highest: #dfe3da;
+
+  --md-sys-color-outline: #717970;
+  --md-sys-color-outline-variant: #c1c9be;
+  --md-sys-color-inverse-surface: #2d322c;
+  --md-sys-color-inverse-on-surface: #eef2e9;
+  --md-sys-color-inverse-primary: #9bd59e;
+
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  --md-sys-elevation-level0: none;
+  --md-sys-elevation-level1: 0 1px 2px rgb(0 0 0 / 0.08), 0 1px 3px 1px rgb(0 0 0 / 0.04);
+  --md-sys-elevation-level2: 0 1px 2px rgb(0 0 0 / 0.1), 0 2px 6px 2px rgb(0 0 0 / 0.06);
+  --md-sys-elevation-level3: 0 4px 8px 3px rgb(0 0 0 / 0.08), 0 1px 3px rgb(0 0 0 / 0.1);
+
+  --md-sys-motion-duration-short1: 50ms;
+  --md-sys-motion-duration-short2: 100ms;
+  --md-sys-motion-duration-short3: 150ms;
+  --md-sys-motion-duration-short4: 200ms;
+  --md-sys-motion-duration-medium1: 250ms;
+  --md-sys-motion-duration-medium2: 300ms;
+  --md-sys-motion-duration-medium3: 350ms;
+  --md-sys-motion-duration-medium4: 400ms;
+  --md-sys-motion-duration-long1: 450ms;
+  --md-sys-motion-duration-long2: 500ms;
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+
+  --font-display: "Fraunces", "Times New Roman", serif;
+  --font-body: "Manrope", "Avenir Next", sans-serif;
+  --font-persian: "Vazirmatn", "Tahoma", sans-serif;
+}
+
+:root[lang="fa-IR"],
+:root[dir="rtl"] {
+  --font-body: var(--font-persian);
+  --font-display: var(--font-persian);
+}

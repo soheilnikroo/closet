@@ -1,0 +1,59 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "exclude": ["types", "exports"],
+  "ignore": [
+    ".agents/**",
+    ".claude/**",
+    ".cursor/**",
+    "apps/api/src/infrastructure/queue/**",
+    "apps/api/src/infrastructure/storage/**",
+    "apps/web/src/entities/**"
+  ],
+  "ignoreDependencies": ["@storybook/react", "@testing-library/user-event"],
+  "ignoreFiles": [
+    "apps/api/src/infrastructure/index.ts",
+    "apps/api/src/shared/index.ts",
+    "apps/web/src/app/index.ts",
+    "apps/web/src/features/index.ts",
+    "apps/web/src/pages/index.ts",
+    "apps/web/src/widgets/index.ts"
+  ],
+  "workspaces": {
+    ".": {},
+    "packages/shared": {
+      "entry": ["src/**/*.test.ts"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "apps/api": {
+      "entry": ["scripts/**/*.ts", "src/**/*.test.ts"],
+      "project": ["src/**/*.{ts,tsx}", "scripts/**/*.ts"],
+      "drizzle": {
+        "config": ["drizzle.config.ts"]
+      }
+    },
+    "apps/web": {
+      "entry": [
+        "app/routes/**/*.{ts,tsx}",
+        "src/**/*.test.{ts,tsx}",
+        "e2e/**/*.ts",
+        ".storybook/{main,preview}.ts",
+        "src/**/*.stories.{ts,tsx}",
+        "scripts/**/*.{js,mjs,ts}"
+      ],
+      "project": [
+        "app/**/*.{ts,tsx}",
+        "src/**/*.{ts,tsx,css}",
+        "e2e/**/*.ts",
+        ".storybook/**/*.{ts,tsx}",
+        "vite-tsconfig-paths.ts",
+        "vite.proxy.ts",
+        "pwa.manifest.ts",
+        "scripts/**/*.{js,mjs,ts}"
+      ],
+      "paths": {
+        "@/*": ["./src/*"],
+        "~/*": ["./*"]
+      }
+    }
+  }
+}
