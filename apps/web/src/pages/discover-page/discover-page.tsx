@@ -1,83 +1,98 @@
-import type { DiscoverGapsResponse } from "@closet/shared";
+import type { DiscoverGap } from "@closet/shared";
 import { motion } from "motion/react";
-import { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 import { StylistChatSheet } from "@/features";
-import { useApiClient } from "@/shared/hooks/use-api-client.js";
-import { fadeUp, pressableCard, staggerContainer, staggerItem } from "@/shared/lib";
+import {
+  fadeUp,
+  localeLabel,
+  Match,
+  pressableCard,
+  staggerContainer,
+  staggerItem,
+} from "@/shared/lib";
 import { Card, EmptyState, Fab } from "@/shared/ui";
 import { AppShell } from "@/widgets/app-shell";
 
+import { useDiscoverPage } from "./model/use-discover-page.js";
+
+function GapList({
+  gaps,
+  language,
+  gapLabel,
+}: {
+  gaps: DiscoverGap[];
+  language: string;
+  gapLabel: string;
+}) {
+  return (
+    <motion.div className="space-y-3 empty:hidden" {...staggerContainer}>
+      {gaps.map((gap) => (
+        <motion.div
+          key={`${gap.categorySlug}-${gap.priority}`}
+          variants={staggerItem.variants}
+          {...pressableCard}
+        >
+          <Card className="space-y-2">
+            <p className="text-xs font-semibold tracking-[0.14em] text-on-surface-variant uppercase">
+              {gapLabel}
+            </p>
+            <h3 className="font-display text-xl font-semibold text-on-surface">
+              {localeLabel(language, gap.categoryName, gap.categoryNameFa)}
+            </h3>
+            <p className="text-sm leading-relaxed text-on-surface-variant">
+              {localeLabel(language, gap.reason, gap.reasonFa)}
+            </p>
+          </Card>
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+}
+
 export function DiscoverPage() {
-  const { t, i18n } = useTranslation();
-  const api = useApiClient();
-  const [data, setData] = useState<DiscoverGapsResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [chatOpen, setChatOpen] = useState(false);
-
-  const load = useCallback(async () => {
-    try {
-      const gaps = await api.getDiscoverGaps();
-      setData(gaps);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t("common.error"));
-    }
-  }, [api, t]);
-
-  useEffect(() => {
-    void load();
-  }, [load]);
+  const page = useDiscoverPage();
 
   return (
-    <AppShell title={t("discover.title")}>
+    <AppShell title={page.t("discover.title")}>
       <motion.div className="space-y-4" {...fadeUp}>
         <Card elevated>
-          <p className="text-sm leading-relaxed text-on-surface-variant">{t("discover.intro")}</p>
+          <p className="text-sm leading-relaxed text-on-surface-variant">
+            {page.t("discover.intro")}
+          </p>
         </Card>
 
-        {error ? <Card className="text-sm text-error">{error}</Card> : null}
-
-        <motion.div className="space-y-3" {...staggerContainer}>
-          {data?.gaps.map((gap) => (
-            <motion.div
-              key={`${gap.categorySlug}-${gap.priority}`}
-              variants={staggerItem.variants}
-              {...pressableCard}
-            >
-              <Card className="space-y-2">
-                <p className="text-xs font-semibold tracking-[0.14em] text-on-surface-variant uppercase">
-                  {t("discover.gapLabel")}
-                </p>
-                <h3 className="font-display text-xl font-semibold text-on-surface">
-                  {i18n.language === "fa-IR" ? gap.categoryNameFa : gap.categoryName}
-                </h3>
-                <p className="text-sm leading-relaxed text-on-surface-variant">
-                  {i18n.language === "fa-IR" ? gap.reasonFa : gap.reason}
-                </p>
-              </Card>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {data && data.gaps.length === 0 ? (
-          <EmptyState
-            variant="balanced"
-            title={t("discover.noGapsTitle")}
-            description={t("discover.noGapsBody")}
-          />
-        ) : null}
+        <Match
+          value={page.viewMode}
+          cases={{
+            error: <Card className="text-sm text-error">{page.error}</Card>,
+            empty: (
+              <EmptyState
+                variant="balanced"
+                title={page.t("discover.noGapsTitle")}
+                description={page.t("discover.noGapsBody")}
+              />
+            ),
+            gaps: (
+              <GapList
+                gaps={page.gaps}
+                language={page.i18n.language}
+                gapLabel={page.t("discover.gapLabel")}
+              />
+            ),
+            loading: null,
+          }}
+        />
 
         <Fab
-          label={t("stylist.title")}
+          label={page.t("stylist.title")}
           className="fixed end-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom,0px))] z-20"
-          onClick={() => setChatOpen(true)}
+          onClick={page.chat.onOpen}
         >
           AI
         </Fab>
       </motion.div>
 
-      <StylistChatSheet open={chatOpen} onClose={() => setChatOpen(false)} />
+      <StylistChatSheet open={page.chat.open} onClose={page.chat.onClose} />
     </AppShell>
   );
 }
