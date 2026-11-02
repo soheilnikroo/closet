@@ -6,6 +6,10 @@ export default [
   route("sign-up/*", "routes/sign-up/route.tsx"),
   route("sso-callback", "routes/sso-callback/route.tsx"),
   route("onboarding", "routes/onboarding/route.tsx"),
+  route(
+    ".well-known/appspecific/com.chrome.devtools.json",
+    "routes/chrome-devtools-well-known/route.ts",
+  ),
   layout("routes/app-shell/route.tsx", [
     route("today", "routes/today/route.tsx"),
     route("closet", "routes/closet/route.tsx"),

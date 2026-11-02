@@ -112,6 +112,18 @@ export const resources = {
       auth: {
         required: "Please sign in to continue",
         loading: "Checking your session…",
+        ssoFailedTitle: "Sign-in didn’t finish",
+        ssoFailedBody:
+          "The auth provider didn’t complete the session. Try again, or go home and start over.",
+        configBlockedTitle: "Google sign-in couldn’t finish",
+        configBlockedBody:
+          "A previous Google attempt is stuck because Clerk still requires a password for OAuth sign-ups. Use email and password below, or in the Clerk Dashboard set Password to Optional if you want Google to work.",
+        continueWithEmail: "Continue with email",
+        signUpStuckTitle: "Sign-up can’t finish this attempt",
+        signUpStuckBody:
+          "Email and password look complete, but Clerk didn’t create a session. Sign in instead (the account may already exist), or start sign-up again. Also check Clerk Dashboard → Legal: turn off required legal acceptance if you don’t need it.",
+        trySignInAgain: "Go to sign in",
+        backHome: "Back to home",
       },
       locale: {
         switchToFa: "فارسی",
@@ -236,6 +248,18 @@ export const resources = {
       auth: {
         required: "برای ادامه وارد شوید",
         loading: "در حال بررسی نشست…",
+        ssoFailedTitle: "ورود کامل نشد",
+        ssoFailedBody:
+          "ارائه‌دهنده احراز هویت نشست را تمام نکرد. دوباره تلاش کنید یا به خانه برگردید.",
+        configBlockedTitle: "ورود با گوگل کامل نشد",
+        configBlockedBody:
+          "تلاش قبلی گوگل گیر کرده چون کلرک هنوز برای ثبت‌نام OAuth رمز عبور می‌خواهد. از ایمیل و رمز استفاده کنید، یا در Clerk Dashboard گزینه Password را Optional کنید تا گوگل کار کند.",
+        continueWithEmail: "ادامه با ایمیل",
+        signUpStuckTitle: "ثبت‌نام این تلاش را تمام نمی‌کند",
+        signUpStuckBody:
+          "ایمیل و رمز کامل به نظر می‌رسد، اما کلرک نشست نساخت. به‌جای آن وارد شوید (شاید حساب از قبل باشد) یا ثبت‌نام را از نو شروع کنید. در Clerk Dashboard → Legal اگر پذیرش قوانین لازم نیست، آن را خاموش کنید.",
+        trySignInAgain: "برو به ورود",
+        backHome: "بازگشت به خانه",
       },
       locale: {
         switchToFa: "فارسی",
