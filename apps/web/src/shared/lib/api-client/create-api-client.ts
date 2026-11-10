@@ -22,6 +22,7 @@ import {
   stylistChatRequestSchema,
   stylistChatResponseSchema,
   todayResponseSchema,
+  updateClothingItemRequestSchema,
   updateMeRequestSchema,
   updateStyleProfileRequestSchema,
   updateUserProfileRequestSchema,
@@ -35,6 +36,7 @@ import {
   type ConfirmMediaRequest,
   type ConfirmMediaResponse,
   type CreateClothingItemRequest,
+  type UpdateClothingItemRequest,
   type CreateRecommendationRequest,
   type DiscoverGapsResponse,
   type FeedbackRequest,
@@ -82,6 +84,7 @@ export type ApiClient = {
     style?: string;
   }) => Promise<ClothingItemsResponse>;
   createItem: (input: CreateClothingItemRequest) => Promise<ClothingItemResponse>;
+  updateItem: (id: string, input: UpdateClothingItemRequest) => Promise<ClothingItemResponse>;
   deleteItem: (id: string) => Promise<void>;
   uploadMedia: (file: File) => Promise<MediaAssetResponse>;
   confirmMedia: (id: string, input: ConfirmMediaRequest) => Promise<ConfirmMediaResponse>;
@@ -282,6 +285,19 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
         "/v1/wardrobe/items",
         {
           method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        },
+        (data) => clothingItemResponseSchema.parse(data),
+        true,
+      );
+    },
+    updateItem(id, input) {
+      const body = updateClothingItemRequestSchema.parse(input);
+      return requestJson(
+        `/v1/wardrobe/items/${id}`,
+        {
+          method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         },

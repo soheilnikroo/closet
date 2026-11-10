@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -27,8 +26,7 @@ describe("DiscoverPage edges", () => {
     vi.clearAllMocks();
   });
 
-  it("shows empty gaps and opens stylist chat", async () => {
-    const user = userEvent.setup();
+  it("shows empty gaps", async () => {
     render(
       <MemoryRouter>
         <I18nextProvider i18n={i18n}>
@@ -38,7 +36,5 @@ describe("DiscoverPage edges", () => {
     );
 
     expect(await screen.findByText(/looking balanced/i)).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: /stylist|ai/i }));
-    expect(await screen.findByRole("textbox")).toBeInTheDocument();
   });
 });

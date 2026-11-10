@@ -9,18 +9,16 @@ export function ClosetAddSheet({
   title,
   uploadHint,
   sampleLabel,
-  stylistLabel,
   busy,
   onClose,
   onUpload,
   onSample,
-  onOpenStylist,
 }: ClosetAddSheetProps) {
   return (
     <BottomSheet open={open} title={title} onClose={onClose}>
       <div className="space-y-3">
         <motion.label
-          className="block touch-manipulation rounded-2xl border border-dashed border-outline-variant/80 bg-surface-container-low px-4 py-6 text-center text-sm transition-colors select-none hover:border-primary/40 hover:bg-primary/5"
+          className="block touch-manipulation rounded-2xl border border-dashed border-outline-variant/80 bg-surface-container-low px-4 py-6 text-center text-sm transition-colors select-none"
           whileTap={{ scale: 0.99 }}
           transition={softSpring}
         >
@@ -33,11 +31,8 @@ export function ClosetAddSheet({
             onChange={(event) => onUpload(event.target.files)}
           />
         </motion.label>
-        <Button fullWidth variant="tonal" disabled={busy} onClick={onSample}>
+        <Button fullWidth size="lg" variant="tonal" disabled={busy} onClick={onSample}>
           {sampleLabel}
-        </Button>
-        <Button fullWidth variant="text" onClick={onOpenStylist}>
-          {stylistLabel}
         </Button>
       </div>
     </BottomSheet>

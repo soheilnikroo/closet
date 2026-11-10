@@ -1,8 +1,9 @@
 import type { ClothingItem } from "@closet/shared";
 
+import type { ClosetSlot } from "@/pages/closet-page/closet-page.types.js";
+
 export type ClosetGridProps = {
   items: ClothingItem[];
-  busy: boolean;
-  deleteLabel: string;
-  onRemove: (id: string) => void;
+  slotLabel: (slot: ClosetSlot) => string;
+  onOpen: (item: ClothingItem) => void;
 };

@@ -57,7 +57,7 @@ describe("ClosetPage upload", () => {
     vi.clearAllMocks();
   });
 
-  it("uploads media from the add sheet and opens stylist chat", async () => {
+  it("uploads a photo, lets you keep detections, then saves them", async () => {
     const user = userEvent.setup();
     render(
       <MemoryRouter>
@@ -85,14 +85,8 @@ describe("ClosetPage upload", () => {
     }
 
     expect(mockApi.uploadMedia).toHaveBeenCalled();
+    expect(await screen.findByText(/detected shirt/i)).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /save to closet/i }));
     expect(mockApi.confirmMedia).toHaveBeenCalled();
-
-    const reopen = screen.getAllByRole("button", { name: /^add clothing$/i })[0];
-    expect(reopen).toBeTruthy();
-    if (reopen) {
-      await user.click(reopen);
-    }
-    await user.click(screen.getByRole("button", { name: /ask the stylist|stylist/i }));
-    expect(await screen.findByRole("textbox")).toBeInTheDocument();
   });
 });

@@ -18,12 +18,12 @@ export function EmptyState({
         elevated
         className={cn("flex flex-col items-center gap-4 px-5 py-7 text-center", className)}
       >
-        <AnimatedScene variant={variant} label={title} />
         <div className="space-y-2">
           <h2 className="font-display text-xl font-semibold text-on-surface">{title}</h2>
           <p className="text-sm leading-relaxed text-on-surface-variant">{description}</p>
         </div>
-        {action ? <div className="w-full pt-1">{action}</div> : null}
+        {action ? <div className="w-full">{action}</div> : null}
+        <AnimatedScene variant={variant} label={title} className="w-32" />
       </Card>
     </motion.div>
   );

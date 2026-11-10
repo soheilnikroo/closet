@@ -74,10 +74,16 @@ describe("ClosetPage interactions", () => {
     await user.click(screen.getByRole("button", { name: /^tops$/i }));
     expect(screen.getByText(/white shirt/i)).toBeInTheDocument();
 
+    await user.click(screen.getByRole("button", { name: /white shirt/i }));
     await user.click(screen.getByRole("button", { name: /^delete$/i }));
     expect(mockApi.deleteItem).toHaveBeenCalledWith(item.id);
 
-    await user.click(screen.getByRole("button", { name: /^add clothing$/i }));
+    const addButtons = screen.getAllByRole("button", { name: /^add clothing$/i });
+    const addButton = addButtons[0];
+    expect(addButton).toBeTruthy();
+    if (addButton) {
+      await user.click(addButton);
+    }
     await user.click(screen.getByRole("button", { name: /use sample/i }));
     expect(mockApi.seedSampleCatalog).toHaveBeenCalled();
   });

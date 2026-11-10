@@ -61,6 +61,7 @@ export function createMockApiClient(overrides: Partial<ApiClient> = {}): ApiClie
     listCategories: vi.fn(),
     listItems: vi.fn().mockResolvedValue({ items: [] }),
     createItem: vi.fn(),
+    updateItem: vi.fn(),
     deleteItem: vi.fn(),
     uploadMedia: vi.fn(),
     confirmMedia: vi.fn(),

@@ -1,10 +1,9 @@
 import { motion } from "motion/react";
 
-import { StylistChatSheet } from "@/features";
 import { useDiscoverPage } from "@/pages/discover-page/model/use-discover-page.js";
 import { GapList } from "@/pages/discover-page/ui/gap-list.js";
 import { fadeUp, Match } from "@/shared/lib";
-import { Card, EmptyState, Fab, FAB_ABOVE_NAV_CLASS } from "@/shared/ui";
+import { Card, EmptyState } from "@/shared/ui";
 import { AppShell } from "@/widgets/app-shell";
 
 export function DiscoverPage() {
@@ -41,17 +40,7 @@ export function DiscoverPage() {
             loading: null,
           }}
         />
-
-        <Fab
-          label={page.t("stylist.title")}
-          className={FAB_ABOVE_NAV_CLASS}
-          onClick={page.chat.onOpen}
-        >
-          AI
-        </Fab>
       </motion.div>
-
-      <StylistChatSheet open={page.chat.open} onClose={page.chat.onClose} />
     </AppShell>
   );
 }

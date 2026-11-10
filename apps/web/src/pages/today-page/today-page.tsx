@@ -1,13 +1,12 @@
 import { motion } from "motion/react";
 
-import { StylistChatSheet } from "@/features";
 import { useTodayPage } from "@/pages/today-page/model/use-today-page.js";
 import { OccasionChips } from "@/pages/today-page/ui/occasion-chips.js";
 import { OutfitList } from "@/pages/today-page/ui/outfit-list.js";
 import { TodayMessageCard } from "@/pages/today-page/ui/today-message-card.js";
 import { TodayWeatherCard } from "@/pages/today-page/ui/today-weather-card.js";
 import { fadeUp, Match } from "@/shared/lib";
-import { Button, Card, CelebrationBurst, EmptyState, Fab, FAB_ABOVE_NAV_CLASS } from "@/shared/ui";
+import { Button, Card, CelebrationBurst, EmptyState } from "@/shared/ui";
 import { AppShell } from "@/widgets/app-shell";
 
 export function TodayPage() {
@@ -63,14 +62,6 @@ export function TodayPage() {
             ) : null,
           }}
         />
-
-        <Fab
-          label={page.t("stylist.title")}
-          className={FAB_ABOVE_NAV_CLASS}
-          onClick={page.chat.onOpen}
-        >
-          AI
-        </Fab>
       </motion.div>
 
       <CelebrationBurst
@@ -79,8 +70,6 @@ export function TodayPage() {
         label={page.celebration.label}
         onDone={page.dismissCelebration}
       />
-
-      <StylistChatSheet open={page.chat.open} onClose={page.chat.onClose} />
     </AppShell>
   );
 }

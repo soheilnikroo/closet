@@ -15,16 +15,55 @@ import {
 } from "@/features/auth-gate/sso-callback-panel.constants.js";
 import type { SsoCallbackPanelProps } from "@/features/auth-gate/sso-callback-panel.types.js";
 
-/**
- * OAuth one-time tokens can only be consumed once. React Strict Mode (and some
- * remounts) used to call handleRedirectCallback twice → second
- * `sign_ups?transfer=true` returns 400 and the UI hangs.
- */
-const handledRedirectKeys = new Set<string>();
+type ClerkClient = ReturnType<typeof useClerk>;
+
+type CallbackOutcome = "signed-in" | "config-blocked" | "continue" | "idle" | "failed";
 
 /**
- * Completes OAuth/SSO exactly once per callback URL.
- * Routes to `/sign-up/continue` only when Clerk reports real missing fields.
+ * One in-flight callback per URL. Strict Mode remounts share this promise so
+ * the second mount is not left on the spinner after the first call is dropped.
+ */
+const callbackByUrl = new Map<string, Promise<CallbackOutcome>>();
+
+function runRedirectCallback(
+  clerk: ClerkClient,
+  fallbackRedirectUrl: string,
+): Promise<CallbackOutcome> {
+  const key = window.location.href;
+  const existing = callbackByUrl.get(key);
+  if (existing) {
+    return existing;
+  }
+
+  const pending = clerk
+    .handleRedirectCallback({
+      signInUrl: SIGN_IN_PATH,
+      signUpUrl: SIGN_UP_PATH,
+      continueSignUpUrl: SIGN_UP_CONTINUE_PATH,
+      signInFallbackRedirectUrl: fallbackRedirectUrl,
+      signUpFallbackRedirectUrl: fallbackRedirectUrl,
+    })
+    .then((): CallbackOutcome => {
+      if (clerk.user) {
+        return "signed-in";
+      }
+      const signUp = clerk.client?.signUp;
+      if (signUp?.status !== "missing_requirements") {
+        return "idle";
+      }
+      if (isStuckOAuthSignUp(signUp)) {
+        return "config-blocked";
+      }
+      return "continue";
+    })
+    .catch((): CallbackOutcome => "failed");
+
+  callbackByUrl.set(key, pending);
+  return pending;
+}
+
+/**
+ * Completes OAuth/SSO once per callback URL, then always leaves the spinner.
  */
 export function SsoCallbackPanel({ fallbackRedirectUrl }: SsoCallbackPanelProps) {
   const { t } = useTranslation();
@@ -33,58 +72,43 @@ export function SsoCallbackPanel({ fallbackRedirectUrl }: SsoCallbackPanelProps)
   const { isLoaded, isSignedIn } = useAuth();
   const [failed, setFailed] = useState(false);
   const [configBlocked, setConfigBlocked] = useState(false);
-  const [timedOut, setTimedOut] = useState(false);
 
   useEffect(() => {
     if (!isLoaded || isSignedIn || failed || configBlocked) {
       return undefined;
     }
 
-    const redirectKey = window.location.href;
-    if (handledRedirectKeys.has(redirectKey)) {
-      return undefined;
-    }
-    handledRedirectKeys.add(redirectKey);
-
-    void clerk
-      .handleRedirectCallback({
-        signInUrl: SIGN_IN_PATH,
-        signUpUrl: SIGN_UP_PATH,
-        continueSignUpUrl: SIGN_UP_CONTINUE_PATH,
-        signInFallbackRedirectUrl: fallbackRedirectUrl,
-        signUpFallbackRedirectUrl: fallbackRedirectUrl,
-      })
-      .then(() => {
-        if (clerk.user) {
-          return;
-        }
-
-        const pendingSignUp = clerk.client?.signUp;
-        if (!pendingSignUp || pendingSignUp.status !== "missing_requirements") {
-          return;
-        }
-
-        if (isStuckOAuthSignUp(pendingSignUp)) {
-          setConfigBlocked(true);
-          return;
-        }
-
-        void navigate(SIGN_UP_CONTINUE_PATH, { replace: true });
-      })
-      .catch(() => {
+    let active = true;
+    const timeout = window.setTimeout(() => {
+      if (active) {
         setFailed(true);
-      });
+      }
+    }, SSO_CALLBACK_TIMEOUT_MS);
 
-    return undefined;
+    void runRedirectCallback(clerk, fallbackRedirectUrl).then((outcome) => {
+      if (!active) {
+        return;
+      }
+      window.clearTimeout(timeout);
+      if (outcome === "signed-in" || outcome === "idle") {
+        return;
+      }
+      if (outcome === "config-blocked") {
+        setConfigBlocked(true);
+        return;
+      }
+      if (outcome === "continue") {
+        void navigate(SIGN_UP_CONTINUE_PATH, { replace: true });
+        return;
+      }
+      setFailed(true);
+    });
+
+    return () => {
+      active = false;
+      window.clearTimeout(timeout);
+    };
   }, [clerk, configBlocked, failed, fallbackRedirectUrl, isLoaded, isSignedIn, navigate]);
-
-  useEffect(() => {
-    if (isSignedIn || failed || configBlocked) {
-      return undefined;
-    }
-    const timeout = window.setTimeout(() => setTimedOut(true), SSO_CALLBACK_TIMEOUT_MS);
-    return () => window.clearTimeout(timeout);
-  }, [configBlocked, failed, isSignedIn]);
 
   if (!isLoaded) {
     return <AuthLoading />;
@@ -98,7 +122,7 @@ export function SsoCallbackPanel({ fallbackRedirectUrl }: SsoCallbackPanelProps)
     return <AuthConfigBlocked />;
   }
 
-  if (failed || timedOut) {
+  if (failed) {
     return (
       <AuthRecoveryCard
         title={t("auth.ssoFailedTitle")}

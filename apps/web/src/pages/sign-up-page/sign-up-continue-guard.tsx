@@ -1,15 +1,10 @@
 import { SignUp, useClerk, useSignUp } from "@clerk/clerk-react";
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router";
 
-import { AuthConfigBlocked } from "@/features/auth-gate/auth-config-blocked.js";
 import { AuthLoading } from "@/features/auth-gate/auth-loading.js";
 import { completeStuckSignUp } from "@/features/auth-gate/complete-stuck-signup.js";
-import { isStuckOAuthSignUp } from "@/features/auth-gate/is-empty-signup-continue.js";
 import { isSatisfiedIncompleteSignUp } from "@/features/auth-gate/is-satisfied-incomplete-signup.js";
-import { resetClerkAuthAttempts } from "@/features/auth-gate/reset-clerk-auth-attempts.js";
 import { SignUpContinueRecovery } from "@/features/auth-gate/signup-continue-recovery.js";
-import { SIGN_UP_PATH } from "@/features/auth-gate/sso-callback-panel.constants.js";
 import { buildSignInHref } from "@/shared/config";
 
 type SignUpContinueGuardProps = {
@@ -17,90 +12,50 @@ type SignUpContinueGuardProps = {
 };
 
 /**
- * Handles Clerk `/sign-up/continue` dead-ends:
- * - stuck Google OAuth → reset to clean sign-up
- * - email+password satisfied but status still incomplete → try legal finalize
- * - still stuck → recovery card (sign in / restart)
+ * Clerk's continue step stays mounted. A background attempt may finish a
+ * sign-up that already has email + password. It never covers the page with a
+ * spinner — a previous version set `recovering` and then cancelled itself.
  */
 export function SignUpContinueGuard({ fallbackRedirectUrl }: SignUpContinueGuardProps) {
   const { isLoaded, signUp } = useSignUp();
   const clerk = useClerk();
-  const navigate = useNavigate();
-  const attemptedComplete = useRef(false);
-  const [recovering, setRecovering] = useState(false);
-  const [showOAuthBlocked, setShowOAuthBlocked] = useState(false);
+  const started = useRef(false);
+  const mounted = useRef(true);
   const [showRecovery, setShowRecovery] = useState(false);
 
   useEffect(() => {
-    if (!isLoaded || recovering || showOAuthBlocked || showRecovery) {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isLoaded || !signUp || started.current || showRecovery) {
+      return undefined;
+    }
+    if (!isSatisfiedIncompleteSignUp(signUp)) {
       return undefined;
     }
 
-    if (isStuckOAuthSignUp(signUp)) {
-      let cancelled = false;
-      setRecovering(true);
-      void (async () => {
-        try {
-          await resetClerkAuthAttempts(clerk);
-          if (!cancelled) {
-            await navigate(SIGN_UP_PATH, { replace: true });
-          }
-        } catch {
-          if (!cancelled) {
-            setShowOAuthBlocked(true);
-          }
-        } finally {
-          if (!cancelled) {
-            setRecovering(false);
-          }
-        }
-      })();
-      return () => {
-        cancelled = true;
-      };
-    }
+    started.current = true;
 
-    if (!signUp || !isSatisfiedIncompleteSignUp(signUp) || attemptedComplete.current) {
-      return undefined;
-    }
-
-    attemptedComplete.current = true;
-    let cancelled = false;
-    setRecovering(true);
-
-    void (async () => {
-      const result = await completeStuckSignUp(clerk, signUp);
-      if (cancelled) {
+    void completeStuckSignUp(clerk, signUp).then((result) => {
+      if (!mounted.current) {
         return;
       }
       if (result.ok) {
-        await navigate(fallbackRedirectUrl, { replace: true });
+        window.location.assign(fallbackRedirectUrl);
         return;
       }
-      setRecovering(false);
       setShowRecovery(true);
-    })();
+    });
 
-    return () => {
-      cancelled = true;
-    };
-  }, [
-    clerk,
-    fallbackRedirectUrl,
-    isLoaded,
-    navigate,
-    recovering,
-    showOAuthBlocked,
-    showRecovery,
-    signUp,
-  ]);
+    return undefined;
+  }, [clerk, fallbackRedirectUrl, isLoaded, showRecovery, signUp]);
 
-  if (!isLoaded || recovering) {
+  if (!isLoaded) {
     return <AuthLoading />;
-  }
-
-  if (showOAuthBlocked || isStuckOAuthSignUp(signUp)) {
-    return <AuthConfigBlocked />;
   }
 
   if (showRecovery) {
@@ -109,7 +64,6 @@ export function SignUpContinueGuard({ fallbackRedirectUrl }: SignUpContinueGuard
 
   return (
     <div className="mx-auto flex min-h-dvh max-w-lg flex-col items-center justify-center gap-4 px-4 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]">
-      {/* Required when legacy bot protection is enabled in Clerk. */}
       <div id="clerk-captcha" />
       <SignUp
         routing="path"

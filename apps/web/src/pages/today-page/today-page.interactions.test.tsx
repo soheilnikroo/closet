@@ -109,7 +109,7 @@ describe("TodayPage interactions", () => {
     vi.clearAllMocks();
   });
 
-  it("shows weather, outfit actions, occasion chips, and stylist fab", async () => {
+  it("shows weather, outfit actions, and occasion chips", async () => {
     const user = userEvent.setup();
     render(
       <MemoryRouter>
@@ -132,8 +132,5 @@ describe("TodayPage interactions", () => {
 
     await user.click(screen.getByRole("button", { name: /^everyday$/i }));
     expect(mockApi.createRecommendations).toHaveBeenCalled();
-
-    await user.click(screen.getByRole("button", { name: /stylist|ai/i }));
-    expect(await screen.findByRole("textbox")).toBeInTheDocument();
   });
 });

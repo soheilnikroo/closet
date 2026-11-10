@@ -1,9 +1,10 @@
 import { motion } from "motion/react";
 
-import { StylistChatSheet } from "@/features";
 import { useClosetPage } from "@/pages/closet-page/model/use-closet-page.js";
 import { ClosetAddSheet } from "@/pages/closet-page/ui/closet-add-sheet.js";
 import { ClosetGrid } from "@/pages/closet-page/ui/closet-grid.js";
+import { ClosetItemSheet } from "@/pages/closet-page/ui/closet-item-sheet.js";
+import { ClosetReviewSheet } from "@/pages/closet-page/ui/closet-review-sheet.js";
 import { SlotFilters } from "@/pages/closet-page/ui/slot-filters.js";
 import { fadeUp, Match } from "@/shared/lib";
 import { Button, Card, EmptyState, Fab, FAB_ABOVE_NAV_CLASS } from "@/shared/ui";
@@ -15,6 +16,10 @@ export function ClosetPage() {
   return (
     <AppShell title={page.t("closet.title")}>
       <motion.div className="space-y-4" {...fadeUp}>
+        <p className="text-sm text-on-surface-variant">
+          {page.t("closet.count", { count: page.itemCount })}
+        </p>
+
         <SlotFilters
           slots={page.slots}
           slotFilter={page.slotFilter}
@@ -41,24 +46,30 @@ export function ClosetPage() {
                 }
               />
             ),
+            filteredEmpty: (
+              <Card>
+                <p className="text-sm text-on-surface-variant">{page.t("closet.filteredEmpty")}</p>
+              </Card>
+            ),
             grid: (
               <ClosetGrid
                 items={page.filtered}
-                busy={page.busy}
-                deleteLabel={page.t("closet.delete")}
-                onRemove={page.removeItem}
+                slotLabel={(slot) => page.t(`closet.slots.${slot}`)}
+                onOpen={page.openItem}
               />
             ),
           }}
         />
 
-        <Fab
-          label={page.t("closet.add")}
-          className={FAB_ABOVE_NAV_CLASS}
-          onClick={page.addSheet.onOpen}
-        >
-          +
-        </Fab>
+        {page.viewMode === "empty" ? null : (
+          <Fab
+            label={page.t("closet.add")}
+            className={FAB_ABOVE_NAV_CLASS}
+            onClick={page.addSheet.onOpen}
+          >
+            +
+          </Fab>
+        )}
       </motion.div>
 
       <ClosetAddSheet
@@ -66,15 +77,36 @@ export function ClosetPage() {
         title={page.t("closet.add")}
         uploadHint={page.t("closet.uploadHint")}
         sampleLabel={page.t("closet.useSample")}
-        stylistLabel={page.t("stylist.title")}
         busy={page.busy}
         onClose={page.addSheet.onClose}
         onUpload={page.onUpload}
         onSample={page.seedSamples}
-        onOpenStylist={page.chat.onOpen}
       />
 
-      <StylistChatSheet open={page.chat.open} onClose={page.chat.onClose} />
+      <ClosetReviewSheet
+        open={page.review !== null}
+        title={page.t("closet.reviewTitle")}
+        hint={page.t("closet.reviewHint")}
+        confirmLabel={page.t("closet.confirm")}
+        busy={page.busy}
+        garments={page.review?.garments ?? []}
+        onClose={page.closeReview}
+        onToggle={page.toggleReviewGarment}
+        onConfirm={page.confirmReview}
+      />
+
+      <ClosetItemSheet
+        item={page.selected}
+        title={page.t("closet.detailTitle")}
+        nameLabel={page.t("closet.name")}
+        saveLabel={page.t("closet.save")}
+        deleteLabel={page.t("closet.delete")}
+        slotLabel={page.selected ? page.t(`closet.slots.${page.selected.slot}`) : ""}
+        busy={page.busy}
+        onClose={page.closeItem}
+        onSave={page.saveSelected}
+        onDelete={page.removeSelected}
+      />
     </AppShell>
   );
 }
