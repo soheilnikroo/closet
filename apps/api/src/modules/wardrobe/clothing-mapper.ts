@@ -27,6 +27,7 @@ export function mapClothingItem(
     warmthLevel: item.warmthLevel,
     size: item.size,
     brand: item.brand,
+    labels: item.labels,
     sourceType: item.sourceType,
     status: item.status,
     imageUrl,

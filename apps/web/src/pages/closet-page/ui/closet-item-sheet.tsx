@@ -11,6 +11,8 @@ export function ClosetItemSheet({
   saveLabel,
   deleteLabel,
   slotLabel,
+  seasonLine,
+  labelLine,
   busy,
   onClose,
   onSave,
@@ -40,6 +42,8 @@ export function ClosetItemSheet({
         <p className="text-xs font-medium tracking-wide text-on-surface-variant uppercase">
           {slotLabel} · {item.primaryColor}
         </p>
+        {seasonLine ? <p className="text-sm text-on-surface">{seasonLine}</p> : null}
+        {labelLine ? <p className="text-sm text-on-surface-variant">{labelLine}</p> : null}
         <TextField
           label={nameLabel}
           value={name}

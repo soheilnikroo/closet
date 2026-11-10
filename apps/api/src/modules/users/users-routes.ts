@@ -1,30 +1,11 @@
 import { createClerkClient } from "@clerk/fastify";
 import { meResponseSchema } from "@closet/shared";
-import type { FastifyInstance, FastifyRequest } from "fastify";
+import type { FastifyInstance } from "fastify";
 
 import type { UsersService } from "@/modules/users/users-service.js";
+import { getAuthFromRequest, type AuthGetter } from "@/shared/auth/index.js";
 import type { Env } from "@/shared/config/index.js";
 import { unauthorized } from "@/shared/errors/index.js";
-
-type AuthGetter = (request: FastifyRequest) => { userId: string | null };
-
-function getAuthFromRequest(request: FastifyRequest): { userId: string | null } {
-  const authValue = Reflect.get(request, "auth");
-
-  if (typeof authValue === "function") {
-    const result: unknown = authValue.call(request);
-    if (
-      typeof result === "object" &&
-      result !== null &&
-      "userId" in result &&
-      (typeof result.userId === "string" || result.userId === null)
-    ) {
-      return { userId: result.userId };
-    }
-  }
-
-  return { userId: null };
-}
 
 export type UsersRoutesDeps = {
   usersService: UsersService;

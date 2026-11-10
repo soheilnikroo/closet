@@ -17,7 +17,9 @@ export function ClosetPage() {
     <AppShell title={page.t("closet.title")}>
       <motion.div className="space-y-4" {...fadeUp}>
         <p className="text-sm text-on-surface-variant">
-          {page.t("closet.count", { count: page.itemCount })}
+          {page.itemCount === 1
+            ? page.t("closet.countOne", { count: page.itemCount })
+            : page.t("closet.count", { count: page.itemCount })}
         </p>
 
         <SlotFilters
@@ -74,13 +76,44 @@ export function ClosetPage() {
 
       <ClosetAddSheet
         open={page.addSheet.open}
+        busy={page.busy}
+        error={page.error}
+        language={page.language}
+        categories={page.categories}
+        presetCategory={page.presetCategory}
+        openManual={page.openManual}
         title={page.t("closet.add")}
+        how={page.t("closet.how")}
+        manualLabel={page.t("closet.manual")}
+        manualHint={page.t("closet.manualHint")}
+        photoLabel={page.t("closet.photo")}
+        photoHint={page.t("closet.photoHint")}
         uploadHint={page.t("closet.uploadHint")}
         sampleLabel={page.t("closet.useSample")}
-        busy={page.busy}
-        onClose={page.addSheet.onClose}
+        sampleHint={page.t("closet.sampleHint")}
+        typeQuestion={page.t("closet.typeQuestion")}
+        colorQuestion={page.t("closet.colorQuestion")}
+        nameQuestion={page.t("closet.nameQuestion")}
+        seasonQuestion={page.t("closet.seasonQuestion")}
+        labelQuestion={page.t("closet.labelQuestion")}
+        labelHint={page.t("closet.labelHint")}
+        labelPlaceholder={page.t("closet.labelPlaceholder")}
+        addLabel={page.t("closet.addLabel")}
+        nextLabel={page.t("closet.next")}
+        nameLabel={page.t("closet.name")}
+        saveLabel={page.t("closet.confirm")}
+        backLabel={page.t("closet.back")}
+        stepLabel={(step) => page.t("closet.step", { step, total: 4 })}
+        colorLabel={(color) => page.t(`closet.colors.${color}`)}
+        seasonLabel={(season) => page.t(`closet.seasons.${season}`)}
+        slotLabel={(slot) => page.t(`closet.slots.${slot}`)}
+        onClose={() => {
+          page.clearPreset();
+          page.addSheet.onClose();
+        }}
         onUpload={page.onUpload}
         onSample={page.seedSamples}
+        onCreate={page.createManual}
       />
 
       <ClosetReviewSheet
@@ -102,6 +135,12 @@ export function ClosetPage() {
         saveLabel={page.t("closet.save")}
         deleteLabel={page.t("closet.delete")}
         slotLabel={page.selected ? page.t(`closet.slots.${page.selected.slot}`) : ""}
+        seasonLine={
+          page.selected
+            ? page.selected.seasons.map((season) => page.t(`closet.seasons.${season}`)).join(" · ")
+            : ""
+        }
+        labelLine={page.selected?.labels?.join(" · ") ?? ""}
         busy={page.busy}
         onClose={page.closeItem}
         onSave={page.saveSelected}

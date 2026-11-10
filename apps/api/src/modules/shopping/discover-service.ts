@@ -62,10 +62,7 @@ export function createDiscoverService(wardrobeService: WardrobeService): Discove
 
       const gaps: WardrobeGap[] = [];
       for (const rule of GAP_RULES) {
-        if (slots.has(rule.slot) && slugs.has(rule.categorySlug)) {
-          continue;
-        }
-        if (slots.has(rule.slot) && rule.slot !== "outerwear") {
+        if (slugs.has(rule.categorySlug)) {
           continue;
         }
         gaps.push({
@@ -78,7 +75,8 @@ export function createDiscoverService(wardrobeService: WardrobeService): Discove
         });
       }
 
-      if (items.length < 5) {
+      const missingCore = !slots.has("top") || !slots.has("bottom") || !slots.has("shoes");
+      if (items.length < 5 || missingCore) {
         gaps.unshift({
           categorySlug: "basics",
           categoryName: "More everyday basics",

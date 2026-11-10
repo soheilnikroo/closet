@@ -21,4 +21,13 @@ describe("createAiProviders", () => {
     expect(providers.vision.name).toBe("openai");
     expect(providers.llm.name).toBe("openai");
   });
+
+  it("stays on mock when AI_PROVIDER is mock, even with a key", () => {
+    const providers = createAiProviders({
+      AI_PROVIDER: "mock",
+      OPENAI_API_KEY: "sk-test-12345678",
+    } as Env);
+    expect(providers.vision.name).toBe("mock");
+    expect(providers.llm.name).toBe("mock");
+  });
 });

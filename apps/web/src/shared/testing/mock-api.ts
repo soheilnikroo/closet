@@ -58,7 +58,7 @@ export function createMockApiClient(overrides: Partial<ApiClient> = {}): ApiClie
         timezone: "Asia/Tehran",
       },
     ]),
-    listCategories: vi.fn(),
+    listCategories: vi.fn().mockResolvedValue({ categories: [] }),
     listItems: vi.fn().mockResolvedValue({ items: [] }),
     createItem: vi.fn(),
     updateItem: vi.fn(),

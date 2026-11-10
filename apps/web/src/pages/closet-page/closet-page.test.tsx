@@ -42,6 +42,6 @@ describe("ClosetPage", () => {
     if (emptyStateAdd) {
       await user.click(emptyStateAdd);
     }
-    expect(await screen.findByText(/take a photo or choose/i)).toBeInTheDocument();
+    expect(await screen.findByText(/how do you want to add it/i)).toBeInTheDocument();
   });
 });

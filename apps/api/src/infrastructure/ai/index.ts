@@ -13,8 +13,8 @@ export { createMockAiProviders } from "@/infrastructure/ai/mock-providers.js";
 export { createOpenAiProviders } from "@/infrastructure/ai/openai-providers.js";
 
 export function createAiProviders(env: Env): AiProviders {
-  if (hasOpenAiKey(env)) {
-    return createOpenAiProviders(env);
+  if (env.AI_PROVIDER === "mock" || !hasOpenAiKey(env)) {
+    return createMockAiProviders();
   }
-  return createMockAiProviders();
+  return createOpenAiProviders(env);
 }

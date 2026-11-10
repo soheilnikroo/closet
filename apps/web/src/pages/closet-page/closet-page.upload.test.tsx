@@ -75,6 +75,7 @@ describe("ClosetPage upload", () => {
       await user.click(emptyStateAdd);
     }
 
+    await user.click(screen.getByRole("button", { name: /from a photo/i }));
     const fileInput = document.querySelector('input[type="file"]');
     expect(fileInput).toBeTruthy();
     if (fileInput) {

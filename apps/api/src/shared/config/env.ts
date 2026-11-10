@@ -9,6 +9,7 @@ const envSchema = z.object({
   CLERK_PUBLISHABLE_KEY: z.string().min(1),
   CLERK_SECRET_KEY: z.string().min(1),
   LOCAL_STORAGE_DIR: z.string().default(".data/storage"),
+  AI_PROVIDER: z.enum(["mock", "openai"]).optional(),
   OPENAI_API_KEY: z.string().optional(),
   OPENAI_BASE_URL: z.string().url().optional(),
   OPENAI_VISION_MODEL: z.string().default("gpt-4o-mini"),

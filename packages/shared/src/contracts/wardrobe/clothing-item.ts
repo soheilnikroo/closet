@@ -38,6 +38,7 @@ export const clothingItemSchema = z.object({
   warmthLevel: z.number().int().min(1).max(5).nullable(),
   size: z.string().nullable(),
   brand: z.string().nullable(),
+  labels: z.array(z.string().min(1).max(32)).max(8).optional(),
   sourceType: z.enum(["photo", "manual", "sample_catalog", "import"]),
   status: clothingStatusSchema,
   imageUrl: z.string().nullable(),
@@ -59,6 +60,7 @@ export const createClothingItemRequestSchema = z.object({
   fit: fitPreferenceSchema.nullable().optional(),
   warmthLevel: z.number().int().min(1).max(5).nullable().optional(),
   brand: z.string().nullable().optional(),
+  labels: z.array(z.string().min(1).max(32)).max(8).optional(),
 });
 
 export const updateClothingItemRequestSchema = createClothingItemRequestSchema.partial().extend({

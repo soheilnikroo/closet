@@ -7,6 +7,8 @@ export type ClosetItemSheetProps = {
   saveLabel: string;
   deleteLabel: string;
   slotLabel: string;
+  seasonLine: string;
+  labelLine: string;
   busy: boolean;
   onClose: () => void;
   onSave: (name: string) => void;

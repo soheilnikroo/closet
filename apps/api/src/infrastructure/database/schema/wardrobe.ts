@@ -77,6 +77,7 @@ export const clothingItemsTable = pgTable("clothing_items", {
   warmthLevel: integer("warmth_level"),
   size: varchar("size", { length: 32 }),
   brand: varchar("brand", { length: 120 }),
+  labels: jsonb("labels").$type<string[]>().notNull().default([]),
   condition: varchar("condition", { length: 64 }),
   sourceType: clothingSourceTypeEnum("source_type").notNull().default("manual"),
   status: clothingStatusEnum("status").notNull().default("active"),

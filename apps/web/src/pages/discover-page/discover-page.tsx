@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { useNavigate } from "react-router";
 
 import { useDiscoverPage } from "@/pages/discover-page/model/use-discover-page.js";
 import { GapList } from "@/pages/discover-page/ui/gap-list.js";
@@ -8,6 +9,7 @@ import { AppShell } from "@/widgets/app-shell";
 
 export function DiscoverPage() {
   const page = useDiscoverPage();
+  const navigate = useNavigate();
 
   return (
     <AppShell title={page.t("discover.title")}>
@@ -35,6 +37,11 @@ export function DiscoverPage() {
                 gaps={page.gaps}
                 language={page.i18n.language}
                 gapLabel={page.t("discover.gapLabel")}
+                addLabel={page.t("discover.addGap")}
+                onAdd={(gap) => {
+                  const slug = gap.categorySlug === "basics" ? "new" : gap.categorySlug;
+                  void navigate(`/closet?add=${slug}`);
+                }}
               />
             ),
             loading: null,

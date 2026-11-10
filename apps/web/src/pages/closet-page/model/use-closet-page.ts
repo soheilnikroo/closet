@@ -1,9 +1,11 @@
-import type { ClothingItem } from "@closet/shared";
+import type { ClothingCategory, ClothingItem } from "@closet/shared";
 import { useEffect, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router";
 
 import { CLOSET_SLOTS } from "@/pages/closet-page/closet-page.constants.js";
 import type { ClosetSlot, ClosetViewMode } from "@/pages/closet-page/closet-page.types.js";
+import type { ManualClothingDraft } from "@/pages/closet-page/ui/closet-add-sheet.types.js";
 import type { ReviewGarment } from "@/pages/closet-page/ui/closet-review-sheet.types.js";
 import { useApiClient, useDisclosure } from "@/shared/hooks";
 
@@ -11,17 +13,22 @@ function errorMessage(err: unknown, fallback: string) {
   if (!(err instanceof Error)) {
     return fallback;
   }
-  if (/status 5\d\d|failed to fetch|network|ECONNREFUSED/i.test(err.message)) {
+  if (
+    /status 5\d\d|failed to fetch|network|ECONNREFUSED|unexpected server error/i.test(err.message)
+  ) {
     return fallback;
   }
   return err.message;
 }
 
 export function useClosetPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const api = useApiClient();
   const addSheet = useDisclosure();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [presetSlug, setPresetSlug] = useState<string | null>(null);
   const [items, setItems] = useState<ClothingItem[]>([]);
+  const [categories, setCategories] = useState<ClothingCategory[]>([]);
   const [slotFilter, setSlotFilter] = useState<ClosetSlot | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [review, setReview] = useState<{ mediaId: string; garments: ReviewGarment[] } | null>(null);
@@ -53,6 +60,44 @@ export function useClosetPage() {
       cancelled = true;
     };
   }, [api, t]);
+
+  const addParam = searchParams.get("add");
+
+  useEffect(() => {
+    let cancelled = false;
+    if ((addSheet.open || addParam) && categories.length === 0) {
+      void api
+        .listCategories()
+        .then((result) => {
+          if (!cancelled) {
+            setCategories(result.categories);
+          }
+        })
+        .catch((err: unknown) => {
+          if (!cancelled) {
+            setError(errorMessage(err, t("common.error")));
+          }
+        });
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [addParam, addSheet.open, api, categories.length, t]);
+
+  useEffect(() => {
+    const add = searchParams.get("add");
+    if (!add) {
+      return;
+    }
+    if (add !== "new" && categories.length === 0) {
+      return;
+    }
+    setPresetSlug(add);
+    addSheet.onOpen();
+    const next = new URLSearchParams(searchParams);
+    next.delete("add");
+    setSearchParams(next, { replace: true });
+  }, [addSheet, categories.length, searchParams, setSearchParams]);
 
   function onUpload(files: FileList | null) {
     const file = files?.[0];
@@ -110,6 +155,27 @@ export function useClosetPage() {
       try {
         await api.confirmMedia(review.mediaId, { garments: accepted });
         setReview(null);
+        await refresh();
+      } catch (err) {
+        setError(errorMessage(err, t("common.error")));
+      }
+    });
+  }
+
+  function createManual(draft: ManualClothingDraft) {
+    startTransition(async () => {
+      setError(null);
+      try {
+        await api.createItem({
+          categoryId: draft.categoryId,
+          name: draft.name,
+          primaryColor: draft.primaryColor,
+          colors: [draft.primaryColor],
+          seasons: draft.seasons,
+          labels: draft.labels,
+        });
+        setPresetSlug(null);
+        addSheet.onClose();
         await refresh();
       } catch (err) {
         setError(errorMessage(err, t("common.error")));
@@ -179,6 +245,15 @@ export function useClosetPage() {
     itemCount: items.length,
     viewMode,
     onUpload,
+    categories,
+    createManual,
+    language: i18n.language,
+    presetCategory:
+      presetSlug && presetSlug !== "new"
+        ? (categories.find((category) => category.slug === presetSlug) ?? null)
+        : null,
+    openManual: presetSlug !== null,
+    clearPreset: () => setPresetSlug(null),
     seedSamples,
     addSheet,
     review,

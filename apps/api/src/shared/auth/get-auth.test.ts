@@ -11,6 +11,13 @@ describe("getAuthFromRequest", () => {
     expect(getAuthFromRequest(request)).toEqual({ userId: "user_1" });
   });
 
+  it("reads userId from the auth object Clerk attaches", () => {
+    const request = {
+      auth: { userId: "user_2", sessionId: "sess_1" },
+    } as unknown as FastifyRequest;
+    expect(getAuthFromRequest(request)).toEqual({ userId: "user_2" });
+  });
+
   it("returns null when auth is missing", () => {
     const request = {} as FastifyRequest;
     expect(getAuthFromRequest(request)).toEqual({ userId: null });

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "prepare": "husky",
-    "dev": "pnpm run --parallel --filter @closet/web --filter @closet/api dev",
+    "dev": "pnpm run --parallel --filter @closet/shared --filter @closet/web --filter @closet/api dev",
     "dev:web": "pnpm --filter @closet/web dev",
     "dev:api": "pnpm --filter @closet/api dev",
     "build": "pnpm run --filter @closet/shared build && pnpm run --filter @closet/api build && pnpm run --filter @closet/web build",

@@ -2,9 +2,9 @@ import { motion } from "motion/react";
 
 import type { GapListProps } from "@/pages/discover-page/ui/gap-list.types.js";
 import { localeLabel, pressableCard, staggerContainer, staggerItem } from "@/shared/lib";
-import { Card } from "@/shared/ui";
+import { Button, Card } from "@/shared/ui";
 
-export function GapList({ gaps, language, gapLabel }: GapListProps) {
+export function GapList({ gaps, language, gapLabel, addLabel, onAdd }: GapListProps) {
   return (
     <motion.div className="space-y-3 empty:hidden" {...staggerContainer}>
       {gaps.map((gap) => (
@@ -23,6 +23,9 @@ export function GapList({ gaps, language, gapLabel }: GapListProps) {
             <p className="text-sm leading-relaxed text-on-surface-variant">
               {localeLabel(language, gap.reason, gap.reasonFa)}
             </p>
+            <Button fullWidth size="lg" onClick={() => onAdd(gap)}>
+              {addLabel}
+            </Button>
           </Card>
         </motion.div>
       ))}
