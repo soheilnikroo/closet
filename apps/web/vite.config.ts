@@ -53,6 +53,8 @@ export default defineConfig({
       "i18next",
       "react-i18next",
       "motion",
+      "motion/react",
+      "zod",
       "workbox-window",
     ],
   },

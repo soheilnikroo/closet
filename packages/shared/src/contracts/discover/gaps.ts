@@ -9,8 +9,20 @@ export const wardrobeGapSchema = z.object({
   priority: z.number().int().min(1).max(5),
 });
 
+export const productSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  nameFa: z.string(),
+  categorySlug: z.string(),
+  color: z.string(),
+  imageUrl: z.string(),
+  styleTags: z.array(z.string()),
+});
+export type Product = z.infer<typeof productSchema>;
+
 export const discoverGapsResponseSchema = z.object({
   gaps: z.array(wardrobeGapSchema),
+  products: z.array(productSchema).optional(),
   itemCount: z.number().int().nonnegative(),
 });
 

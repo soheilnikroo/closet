@@ -1,3 +1,4 @@
+import type { UpdateClothingItemRequest } from "@closet/shared";
 import type { ClothingCategory, Season } from "@closet/shared";
 import { useState } from "react";
 
@@ -8,6 +9,7 @@ import {
 } from "@/pages/closet-page/closet-page.constants.js";
 import { clothingColor } from "@/pages/closet-page/closet-page.utils.js";
 import type { ClosetManualWizardProps } from "@/pages/closet-page/ui/closet-manual-wizard.types.js";
+import { ClothingDetails } from "@/pages/closet-page/ui/clothing-details.js";
 import { Button, TextField } from "@/shared/ui";
 
 type ManualStep = "type" | "color" | "season" | "details";
@@ -45,6 +47,7 @@ export function ClosetManualWizard({
   const [color, setColor] = useState<string | null>(null);
   const [seasons, setSeasons] = useState<Season[]>([]);
   const [name, setName] = useState(initialCategory ? categoryName(initialCategory, language) : "");
+  const [details, setDetails] = useState<UpdateClothingItemRequest>({});
   const [labelDraft, setLabelDraft] = useState("");
   const [labels, setLabels] = useState<string[]>([]);
 
@@ -86,7 +89,7 @@ export function ClosetManualWizard({
       <div className="flex items-center justify-between gap-3">
         <button
           type="button"
-          className="min-h-11 text-sm font-medium text-primary"
+          className="md-state-layer min-h-12 text-sm font-medium text-primary"
           onClick={() => {
             if (step === "type") {
               onBack();
@@ -122,7 +125,7 @@ export function ClosetManualWizard({
                     <button
                       key={item.id}
                       type="button"
-                      className="min-h-12 rounded-2xl border border-outline-variant/50 bg-surface px-3 py-2 text-start text-sm font-medium text-on-surface"
+                      className="md-state-layer min-h-12 rounded-2xl border border-outline-variant/50 bg-surface px-3 py-2 text-start text-sm font-medium text-on-surface"
                       onClick={() => chooseCategory(item)}
                     >
                       {categoryName(item, language)}
@@ -143,7 +146,7 @@ export function ClosetManualWizard({
               <button
                 key={swatch}
                 type="button"
-                className="flex min-h-12 items-center gap-3 rounded-2xl border border-outline-variant/50 bg-surface px-3 text-start text-sm font-medium text-on-surface"
+                className="md-state-layer flex min-h-12 items-center gap-3 rounded-2xl border border-outline-variant/50 bg-surface px-3 text-start text-sm font-medium text-on-surface"
                 onClick={() => {
                   setColor(swatch);
                   setStep("season");
@@ -174,8 +177,8 @@ export function ClosetManualWizard({
                   aria-pressed={selected}
                   className={
                     selected
-                      ? "min-h-11 rounded-full bg-secondary-container px-4 text-sm font-medium text-on-secondary-container"
-                      : "min-h-11 rounded-full border border-outline-variant bg-surface px-4 text-sm font-medium text-on-surface"
+                      ? "md-state-layer min-h-12 rounded-full bg-secondary-container px-4 text-sm font-medium text-on-secondary-container"
+                      : "md-state-layer min-h-12 rounded-full border border-outline-variant bg-surface px-4 text-sm font-medium text-on-surface"
                   }
                   onClick={() => toggleSeason(season)}
                 >
@@ -208,6 +211,7 @@ export function ClosetManualWizard({
             className="text-base"
             onChange={(event) => setName(event.target.value)}
           />
+          <ClothingDetails value={details} onChange={setDetails} />
           <div className="space-y-2">
             <h4 className="text-sm font-semibold text-on-surface">{labelQuestion}</h4>
             <p className="text-sm text-on-surface-variant">{labelHint}</p>
@@ -238,7 +242,7 @@ export function ClosetManualWizard({
                 <button
                   key={label}
                   type="button"
-                  className="min-h-11 rounded-full bg-surface-container px-4 text-sm text-on-surface"
+                  className="md-state-layer min-h-12 rounded-full bg-surface-container px-4 text-sm text-on-surface"
                   onClick={() => setLabels((current) => current.filter((item) => item !== label))}
                 >
                   {label} ×
@@ -252,6 +256,7 @@ export function ClosetManualWizard({
             disabled={busy || name.trim().length === 0}
             onClick={() =>
               onCreate({
+                ...details,
                 categoryId: category.id,
                 name: name.trim(),
                 primaryColor: color,

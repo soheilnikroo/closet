@@ -19,7 +19,7 @@ export function NavigationBar({ items, className }: NavigationBarProps) {
       )}
       style={{ viewTransitionName: "app-nav" }}
     >
-      <ul className="mx-auto grid h-20 max-w-lg grid-cols-3">
+      <ul className="mx-auto grid h-20 max-w-lg auto-cols-fr grid-flow-col">
         {items.map((item) => (
           <li key={item.to} className="min-w-0">
             <NavLink

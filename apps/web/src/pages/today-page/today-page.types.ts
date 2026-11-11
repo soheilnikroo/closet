@@ -1,1 +1,1 @@
-export type TodayViewMode = "message" | "empty" | "outfit";
+export type TodayViewMode = "loading" | "message" | "empty" | "outfit";

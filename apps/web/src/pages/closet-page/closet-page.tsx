@@ -7,7 +7,7 @@ import { ClosetItemSheet } from "@/pages/closet-page/ui/closet-item-sheet.js";
 import { ClosetReviewSheet } from "@/pages/closet-page/ui/closet-review-sheet.js";
 import { SlotFilters } from "@/pages/closet-page/ui/slot-filters.js";
 import { fadeUp, Match } from "@/shared/lib";
-import { Button, Card, EmptyState, Fab, FAB_ABOVE_NAV_CLASS } from "@/shared/ui";
+import { Button, Card, TextField, EmptyState, Fab, FAB_ABOVE_NAV_CLASS } from "@/shared/ui";
 import { AppShell } from "@/widgets/app-shell";
 
 export function ClosetPage() {
@@ -21,6 +21,13 @@ export function ClosetPage() {
             ? page.t("closet.countOne", { count: page.itemCount })
             : page.t("closet.count", { count: page.itemCount })}
         </p>
+
+        <TextField
+          type="search"
+          label={page.t("experience.searchCloset")}
+          value={page.query}
+          onChange={(event) => page.setQuery(event.target.value)}
+        />
 
         <SlotFilters
           slots={page.slots}
@@ -36,6 +43,17 @@ export function ClosetPage() {
         <Match
           value={page.viewMode}
           cases={{
+            loading: (
+              <div role="status" className="grid grid-cols-2 gap-3">
+                <span className="sr-only">{page.t("experience.loading")}</span>
+                {[0, 1, 2, 3].map((key) => (
+                  <div
+                    key={key}
+                    className="h-56 animate-pulse rounded-2xl bg-surface-container motion-reduce:animate-none"
+                  />
+                ))}
+              </div>
+            ),
             empty: (
               <EmptyState
                 variant="closetEmpty"
@@ -51,6 +69,15 @@ export function ClosetPage() {
             filteredEmpty: (
               <Card>
                 <p className="text-sm text-on-surface-variant">{page.t("closet.filteredEmpty")}</p>
+                <Button
+                  variant="text"
+                  onClick={() => {
+                    page.setQuery("");
+                    page.setSlotFilter(null);
+                  }}
+                >
+                  {page.t("experience.clearFilters")}
+                </Button>
               </Card>
             ),
             grid: (
@@ -65,6 +92,7 @@ export function ClosetPage() {
 
         {page.viewMode === "empty" ? null : (
           <Fab
+            extended
             label={page.t("closet.add")}
             className={FAB_ABOVE_NAV_CLASS}
             onClick={page.addSheet.onOpen}
@@ -129,6 +157,7 @@ export function ClosetPage() {
       />
 
       <ClosetItemSheet
+        error={page.error}
         item={page.selected}
         title={page.t("closet.detailTitle")}
         nameLabel={page.t("closet.name")}

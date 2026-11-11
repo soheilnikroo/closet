@@ -10,7 +10,7 @@ describe("weather clients", () => {
     vi.unstubAllGlobals();
   });
 
-  it("returns a fixed mock snapshot", async () => {
+  it("returns a deterministic seasonal mock snapshot", async () => {
     const client = createMockWeatherClient();
     const result = await client.fetchCurrent({
       cityId: "1",
@@ -19,7 +19,22 @@ describe("weather clients", () => {
       longitude: 51,
     });
 
-    expect(result.temperature).toBe(22);
+    const again = await client.fetchCurrent({
+      cityId: "1",
+      cityName: "Tehran",
+      latitude: 35,
+      longitude: 51,
+    });
+    expect(result.temperature).toBe(again.temperature);
+    expect(result.minTemperature).toBeLessThan(result.temperature);
+    expect(result.maxTemperature).toBeGreaterThan(result.temperature);
+    const isfahan = await client.fetchCurrent({
+      cityId: "2",
+      cityName: "Isfahan",
+      latitude: 35,
+      longitude: 51,
+    });
+    expect(isfahan.temperature).not.toBe(result.temperature);
     expect(result.condition).toBe("partly_cloudy");
   });
 

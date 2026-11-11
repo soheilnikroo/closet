@@ -109,4 +109,39 @@ export const SAMPLE_CATALOG_ITEMS: SampleItem[] = [
     fit: "regular",
     warmthLevel: 2,
   },
+  ...[
+    {
+      categorySlug: "shirt",
+      name: "Sky blue cotton shirt",
+      primaryColor: "blue",
+      material: "cotton",
+    },
+    {
+      categorySlug: "trousers",
+      name: "Olive relaxed trousers",
+      primaryColor: "olive",
+      material: "cotton",
+    },
+    {
+      categorySlug: "loafers",
+      name: "Brown leather loafers",
+      primaryColor: "brown",
+      material: "leather",
+    },
+    {
+      categorySlug: "sneakers",
+      name: "Black everyday sneakers",
+      primaryColor: "black",
+      material: "canvas",
+    },
+  ].map((item): SampleItem => ({
+    ...item,
+    colors: [item.primaryColor],
+    pattern: "solid",
+    styleTags: ["casual", "minimal"],
+    seasons: ["all_season"],
+    formality: "smart_casual",
+    fit: "regular",
+    warmthLevel: 2,
+  })),
 ];

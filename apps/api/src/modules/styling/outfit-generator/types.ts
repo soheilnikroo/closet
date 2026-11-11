@@ -17,6 +17,7 @@ export type GeneratorInput = {
   occasionFormality: number;
   preferredStyles: ClothingItem["styleTags"][number][] | string[];
   excludeItemIds: Set<string>;
+  requiredItemIds?: Set<string>;
   recentOutfitSignatures: Set<string>;
   dislikedItemIds: Set<string>;
 };

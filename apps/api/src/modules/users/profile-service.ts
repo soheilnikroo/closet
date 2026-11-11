@@ -37,7 +37,7 @@ export function createProfileService(db: Database): ProfileService {
         .limit(1);
 
       if (existingProfile.length === 0) {
-        await db.insert(userProfilesTable).values({ userId });
+        await db.insert(userProfilesTable).values({ userId }).onConflictDoNothing();
       }
 
       const existingStyle = await db
@@ -47,7 +47,7 @@ export function createProfileService(db: Database): ProfileService {
         .limit(1);
 
       if (existingStyle.length === 0) {
-        await db.insert(userStyleProfilesTable).values({ userId });
+        await db.insert(userStyleProfilesTable).values({ userId }).onConflictDoNothing();
       }
     },
 

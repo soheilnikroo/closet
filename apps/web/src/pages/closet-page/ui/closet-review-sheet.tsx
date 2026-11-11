@@ -25,7 +25,7 @@ export function ClosetReviewSheet({
                 type="button"
                 aria-label={garment.name}
                 aria-pressed={garment.accepted}
-                className="flex w-full items-center justify-between gap-3 rounded-2xl border border-outline-variant/40 bg-surface px-3 py-3 text-start"
+                className="md-state-layer flex w-full items-center justify-between gap-3 rounded-2xl border border-outline-variant/40 bg-surface px-3 py-3 text-start"
                 onClick={() => onToggle(garment.tempId)}
               >
                 <span>

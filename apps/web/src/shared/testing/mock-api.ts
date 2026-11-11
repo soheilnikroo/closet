@@ -3,8 +3,37 @@ import { vi } from "vitest";
 import type { ApiClient } from "@/shared/lib";
 
 export function createMockApiClient(overrides: Partial<ApiClient> = {}): ApiClient {
-  return {
-    getHealth: vi.fn(),
+  const client: ApiClient = {
+    getPreferences: vi.fn().mockResolvedValue({
+      preferences: {
+        locale: "en-GB",
+        notifications: false,
+        savedDiscoverIds: [],
+        silhouette: "straight",
+        heightBand: "unspecified",
+      },
+    }),
+    updatePreferences: vi.fn().mockImplementation(async (input) => ({
+      preferences: {
+        locale: "en-GB",
+        notifications: false,
+        savedDiscoverIds: [],
+        silhouette: "straight",
+        heightBand: "unspecified",
+        ...input,
+      },
+    })),
+    seedDemo: vi.fn().mockResolvedValue({ count: 12 }),
+    tryOn: vi.fn().mockResolvedValue({
+      provider: "mock",
+      outfitId: "00000000-0000-4000-8000-000000000031",
+      imageUrl: "data:image/svg+xml,<svg/>",
+    }),
+    getHealth: vi.fn().mockResolvedValue({
+      status: "ok",
+      service: "closet-api",
+      timestamp: "2026-11-01T10:00:00.000Z",
+    }),
     getMe: vi.fn(),
     updateMe: vi.fn(),
     getProfile: vi.fn().mockResolvedValue({
@@ -162,6 +191,52 @@ export function createMockApiClient(overrides: Partial<ApiClient> = {}): ApiClie
       ],
       itemCount: 3,
     }),
-    ...overrides,
   };
+  client.getMe = vi.fn().mockResolvedValue({
+    user: {
+      id: "00000000-0000-4000-8000-000000000001",
+      clerkUserId: "mock:dev-user",
+      email: null,
+      phone: null,
+      displayName: "My closet",
+      avatarUrl: null,
+      locale: "en-GB",
+      status: "active",
+      createdAt: "2026-11-01T10:00:00.000Z",
+      updatedAt: "2026-11-01T10:00:00.000Z",
+    },
+  });
+  client.updateMe = vi
+    .fn()
+    .mockImplementation(async (input) => ({ user: { ...(await client.getMe()).user, ...input } }));
+  client.getStyleProfile = vi.fn().mockImplementation(() => client.updateStyleProfile({}));
+  client.createItem = vi.fn().mockImplementation(async (input) => ({
+    item: { ...(await client.createRecommendations()).primary.outfit.items[0]?.item, ...input },
+  }));
+  client.updateItem = vi.fn().mockImplementation(async (id, input) => ({
+    item: {
+      ...(await client.createRecommendations()).primary.outfit.items[0]?.item,
+      ...input,
+      id,
+    },
+  }));
+  client.deleteItem = vi.fn().mockResolvedValue(undefined);
+  client.uploadMedia = vi.fn().mockResolvedValue({
+    media: {
+      id: "00000000-0000-4000-8000-000000000050",
+      processingStatus: "completed",
+      mimeType: "image/jpeg",
+      sizeBytes: 10,
+      contentUrl: null,
+      error: null,
+      createdAt: "2026-11-01T10:00:00.000Z",
+      detections: [],
+    },
+  });
+  client.confirmMedia = vi.fn().mockResolvedValue({ items: [], count: 0 });
+  client.replaceItem = vi.fn().mockImplementation(async () => ({
+    recommendation: (await client.createRecommendations()).primary,
+  }));
+  client.getWeather = vi.fn().mockResolvedValue({ weather: null });
+  return { ...client, ...overrides };
 }

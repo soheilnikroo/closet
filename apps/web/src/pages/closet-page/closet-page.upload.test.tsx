@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router";
@@ -87,7 +87,9 @@ describe("ClosetPage upload", () => {
 
     expect(mockApi.uploadMedia).toHaveBeenCalled();
     expect(await screen.findByText(/detected shirt/i)).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: /save to closet/i }));
-    expect(mockApi.confirmMedia).toHaveBeenCalled();
+    const save = screen.getByRole("button", { name: /save to closet/i });
+    await waitFor(() => expect(save).toBeEnabled());
+    await user.click(save);
+    await waitFor(() => expect(mockApi.confirmMedia).toHaveBeenCalled());
   });
 });

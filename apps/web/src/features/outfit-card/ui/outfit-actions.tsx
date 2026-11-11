@@ -14,15 +14,16 @@ export function OutfitActions({
 }: OutfitActionsProps) {
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-      <Button size="sm" disabled={busy} onClick={onLike}>
-        {likeLabel}
-      </Button>
-      <Button size="sm" variant="tonal" disabled={busy} onClick={onDislike}>
-        {dislikeLabel}
-      </Button>
-      <Button size="sm" variant="outlined" disabled={busy} onClick={onSave}>
+      <Button size="sm" variant="filled" disabled={busy} onClick={onSave}>
         {saveLabel}
       </Button>
+      <Button size="sm" variant="tonal" disabled={busy} onClick={onLike}>
+        {likeLabel}
+      </Button>
+      <Button size="sm" variant="text" disabled={busy} onClick={onDislike}>
+        {dislikeLabel}
+      </Button>
+
       <Button size="sm" variant="text" disabled={busy} onClick={onRegenerate}>
         {regenerateLabel}
       </Button>

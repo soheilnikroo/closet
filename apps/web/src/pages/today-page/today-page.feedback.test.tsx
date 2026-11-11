@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router";
@@ -63,7 +63,9 @@ describe("TodayPage feedback", () => {
     );
 
     expect(await screen.findByText(/a clean everyday combination/i)).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByRole("button", { name: /not for me/i })).toBeEnabled());
     await user.click(screen.getByRole("button", { name: /not for me/i }));
+    await waitFor(() => expect(screen.getByRole("button", { name: /^save$/i })).toBeEnabled());
     await user.click(screen.getByRole("button", { name: /^save$/i }));
     expect(mockApi.submitFeedback).toHaveBeenCalledTimes(2);
     expect(await screen.findByText(/look saved/i)).toBeInTheDocument();

@@ -1,4 +1,10 @@
 import {
+  preferencesResponseSchema,
+  tryOnResultSchema,
+  demoSeedResponseSchema,
+  type Preferences,
+  type TryOnRequest,
+  type TryOnResult,
   apiErrorSchema,
   clothingCategoriesResponseSchema,
   clothingItemResponseSchema,
@@ -68,6 +74,10 @@ export type ApiClientOptions = {
 };
 
 export type ApiClient = {
+  getPreferences: () => Promise<{ preferences: Preferences }>;
+  updatePreferences: (input: Partial<Preferences>) => Promise<{ preferences: Preferences }>;
+  seedDemo: () => Promise<{ count: number }>;
+  tryOn: (input: TryOnRequest) => Promise<TryOnResult>;
   getHealth: () => Promise<HealthResponse>;
   getMe: () => Promise<MeResponse>;
   updateMe: (input: UpdateMeRequest) => Promise<MeResponse>;
@@ -170,6 +180,46 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
   }
 
   return {
+    getPreferences() {
+      return requestJson(
+        "/v1/users/me/preferences",
+        { method: "GET" },
+        (data) => preferencesResponseSchema.parse(data),
+        true,
+      );
+    },
+    updatePreferences(input) {
+      return requestJson(
+        "/v1/users/me/preferences",
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        },
+        (data) => preferencesResponseSchema.parse(data),
+        true,
+      );
+    },
+    seedDemo() {
+      return requestJson(
+        "/v1/demo/seed",
+        { method: "POST" },
+        (data) => demoSeedResponseSchema.parse(data),
+        true,
+      );
+    },
+    tryOn(input) {
+      return requestJson(
+        "/v1/try-on",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        },
+        (data) => tryOnResultSchema.parse(data),
+        true,
+      );
+    },
     getHealth() {
       return requestJson(
         "/health",

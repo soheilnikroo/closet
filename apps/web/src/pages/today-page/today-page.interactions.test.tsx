@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router";
@@ -122,9 +122,8 @@ describe("TodayPage interactions", () => {
     expect(await screen.findByText(/tehran/i)).toBeInTheDocument();
     expect(screen.getAllByText(/a clean everyday combination/i).length).toBeGreaterThan(0);
 
-    const likeButtons = screen.getAllByRole("button", { name: /^like$/i });
-    const primaryLike = likeButtons[0];
-    expect(primaryLike).toBeTruthy();
+    const primaryLike = screen.getAllByRole("button", { name: /^like$/i })[0];
+    await waitFor(() => expect(primaryLike).toBeEnabled());
     if (primaryLike) {
       await user.click(primaryLike);
     }

@@ -14,7 +14,11 @@ export function TopAppBar({ title, leading, trailing, className }: TopAppBarProp
       )}
       style={{ height: "calc(var(--md-comp-top-app-bar-height) + env(safe-area-inset-top, 0px))" }}
     >
-      <div className="flex w-12 shrink-0 justify-start ps-1">{leading}</div>
+      {leading ? (
+        <div className="flex w-12 shrink-0 justify-start ps-1">{leading}</div>
+      ) : (
+        <span className="w-2 shrink-0" />
+      )}
       <h1 className="md-title-large flex-1 truncate text-on-surface">{title}</h1>
       <div className="flex w-auto shrink-0 items-center justify-end gap-0.5 pe-1">{trailing}</div>
     </header>

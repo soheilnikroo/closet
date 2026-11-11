@@ -1,3 +1,4 @@
+import { DemoButton } from "@/features/demo-button.js";
 import { useHomePage } from "@/pages/home-page/model/use-home-page.js";
 import { HomeFooterCta } from "@/pages/home-page/ui/home-footer-cta.js";
 import { HomeHeader } from "@/pages/home-page/ui/home-header.js";
@@ -25,6 +26,7 @@ export function HomePage() {
         brand={page.t("brand")}
       />
 
+      {!page.clerkEnabled ? <DemoButton /> : null}
       <HomeFooterCta
         clerkEnabled={page.clerkEnabled}
         ctaStart={page.t("home.ctaStart")}

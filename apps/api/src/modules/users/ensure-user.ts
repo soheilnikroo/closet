@@ -2,6 +2,7 @@ import { createClerkClient } from "@clerk/fastify";
 import type { User } from "@closet/shared";
 
 import type { UsersService } from "@/modules/users/users-service.js";
+import { usesMockAuth } from "@/shared/auth/provider.js";
 import type { Env } from "@/shared/config/index.js";
 import { unauthorized } from "@/shared/errors/index.js";
 
@@ -17,6 +18,16 @@ export async function ensureUserFromClerkId(
   const existing = await usersService.getByClerkUserId(clerkUserId);
   if (existing) {
     return existing;
+  }
+
+  if (usesMockAuth(env) && clerkUserId.startsWith("mock:")) {
+    return usersService.upsertFromClerk({
+      clerkUserId,
+      email: null,
+      phone: null,
+      displayName: "My closet",
+      avatarUrl: null,
+    });
   }
 
   const clerkClient = createClerkClient({

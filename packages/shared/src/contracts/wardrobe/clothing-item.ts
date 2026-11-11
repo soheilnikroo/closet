@@ -59,7 +59,8 @@ export const createClothingItemRequestSchema = z.object({
   formality: formalitySchema.nullable().optional(),
   fit: fitPreferenceSchema.nullable().optional(),
   warmthLevel: z.number().int().min(1).max(5).nullable().optional(),
-  brand: z.string().nullable().optional(),
+  brand: z.string().max(120).nullable().optional(),
+  size: z.string().max(32).nullable().optional(),
   labels: z.array(z.string().min(1).max(32)).max(8).optional(),
 });
 

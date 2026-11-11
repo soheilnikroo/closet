@@ -2,6 +2,9 @@ import { getOptionalClerkPublishableKey } from "@/shared/config/env.js";
 
 /** True when a real (non-placeholder) Clerk publishable key is configured. */
 export function isClerkEnabled(): boolean {
+  if (import.meta.env["VITE_AUTH_PROVIDER"] === "mock") {
+    return false;
+  }
   const publishableKey = getOptionalClerkPublishableKey();
   return typeof publishableKey === "string" && !publishableKey.includes("replace_me");
 }

@@ -27,7 +27,7 @@ export function TextField({
         aria-invalid={Boolean(errorText)}
         aria-describedby={describedBy}
         className={cn(
-          "h-14 rounded-sm border bg-surface px-4 text-on-surface outline-none transition-[border-color,box-shadow] duration-150",
+          "h-14 rounded-xs border bg-surface px-4 text-on-surface outline-none transition-[border-color,box-shadow] duration-150",
           errorText
             ? "border-error focus:border-error focus:shadow-[inset_0_0_0_1px_var(--md-sys-color-error)]"
             : "border-outline focus:border-primary focus:shadow-[inset_0_0_0_1px_var(--md-sys-color-primary)]",

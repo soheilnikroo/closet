@@ -18,7 +18,7 @@ export function Chip({
       type={type}
       aria-pressed={selected}
       className={cn(
-        "md-state-layer inline-flex h-8 min-h-8 shrink-0 touch-manipulation select-none items-center rounded-full border px-4 md-label-large",
+        "md-state-layer inline-flex h-12 min-h-12 shrink-0 touch-manipulation select-none items-center rounded-sm border px-4 md-label-large",
         selected
           ? "border-transparent bg-secondary-container text-on-secondary-container"
           : "border-outline-variant bg-surface text-on-surface-variant",

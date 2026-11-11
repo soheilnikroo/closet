@@ -2,8 +2,10 @@ import { createClerkClient } from "@clerk/fastify";
 import { meResponseSchema } from "@closet/shared";
 import type { FastifyInstance } from "fastify";
 
+import { ensureUserFromClerkId } from "@/modules/users/ensure-user.js";
 import type { UsersService } from "@/modules/users/users-service.js";
 import { getAuthFromRequest, type AuthGetter } from "@/shared/auth/index.js";
+import { usesMockAuth } from "@/shared/auth/provider.js";
 import type { Env } from "@/shared/config/index.js";
 import { unauthorized } from "@/shared/errors/index.js";
 
@@ -30,6 +32,10 @@ export async function registerUsersRoutes(
       throw unauthorized();
     }
 
+    if (usesMockAuth(deps.env)) {
+      const user = await ensureUserFromClerkId(userId, deps.usersService, deps.env);
+      return reply.send(meResponseSchema.parse({ user }));
+    }
     const clerkUser = await clerkClient.users.getUser(userId);
     const primaryEmail =
       clerkUser.emailAddresses.find((entry) => entry.id === clerkUser.primaryEmailAddressId)

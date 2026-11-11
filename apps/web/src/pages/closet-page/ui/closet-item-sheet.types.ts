@@ -1,4 +1,4 @@
-import type { ClothingItem } from "@closet/shared";
+import type { ClothingItem, UpdateClothingItemRequest } from "@closet/shared";
 
 export type ClosetItemSheetProps = {
   item: ClothingItem | null;
@@ -10,7 +10,8 @@ export type ClosetItemSheetProps = {
   seasonLine: string;
   labelLine: string;
   busy: boolean;
+  error?: string | null;
   onClose: () => void;
-  onSave: (name: string) => void;
+  onSave: (name: string, details?: UpdateClothingItemRequest) => void;
   onDelete: () => void;
 };

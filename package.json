@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "prepare": "husky",
-    "dev": "pnpm run --parallel --filter @closet/shared --filter @closet/web --filter @closet/api dev",
+    "dev": "node scripts/dev.mjs",
     "dev:web": "pnpm --filter @closet/web dev",
     "dev:api": "pnpm --filter @closet/api dev",
     "build": "pnpm run --filter @closet/shared build && pnpm run --filter @closet/api build && pnpm run --filter @closet/web build",
@@ -25,7 +25,8 @@
     "db:studio": "pnpm --filter @closet/api db:studio",
     "docker:up": "PATH=\"/Applications/Docker.app/Contents/Resources/bin:$HOME/.orbstack/bin:/usr/local/bin:/opt/homebrew/bin:$PATH\" docker compose up -d",
     "docker:down": "PATH=\"/Applications/Docker.app/Contents/Resources/bin:$HOME/.orbstack/bin:/usr/local/bin:/opt/homebrew/bin:$PATH\" docker compose down",
-    "check": "pnpm fmt:check && pnpm lint && pnpm typecheck && pnpm test && pnpm knip"
+    "check": "pnpm fmt:check && pnpm lint && pnpm typecheck && pnpm test && pnpm knip",
+    "dev:mock": "AUTH_PROVIDER=mock VITE_AUTH_PROVIDER=mock AI_PROVIDER=mock WEATHER_PROVIDER=mock TRYON_PROVIDER=mock pnpm dev"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.4",
@@ -47,5 +48,8 @@
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
       "oxlint --type-aware --fix"
     ]
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

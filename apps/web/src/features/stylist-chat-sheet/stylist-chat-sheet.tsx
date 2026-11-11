@@ -24,7 +24,7 @@ export function StylistChatSheet({ open, onClose }: StylistChatSheetProps) {
           }}
         />
         <Button fullWidth disabled={!chat.canSend} onClick={chat.send}>
-          {t("stylist.send")}
+          {chat.busy ? t("experience.loading") : t("stylist.send")}
         </Button>
         <p className="text-sm text-error empty:hidden">{chat.error}</p>
         <div className="rounded-2xl bg-surface-container px-3 py-3 text-sm leading-relaxed empty:hidden">

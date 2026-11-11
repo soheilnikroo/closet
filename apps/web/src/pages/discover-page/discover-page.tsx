@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 
 import { useDiscoverPage } from "@/pages/discover-page/model/use-discover-page.js";
 import { GapList } from "@/pages/discover-page/ui/gap-list.js";
+import { ProductIdeas } from "@/pages/discover-page/ui/product-ideas.js";
 import { fadeUp, Match } from "@/shared/lib";
 import { Card, EmptyState } from "@/shared/ui";
 import { AppShell } from "@/widgets/app-shell";
@@ -25,13 +26,18 @@ export function DiscoverPage() {
         <Match
           value={page.viewMode}
           cases={{
-            empty: (
-              <EmptyState
-                variant="balanced"
-                title={page.t("discover.noGapsTitle")}
-                description={page.t("discover.noGapsBody")}
-              />
-            ),
+            empty:
+              page.products.length > 0 ? (
+                <p className="rounded-2xl bg-secondary-container p-4 text-sm text-on-secondary-container">
+                  {page.t("discover.noGapsBody")}
+                </p>
+              ) : (
+                <EmptyState
+                  variant="balanced"
+                  title={page.t("discover.noGapsTitle")}
+                  description={page.t("discover.noGapsBody")}
+                />
+              ),
             gaps: (
               <GapList
                 gaps={page.gaps}
@@ -44,9 +50,20 @@ export function DiscoverPage() {
                 }}
               />
             ),
-            loading: null,
+            loading: (
+              <div role="status" className="space-y-3">
+                <p>{page.t("experience.loading")}</p>
+                {[1, 2, 3].map((id) => (
+                  <div
+                    key={id}
+                    className="h-28 animate-pulse rounded-3xl bg-surface-container motion-reduce:animate-none"
+                  />
+                ))}
+              </div>
+            ),
           }}
         />
+        <ProductIdeas products={page.products} />
       </motion.div>
     </AppShell>
   );

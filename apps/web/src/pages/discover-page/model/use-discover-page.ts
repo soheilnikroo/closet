@@ -44,6 +44,7 @@ export function useDiscoverPage() {
     busy: isPending,
     error,
     gaps,
+    products: data?.products ?? [],
     viewMode,
   };
 }

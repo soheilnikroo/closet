@@ -20,7 +20,7 @@ export function HomeGuestActions({
       </Button>
       <button
         type="button"
-        className="md-label-large touch-manipulation py-2.5 text-center text-on-surface-variant underline-offset-4 hover:text-primary hover:underline"
+        className="md-state-layer md-label-large touch-manipulation py-2.5 text-center text-on-surface-variant underline-offset-4 hover:text-primary hover:underline"
         onClick={onExplore}
       >
         {explore}

@@ -54,8 +54,13 @@ export function createMockVisionProvider(): VisionProvider {
   return {
     name: "mock",
     model: "mock-vision-v1",
-    async analyzeClothing() {
-      return MOCK_DETECTIONS.map((item, index) => ({
+    async analyzeClothing(input) {
+      const hash = input.imageBytes.reduce((sum, byte) => (sum * 31 + byte) >>> 0, 0);
+      const candidates =
+        hash % 3 === 0
+          ? MOCK_DETECTIONS
+          : MOCK_DETECTIONS.filter((_item, index) => index === hash % MOCK_DETECTIONS.length);
+      return candidates.map((item, index) => ({
         ...item,
         tempId: `mock-${Date.now()}-${index}`,
       }));
@@ -92,10 +97,35 @@ export function createMockLlmProvider(): LlmProvider {
       }
 
       const excludeKeywords: string[] = [];
-      if (lower.includes("jeans") || lower.includes("جین")) {
+      if (
+        /(no|without|avoid|not|بدون|نمی‌خواهم|نمیخوام)/u.test(lower) &&
+        (lower.includes("jeans") || lower.includes("جین"))
+      ) {
         excludeKeywords.push("jeans");
       }
 
+      for (const [en, fa] of [
+        ["black", "مشکی"],
+        ["white", "سفید"],
+        ["red", "قرمز"],
+        ["blue", "آبی"],
+      ]) {
+        if (
+          en &&
+          fa &&
+          (lower.includes(`no ${en}`) ||
+            lower.includes(`without ${en}`) ||
+            lower.includes(`بدون ${fa}`))
+        ) {
+          excludeKeywords.push(en);
+        }
+      }
+      if (/sport|gym|ورزش/u.test(lower)) {
+        preferredStyles.push("sporty");
+      }
+      if (/classic|کلاسیک/u.test(lower)) {
+        preferredStyles.push("classic");
+      }
       return {
         occasionSlug,
         excludeKeywords,

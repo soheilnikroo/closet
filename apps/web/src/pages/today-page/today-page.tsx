@@ -31,6 +31,13 @@ export function TodayPage() {
         <Match
           value={page.viewMode}
           cases={{
+            loading: (
+              <div role="status" className="space-y-4">
+                <span className="sr-only">{page.t("experience.loading")}</span>
+                <div className="h-24 animate-pulse rounded-2xl bg-surface-container motion-reduce:animate-none" />
+                <div className="h-96 animate-pulse rounded-2xl bg-surface-container motion-reduce:animate-none" />
+              </div>
+            ),
             message: page.message ? (
               <TodayMessageCard
                 message={page.message}

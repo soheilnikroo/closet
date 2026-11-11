@@ -345,6 +345,7 @@ export function createStylingService(deps: {
       occasionFormality: occasion?.formalityLevel ?? 2,
       preferredStyles,
       excludeItemIds: exclude,
+      requiredItemIds: new Set(input.requiredItemIds ?? []),
       recentOutfitSignatures: input.regenerate ? new Set() : recent,
       dislikedItemIds: disliked,
     });
@@ -540,6 +541,13 @@ export function createStylingService(deps: {
         .from(outfitItemsTable)
         .where(eq(outfitItemsTable.outfitId, rec.outfitId));
 
+      if (
+        !currentItems.some(
+          (item) => item.clothingItemId === input.clothingItemId && item.role === input.role,
+        )
+      ) {
+        throw notFound("Outfit piece not found");
+      }
       const keepIds = currentItems
         .filter((item) => item.role !== input.role)
         .map((item) => item.clothingItemId);
@@ -574,7 +582,8 @@ export function createStylingService(deps: {
           intent.excludeKeywords.some(
             (keyword) =>
               item.categorySlug.includes(keyword.toLowerCase()) ||
-              item.name.toLowerCase().includes(keyword.toLowerCase()),
+              item.name.toLowerCase().includes(keyword.toLowerCase()) ||
+              item.primaryColor.toLowerCase() === keyword.toLowerCase(),
           ),
         )
         .map((item) => item.id);

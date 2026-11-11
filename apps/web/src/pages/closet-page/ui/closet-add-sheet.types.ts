@@ -1,8 +1,11 @@
-import type { ClothingCategory, Season } from "@closet/shared";
+import type { ClothingCategory, Season, UpdateClothingItemRequest } from "@closet/shared";
 
 import type { ClosetSlot } from "@/pages/closet-page/closet-page.types.js";
 
-export type ManualClothingDraft = {
+export type ManualClothingDraft = Pick<
+  UpdateClothingItemRequest,
+  "fit" | "formality" | "warmthLevel" | "material" | "brand" | "size"
+> & {
   categoryId: string;
   name: string;
   primaryColor: string;

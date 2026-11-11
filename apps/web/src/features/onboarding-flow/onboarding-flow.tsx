@@ -70,7 +70,6 @@ export function OnboardingFlow({ onComplete }: OnboardingFlowProps) {
               onFeedback={flow.sendFeedback}
             />
           ) : null,
-          feedback: null,
         }}
       />
     </div>

@@ -82,6 +82,11 @@ describe("ClosetPage interactions", () => {
     );
 
     expect(await screen.findByText(/white shirt/i)).toBeInTheDocument();
+    const search = screen.getByRole("searchbox", { name: /search your closet/i });
+    await user.type(search, "missing piece");
+    expect(screen.queryByText(/white shirt/i)).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /clear search and filters/i }));
+    expect(screen.getByText(/white shirt/i)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: /^tops$/i }));
     expect(screen.getByText(/white shirt/i)).toBeInTheDocument();
 

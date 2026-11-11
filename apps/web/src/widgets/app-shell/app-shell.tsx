@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { LocaleSwitcher } from "@/features/locale-switcher";
+import { StylistChatSheet } from "@/features/stylist-chat-sheet";
 import { UserAuthControls } from "@/features/user-auth-controls";
+import { Button } from "@/shared/ui";
 import {
   ClosetIcon,
   DiscoverIcon,
@@ -18,6 +21,7 @@ import type { AppShellProps } from "@/widgets/app-shell/app-shell.types.js";
  */
 export function AppShell({ title, children }: AppShellProps) {
   const { t } = useTranslation();
+  const [chatOpen, setChatOpen] = useState(false);
 
   return (
     <div className="mx-auto flex h-dvh w-full max-w-lg flex-col overflow-hidden overscroll-none bg-surface">
@@ -26,6 +30,9 @@ export function AppShell({ title, children }: AppShellProps) {
         title={title}
         trailing={
           <div className="flex items-center gap-0.5">
+            <Button variant="tonal" size="sm" onClick={() => setChatOpen(true)}>
+              {t("experience.askStylist")}
+            </Button>
             <LocaleSwitcher />
             <UserAuthControls />
           </div>
@@ -41,6 +48,7 @@ export function AppShell({ title, children }: AppShellProps) {
       >
         {children}
       </main>
+      {chatOpen ? <StylistChatSheet open={chatOpen} onClose={() => setChatOpen(false)} /> : null}
       <NavigationBar
         items={[
           {
@@ -57,6 +65,23 @@ export function AppShell({ title, children }: AppShellProps) {
             to: "/discover",
             label: t("nav.discover"),
             icon: <DiscoverIcon className="size-6" />,
+          },
+          {
+            to: "/settings",
+            label: t("experience.settings"),
+            icon: (
+              <svg
+                viewBox="0 0 24 24"
+                className="size-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="8" r="3.5" />
+                <path d="M5 21v-3a7 7 0 0 1 14 0v3" />
+              </svg>
+            ),
           },
         ]}
       />

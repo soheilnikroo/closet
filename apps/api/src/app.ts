@@ -17,6 +17,7 @@ import {
   runSeeds,
   type Database,
 } from "@/infrastructure/index.js";
+import { registerExperienceRoutes } from "@/modules/experience/experience-routes.js";
 import {
   createDiscoverService,
   createProfileService,
@@ -32,6 +33,7 @@ import {
   registerWardrobeRoutes,
   registerWeatherRoutes,
 } from "@/modules/index.js";
+import { usesMockAuth } from "@/shared/auth/provider.js";
 import type { Env } from "@/shared/config/index.js";
 import { HttpError, serviceUnavailable } from "@/shared/errors/index.js";
 import { expandWebCorsOrigins } from "@/shared/http/cors-origins.js";
@@ -58,7 +60,7 @@ export async function buildApp(deps: AppDeps) {
 
   const clerkReady = hasRealClerkKeys(deps.env);
 
-  if (deps.env.NODE_ENV === "production" && !clerkReady) {
+  if (deps.env.NODE_ENV === "production" && (!clerkReady || deps.env.AUTH_PROVIDER === "mock")) {
     throw new Error("Refusing to start: production requires real Clerk keys");
   }
 
@@ -141,7 +143,15 @@ export async function buildApp(deps: AppDeps) {
   await registerHealthRoutes(app);
 
   await app.register(async (protectedScope) => {
-    if (!clerkReady) {
+    if (usesMockAuth(deps.env)) {
+      protectedScope.decorateRequest("auth", null);
+      protectedScope.addHook("onRequest", async (request) => {
+        const match = /^Bearer mock:([a-zA-Z0-9_-]{1,64})$/.exec(
+          request.headers.authorization ?? "",
+        );
+        Reflect.set(request, "auth", { userId: match ? `mock:${match[1]}` : null });
+      });
+    } else if (!clerkReady) {
       protectedScope.addHook("onRequest", async () => {
         throw serviceUnavailable("Authentication is not configured");
       });
@@ -152,6 +162,13 @@ export async function buildApp(deps: AppDeps) {
       });
     }
 
+    await registerExperienceRoutes(protectedScope, {
+      db,
+      env: deps.env,
+      usersService,
+      profileService,
+      wardrobeService,
+    });
     await registerUsersRoutes(protectedScope, {
       usersService,
       env: deps.env,

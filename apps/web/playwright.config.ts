@@ -25,13 +25,18 @@ export default defineConfig({
       ...process.env,
       // Force guest mode so shell routes are explorable without Clerk sign-in.
       VITE_CLERK_PUBLISHABLE_KEY: "pk_test_replace_me",
-      VITE_API_BASE_URL: "http://127.0.0.1:8080",
+      VITE_API_BASE_URL: "",
     },
   },
   projects: [
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        ...(process.env["PLAYWRIGHT_CHANNEL"]
+          ? { channel: process.env["PLAYWRIGHT_CHANNEL"] }
+          : {}),
+      },
     },
   ],
 });

@@ -97,11 +97,14 @@ export function useTodayPage() {
   const weather = data?.weather ?? null;
   const alternatives = data?.alternatives ?? [];
 
-  const viewMode: TodayViewMode = data?.message
-    ? "message"
-    : !isPending && !primary
-      ? "empty"
-      : "outfit";
+  const viewMode: TodayViewMode =
+    !data && !error
+      ? "loading"
+      : data?.message
+        ? "message"
+        : !isPending && !primary
+          ? "empty"
+          : "outfit";
 
   return {
     t,

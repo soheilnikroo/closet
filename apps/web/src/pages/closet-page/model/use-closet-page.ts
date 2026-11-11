@@ -1,3 +1,4 @@
+import type { UpdateClothingItemRequest } from "@closet/shared";
 import type { ClothingCategory, ClothingItem } from "@closet/shared";
 import { useEffect, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
@@ -27,6 +28,8 @@ export function useClosetPage() {
   const addSheet = useDisclosure();
   const [searchParams, setSearchParams] = useSearchParams();
   const [presetSlug, setPresetSlug] = useState<string | null>(null);
+  const [loaded, setLoaded] = useState(false);
+  const [query, setQuery] = useState("");
   const [items, setItems] = useState<ClothingItem[]>([]);
   const [categories, setCategories] = useState<ClothingCategory[]>([]);
   const [slotFilter, setSlotFilter] = useState<ClosetSlot | null>(null);
@@ -53,6 +56,10 @@ export function useClosetPage() {
       } catch (err) {
         if (!cancelled) {
           setError(errorMessage(err, t("common.error")));
+        }
+      } finally {
+        if (!cancelled) {
+          setLoaded(true);
         }
       }
     });
@@ -167,6 +174,7 @@ export function useClosetPage() {
       setError(null);
       try {
         await api.createItem({
+          ...draft,
           categoryId: draft.categoryId,
           name: draft.name,
           primaryColor: draft.primaryColor,
@@ -196,14 +204,14 @@ export function useClosetPage() {
     });
   }
 
-  function saveSelected(name: string) {
+  function saveSelected(name: string, details: UpdateClothingItemRequest = {}) {
     if (!selected) {
       return;
     }
     startTransition(async () => {
       setError(null);
       try {
-        const updated = await api.updateItem(selected.id, { name });
+        const updated = await api.updateItem(selected.id, { ...details, name });
         setItems((current) =>
           current.map((item) => (item.id === updated.item.id ? updated.item : item)),
         );
@@ -230,12 +238,33 @@ export function useClosetPage() {
     });
   }
 
-  const filtered = slotFilter ? items.filter((item) => item.slot === slotFilter) : items;
-  const viewMode: ClosetViewMode =
-    items.length === 0 ? "empty" : filtered.length === 0 ? "filteredEmpty" : "grid";
+  const search = query.trim().toLocaleLowerCase();
+  const filtered = items.filter(
+    (item) =>
+      (!slotFilter || item.slot === slotFilter) &&
+      [
+        item.name,
+        item.primaryColor,
+        item.brand,
+        ...(item.labels ?? []),
+        t(`closet.slots.${item.slot}`),
+      ]
+        .join(" ")
+        .toLocaleLowerCase()
+        .includes(search),
+  );
+  const viewMode: ClosetViewMode = !loaded
+    ? "loading"
+    : items.length === 0
+      ? "empty"
+      : filtered.length === 0
+        ? "filteredEmpty"
+        : "grid";
 
   return {
     t,
+    query,
+    setQuery,
     busy: isPending,
     error,
     slots: CLOSET_SLOTS,

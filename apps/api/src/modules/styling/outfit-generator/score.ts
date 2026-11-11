@@ -91,7 +91,11 @@ function weatherScore(items: ClothingItem[], weather: WeatherSnapshot | null): n
 }
 
 function fitScore(items: ClothingItem[], styleProfile: StyleProfile): number {
-  if (styleProfile.preferredFits.length === 0 && styleProfile.dislikedFits.length === 0) {
+  if (
+    !styleProfile.comfortPriority &&
+    styleProfile.preferredFits.length === 0 &&
+    styleProfile.dislikedFits.length === 0
+  ) {
     return 0.7;
   }
 
@@ -99,6 +103,16 @@ function fitScore(items: ClothingItem[], styleProfile: StyleProfile): number {
   for (const item of items) {
     if (!item.fit) {
       continue;
+    }
+    if (styleProfile.comfortPriority && item.fit === "fitted") {
+      score -= 0.15;
+    }
+    if (
+      styleProfile.comfortPriority &&
+      item.fit === "oversized" &&
+      !styleProfile.dislikedFits.includes(item.fit)
+    ) {
+      score += 0.1;
     }
     if (styleProfile.dislikedFits.includes(item.fit)) {
       score -= 0.25;

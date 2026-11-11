@@ -18,7 +18,7 @@ export function useStylistChat() {
 
   function send() {
     const trimmed = message.trim();
-    if (!trimmed) {
+    if (!trimmed || isPending) {
       return;
     }
 

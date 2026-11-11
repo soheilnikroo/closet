@@ -64,7 +64,7 @@ export function ClosetAddSheet({
           <h3 className="font-display text-xl font-semibold text-on-surface">{how}</h3>
           <button
             type="button"
-            className="flex min-h-14 w-full flex-col items-start justify-center rounded-2xl bg-primary px-4 py-3 text-start text-on-primary"
+            className="md-state-layer flex min-h-14 w-full flex-col items-start justify-center rounded-2xl bg-primary px-4 py-3 text-start text-on-primary"
             onClick={() => setStep("manual")}
           >
             <span className="text-sm font-semibold">{manualLabel}</span>
@@ -72,7 +72,7 @@ export function ClosetAddSheet({
           </button>
           <button
             type="button"
-            className="flex min-h-14 w-full flex-col items-start justify-center rounded-2xl border border-outline-variant/60 bg-surface px-4 py-3 text-start"
+            className="md-state-layer flex min-h-14 w-full flex-col items-start justify-center rounded-2xl border border-outline-variant/60 bg-surface px-4 py-3 text-start"
             onClick={() => setStep("photo")}
           >
             <span className="text-sm font-semibold text-on-surface">{photoLabel}</span>
@@ -80,7 +80,7 @@ export function ClosetAddSheet({
           </button>
           <button
             type="button"
-            className="flex min-h-14 w-full flex-col items-start justify-center rounded-2xl border border-outline-variant/60 bg-surface px-4 py-3 text-start"
+            className="md-state-layer flex min-h-14 w-full flex-col items-start justify-center rounded-2xl border border-outline-variant/60 bg-surface px-4 py-3 text-start"
             disabled={busy}
             onClick={onSample}
           >
@@ -94,7 +94,7 @@ export function ClosetAddSheet({
         <div className="space-y-4">
           <button
             type="button"
-            className="min-h-11 text-sm font-medium text-primary"
+            className="md-state-layer min-h-12 text-sm font-medium text-primary"
             onClick={() => setStep("method")}
           >
             {backLabel}

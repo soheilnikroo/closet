@@ -1,0 +1,42 @@
+name: Check closet
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: closet
+          POSTGRES_PASSWORD: closet
+          POSTGRES_DB: closet
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U closet -d closet"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      AUTH_PROVIDER: mock
+      VITE_AUTH_PROVIDER: mock
+      AI_PROVIDER: mock
+      WEATHER_PROVIDER: mock
+      CLOSET_LIVE_E2E: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: cp .env.example .env
+      - run: pnpm --filter @closet/shared build
+      - run: pnpm db:migrate
+      - run: pnpm check
+      - run: pnpm build
+      - run: pnpm --filter @closet/web exec playwright install --with-deps chromium
+      - run: |
+          pnpm dev:api > /tmp/closet-api.log 2>&1 &
+          for attempt in $(seq 1 30); do curl -fsS http://127.0.0.1:8080/health && break || sleep 1; done
+          pnpm test:e2e

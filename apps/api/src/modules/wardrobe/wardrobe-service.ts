@@ -345,6 +345,7 @@ export function createWardrobeService(deps: {
           fit: input.fit ?? null,
           warmthLevel: input.warmthLevel ?? null,
           brand: input.brand ?? null,
+          size: input.size ?? null,
           labels: input.labels ?? [],
           sourceType: "manual",
         })
@@ -374,6 +375,7 @@ export function createWardrobeService(deps: {
           ...(input.fit !== undefined ? { fit: input.fit } : {}),
           ...(input.warmthLevel !== undefined ? { warmthLevel: input.warmthLevel } : {}),
           ...(input.brand !== undefined ? { brand: input.brand } : {}),
+          ...(input.size !== undefined ? { size: input.size } : {}),
           ...(input.labels !== undefined ? { labels: input.labels } : {}),
           ...(input.status !== undefined ? { status: input.status } : {}),
           updatedAt: new Date(),

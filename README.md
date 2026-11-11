@@ -127,7 +127,7 @@ End-to-end MVP is implemented on this foundation:
 - My Closet (photo upload + mock/OpenAI vision → confirm → CRUD)
 - Today (deterministic outfit engine, weather via Open-Meteo/mock, like/dislike/save/regenerate)
 - Contextual stylist chat (intent parsing + wardrobe-only recommendations)
-- Discover gaps stub (no store scraping)
+- Discover wardrobe gaps and saved sample product ideas (no store scraping)
 
 ### Optional integrations
 
@@ -138,3 +138,52 @@ End-to-end MVP is implemented on this foundation:
 | Media storage | `LOCAL_STORAGE_DIR` (default) or `S3_*`         | Local filesystem under `.data/storage` |
 
 Product APIs under `/v1/*` still require real Clerk keys. Seeds (Iran cities, clothing categories, occasions) run on API boot.
+
+
+## Complete mock-first experience
+
+Use Node 24+ and pnpm. Copy `.env.example` to `.env`, then run:
+
+```sh
+pnpm install
+pnpm docker:up
+pnpm db:migrate
+pnpm dev:mock
+```
+
+Open the web URL and choose **Try a ready-made closet**. This creates a local demo
+profile, selects Tehran if no city was chosen, and adds 12 sample garments without
+removing your clothes. Repeating it reuses existing active sample garments.
+You can also start empty, add photos or enter garments in four short steps.
+
+Today and stylist chat support feedback, swapping a garment, and an illustrated
+outfit preview. Discover offers a local sample catalog matched to wardrobe gaps,
+with saved ideas and a shortcut for adding similar clothes you own. You contains
+city, language, units, style, fit, comfort, optional height, and preview settings.
+Preferences persist in PostgreSQL. Height is recorded for future styling work;
+it does not currently change scoring. Notification preferences are reserved; no
+notifications are sent. The try-on preview draws garment colours on a mannequin;
+it is not photographic try-on or an estimate of fit.
+
+| Mode | API authentication | Web authentication | AI | Weather |
+| --- | --- | --- | --- | --- |
+| All mock (local / CI) | `AUTH_PROVIDER=mock` | `VITE_AUTH_PROVIDER=mock` | `AI_PROVIDER=mock` | `WEATHER_PROVIDER=mock` |
+| Hybrid local | mock or Clerk | match API provider | mock or OpenAI + key | mock or open-meteo |
+| Production | `AUTH_PROVIDER=clerk`, real Clerk keys | `VITE_AUTH_PROVIDER=clerk`, matching publishable key | selected provider | selected provider |
+
+With AUTH_PROVIDER unset, placeholder / missing Clerk keys select mock mode only
+outside production. Mock requests use `Authorization: Bearer mock:dev-user`.
+Use a different `mock:<id>` for an isolated local test user. Mock identities are
+not authentication: keep the demo API local. Production refuses mock auth and
+requires real Clerk keys. `POST /v1/demo/seed` is available only in mock-auth mode.
+Shopping and `TRYON_PROVIDER=mock` previews are local mocks in all modes.
+Storage remains local disk. No S3, payments, scraping or external try-on service.
+
+The PWA caches its shell/assets; wardrobe data, settings, and recommendations
+still require the running API and database. The mock weather is deterministic
+for a city and month and is not a real forecast. Vision uses image bytes to select
+sample garments; always review detections before saving.
+
+Validation: `pnpm check`, `pnpm build`, `pnpm test:e2e`.
+Run the optional real mock-auth funnel with `CLOSET_LIVE_E2E=1 pnpm test:e2e`
+after starting the API with mock providers on port 8080 and migrating the DB.

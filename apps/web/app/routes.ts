@@ -14,5 +14,6 @@ export default [
     route("today", "routes/today/route.tsx"),
     route("closet", "routes/closet/route.tsx"),
     route("discover", "routes/discover/route.tsx"),
+    route("settings", "routes/settings/route.tsx"),
   ]),
 ] satisfies RouteConfig;

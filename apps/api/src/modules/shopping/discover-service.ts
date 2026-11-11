@@ -1,5 +1,6 @@
 import type { DiscoverGapsResponse, WardrobeGap } from "@closet/shared";
 
+import { SAMPLE_PRODUCTS } from "@/modules/shopping/sample-products.js";
 import type { WardrobeService } from "@/modules/wardrobe/wardrobe-service.js";
 
 const GAP_RULES: Array<{
@@ -89,6 +90,14 @@ export function createDiscoverService(wardrobeService: WardrobeService): Discove
 
       return {
         gaps: gaps.slice(0, 5),
+        products: [
+          ...SAMPLE_PRODUCTS.filter((product) =>
+            gaps.some((gap) => gap.categorySlug === product.categorySlug),
+          ),
+          ...SAMPLE_PRODUCTS.filter(
+            (product) => !gaps.some((gap) => gap.categorySlug === product.categorySlug),
+          ),
+        ],
         itemCount: items.length,
       };
     },

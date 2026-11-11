@@ -19,5 +19,4 @@ export const STEP_PROGRESS: Record<OnboardingStep, number> = {
   clothing: 55,
   review: 70,
   first_outfit: 85,
-  feedback: 95,
 };

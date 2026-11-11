@@ -32,10 +32,6 @@ export function generateOutfitCandidates(input: GeneratorInput): OutfitCandidate
           : [undefined, ...outerwear.slice(0, 2)];
 
         for (const outer of outerOptions) {
-          if (needsOuterwear && !outer) {
-            continue;
-          }
-
           const accessoryOptions: Array<ClothingItem | undefined> = [
             undefined,
             ...accessories.slice(0, 2),
@@ -45,6 +41,12 @@ export function generateOutfitCandidates(input: GeneratorInput): OutfitCandidate
             const ids = [top.id, bottom.id, shoe.id, outer?.id, accessory?.id].filter(
               (id): id is string => Boolean(id),
             );
+            if (
+              input.requiredItemIds &&
+              ![...input.requiredItemIds].every((id) => ids.includes(id))
+            ) {
+              continue;
+            }
             const signature = outfitSignature(ids);
             candidates.push(
               scoreOutfit({

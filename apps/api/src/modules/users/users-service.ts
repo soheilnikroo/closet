@@ -69,6 +69,16 @@ export function createUsersService(db: Database): UsersService {
           displayName: input.displayName,
           avatarUrl: input.avatarUrl,
         })
+        .onConflictDoUpdate({
+          target: usersTable.clerkUserId,
+          set: {
+            email: input.email,
+            phone: input.phone,
+            displayName: input.displayName,
+            avatarUrl: input.avatarUrl,
+            updatedAt: new Date(),
+          },
+        })
         .returning();
 
       const row = inserted[0];

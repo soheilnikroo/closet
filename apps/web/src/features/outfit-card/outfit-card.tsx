@@ -7,10 +7,12 @@ import { OutfitActions } from "@/features/outfit-card/ui/outfit-actions.js";
 import { OutfitItemsGrid } from "@/features/outfit-card/ui/outfit-items-grid.js";
 import { SwipeBadges } from "@/features/outfit-card/ui/swipe-badges.js";
 import { softSpring } from "@/shared/lib";
-import { Card, Chip } from "@/shared/ui";
+import { Button, Card } from "@/shared/ui";
 
 export function OutfitCard({
   recommendation,
+  onReplace,
+  onTryOn,
   onLike,
   onDislike,
   onSave,
@@ -47,32 +49,27 @@ export function OutfitCard({
         ) : null}
       </div>
 
-      <Card elevated className="space-y-4 select-none">
+      <Card
+        elevated
+        className="space-y-4 border border-outline-variant/60 bg-surface-container-lowest shadow-none select-none"
+      >
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold tracking-[0.14em] text-on-surface-variant uppercase">
-              {t("today.outfitLabel")}
-            </p>
-            <h2 className="mt-1 font-display text-2xl leading-tight text-on-surface">
+            <p className="md-label-medium text-primary">{t("today.outfitLabel")}</p>
+            <h2 className="md-title-large mt-1 text-on-surface">
               {recommendation.outfit.name ?? t("today.outfitLabel")}
             </h2>
           </div>
           <div className="empty:hidden">
             {recommendation.outfit.style ? (
-              <Chip selected>{recommendation.outfit.style.replaceAll("_", " ")}</Chip>
+              <span className="inline-block rounded-full bg-secondary-container px-3 py-2 text-xs text-on-secondary-container">
+                {recommendation.outfit.style.replaceAll("_", " ")}
+              </span>
             ) : null}
           </div>
         </div>
 
-        <p className="md-label-small rounded-full bg-secondary-container px-3 py-1.5 text-center text-on-secondary-container empty:hidden">
-          {swipe.canSwipe ? t("today.swipeHint") : null}
-        </p>
-
         <OutfitItemsGrid items={recommendation.outfit.items} />
-
-        <p className="text-sm leading-relaxed text-on-surface-variant">
-          {recommendation.explanation}
-        </p>
 
         <OutfitActions
           busy={busy}
@@ -85,6 +82,45 @@ export function OutfitCard({
           onSave={onSave}
           onRegenerate={onRegenerate}
         />
+
+        <details className="rounded-md bg-surface-container-low px-3">
+          <summary className="md-state-layer md-label-large min-h-12 cursor-pointer py-3 text-primary">
+            {t("experience.whyOutfit")}
+          </summary>
+          <p className="md-body-medium pb-3 text-on-surface-variant">
+            {recommendation.explanation}
+          </p>
+        </details>
+
+        <p className="md-body-small text-center text-on-surface-variant empty:hidden">
+          {swipe.canSwipe ? t("today.swipeHint") : null}
+        </p>
+
+        {onReplace ? (
+          <details className="rounded-2xl bg-surface-container p-3">
+            <summary className="md-state-layer min-h-12 cursor-pointer py-3 text-sm font-semibold text-primary">
+              {t("experience.swap")}
+            </summary>
+            <div className="flex flex-wrap gap-2">
+              {recommendation.outfit.items.map((entry) => (
+                <Button
+                  key={entry.clothingItemId}
+                  variant="tonal"
+                  size="sm"
+                  disabled={busy}
+                  onClick={() => onReplace(entry)}
+                >
+                  {entry.item?.name ?? entry.role}
+                </Button>
+              ))}
+            </div>
+          </details>
+        ) : null}
+        {onTryOn ? (
+          <Button variant="tonal" fullWidth disabled={busy} onClick={onTryOn}>
+            {t("experience.preview")}
+          </Button>
+        ) : null}
       </Card>
     </motion.div>
   );

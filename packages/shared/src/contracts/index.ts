@@ -13,3 +13,5 @@ export * from "@/contracts/weather/index.js";
 export * from "@/contracts/styling/index.js";
 export * from "@/contracts/ai/index.js";
 export * from "@/contracts/discover/index.js";
+
+export * from "@/contracts/experience.js";
