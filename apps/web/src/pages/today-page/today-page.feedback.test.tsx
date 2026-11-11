@@ -28,6 +28,22 @@ const recommendation = {
 };
 
 const mockApi = createMockApiClient({
+  createRecommendations: vi.fn().mockResolvedValue({ primary: recommendation, alternatives: [] }),
+  listCollections: vi.fn().mockResolvedValue({
+    collections: [
+      {
+        id: "00000000-0000-4000-8000-000000000041",
+        name: "Weekend",
+        description: "",
+        occasion: "",
+        season: "any",
+        color: "sage",
+        count: 0,
+        createdAt: "2026-11-01T10:00:00.000Z",
+      },
+    ],
+  }),
+
   getToday: vi.fn().mockResolvedValue({
     primary: recommendation,
     alternatives: [],
@@ -67,7 +83,12 @@ describe("TodayPage feedback", () => {
     await user.click(screen.getByRole("button", { name: /not for me/i }));
     await waitFor(() => expect(screen.getByRole("button", { name: /^save$/i })).toBeEnabled());
     await user.click(screen.getByRole("button", { name: /^save$/i }));
-    expect(mockApi.submitFeedback).toHaveBeenCalledTimes(2);
-    expect(await screen.findByText(/look saved/i)).toBeInTheDocument();
+    await user.click(await screen.findByRole("button", { name: /Weekend/ }));
+    expect(mockApi.submitFeedback).toHaveBeenCalledTimes(1);
+    expect(mockApi.saveCollectionOutfit).toHaveBeenCalledWith(
+      "00000000-0000-4000-8000-000000000041",
+      { recommendationId: recommendation.id, action: "save" },
+    );
+    expect(await screen.findByText(/saved to weekend/i)).toBeInTheDocument();
   });
 });

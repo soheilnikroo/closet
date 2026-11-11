@@ -6,7 +6,10 @@ import { GarmentArt } from "@/shared/ui/garment-art.js";
 
 export function OutfitItemsGrid({ items }: OutfitItemsGridProps) {
   return (
-    <motion.ul className="grid grid-cols-3 gap-2" {...staggerContainer}>
+    <motion.ul
+      className={`grid ${items.length === 4 ? "grid-cols-2" : "grid-cols-3"} gap-2`}
+      {...staggerContainer}
+    >
       {items.map((entry) => (
         <motion.li
           key={`${entry.clothingItemId}-${entry.role}`}

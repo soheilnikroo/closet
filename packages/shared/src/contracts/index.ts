@@ -15,3 +15,4 @@ export * from "@/contracts/ai/index.js";
 export * from "@/contracts/discover/index.js";
 
 export * from "@/contracts/experience.js";
+export * from "@/contracts/collections.js";

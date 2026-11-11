@@ -24,7 +24,6 @@ export function NavigationBar({ items, className }: NavigationBarProps) {
           <li key={item.to} className="min-w-0">
             <NavLink
               to={item.to}
-              viewTransition
               className={({ isActive }) =>
                 cn(
                   "md-state-layer relative flex h-full min-h-12 touch-manipulation select-none flex-col items-center justify-center gap-1 px-2",
@@ -34,7 +33,7 @@ export function NavigationBar({ items, className }: NavigationBarProps) {
             >
               {({ isActive }) => (
                 <>
-                  <span className="relative flex h-8 w-16 items-center justify-center">
+                  <span className="relative flex h-8 w-14 items-center justify-center">
                     {isActive ? (
                       <motion.span
                         className="absolute inset-x-0 inset-y-0 rounded-full bg-secondary-container"

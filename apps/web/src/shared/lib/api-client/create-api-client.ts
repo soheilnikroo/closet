@@ -1,4 +1,12 @@
 import {
+  collectionsResponseSchema,
+  collectionResponseSchema,
+  collectionDetailSchema,
+  type OutfitCollection,
+  type CreateCollection,
+  type CollectionInput,
+  type SaveCollectionOutfit,
+  type CollectionDetail,
   preferencesResponseSchema,
   tryOnResultSchema,
   demoSeedResponseSchema,
@@ -74,6 +82,12 @@ export type ApiClientOptions = {
 };
 
 export type ApiClient = {
+  listCollections: () => Promise<{ collections: OutfitCollection[] }>;
+  createCollection: (input: CreateCollection) => Promise<{ collection: OutfitCollection }>;
+  getCollection: (id: string) => Promise<CollectionDetail>;
+  updateCollection: (id: string, input: CollectionInput) => Promise<{ ok: true }>;
+  saveCollectionOutfit: (id: string, input: SaveCollectionOutfit) => Promise<{ ok: true }>;
+
   getPreferences: () => Promise<{ preferences: Preferences }>;
   updatePreferences: (input: Partial<Preferences>) => Promise<{ preferences: Preferences }>;
   seedDemo: () => Promise<{ count: number }>;
@@ -180,6 +194,58 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
   }
 
   return {
+    listCollections() {
+      return requestJson(
+        "/v1/collections",
+        { method: "GET" },
+        (data) => collectionsResponseSchema.parse(data),
+        true,
+      );
+    },
+    createCollection(input) {
+      return requestJson(
+        "/v1/collections",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        },
+        (data) => collectionResponseSchema.parse(data),
+        true,
+      );
+    },
+    getCollection(id) {
+      return requestJson(
+        `/v1/collections/${id}`,
+        { method: "GET" },
+        (data) => collectionDetailSchema.parse(data),
+        true,
+      );
+    },
+    updateCollection(id, input) {
+      return requestJson(
+        `/v1/collections/${id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        },
+        (data) => feedbackResponseSchema.parse(data),
+        true,
+      );
+    },
+    saveCollectionOutfit(id, input) {
+      return requestJson(
+        `/v1/collections/${id}/outfits`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        },
+        (data) => feedbackResponseSchema.parse(data),
+        true,
+      );
+    },
     getPreferences() {
       return requestJson(
         "/v1/users/me/preferences",

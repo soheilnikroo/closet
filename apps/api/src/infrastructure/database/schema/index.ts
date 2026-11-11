@@ -56,3 +56,7 @@ export {
   aiProcessingJobsTable,
   type AiProcessingJobRow,
 } from "@/infrastructure/database/schema/ai.js";
+export {
+  collectionsTable,
+  collectionOutfitsTable,
+} from "@/infrastructure/database/schema/collections.js";

@@ -14,7 +14,7 @@ export const links = () => [
   },
   {
     rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap",
+    href: "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Roboto:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap",
   },
   { rel: "stylesheet", href: appStyles },
   { rel: "icon", href: "/favicon.ico", sizes: "48x48" },
@@ -33,8 +33,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
           content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
         />
         <meta name="color-scheme" content="light" />
-        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fef7ff" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#fef7ff" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fbf6" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#f9fbf6" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

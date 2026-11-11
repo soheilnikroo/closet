@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, useDragControls } from "motion/react";
 import { useTranslation } from "react-i18next";
 
 import { useOutfitSwipe } from "@/features/outfit-card/model/use-outfit-swipe.js";
@@ -21,6 +21,7 @@ export function OutfitCard({
   swipeable = true,
 }: OutfitCardProps) {
   const { t } = useTranslation();
+  const dragControls = useDragControls();
   const swipe = useOutfitSwipe({
     enabled: swipeable && !busy,
     onLike,
@@ -32,6 +33,8 @@ export function OutfitCard({
       className="relative touch-pan-y"
       style={swipe.canSwipe ? { x: swipe.x, rotate: swipe.rotate } : undefined}
       drag={swipe.canSwipe ? "x" : false}
+      dragListener={false}
+      dragControls={dragControls}
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.92}
       onDragEnd={swipe.handleDragEnd}
@@ -69,7 +72,16 @@ export function OutfitCard({
           </div>
         </div>
 
-        <OutfitItemsGrid items={recommendation.outfit.items} />
+        <div
+          onPointerDown={(event) => {
+            if (swipe.canSwipe && event.isPrimary) {
+              dragControls.start(event);
+            }
+          }}
+          className="touch-pan-y"
+        >
+          <OutfitItemsGrid items={recommendation.outfit.items} />
+        </div>
 
         <OutfitActions
           busy={busy}

@@ -60,6 +60,9 @@ export function useTodayPage() {
           dislike: () => undefined,
         } as const;
         celebrationByAction[action]();
+        if (action === "dislike") {
+          regenerate(selectedOccasion);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : t("common.error"));
       }

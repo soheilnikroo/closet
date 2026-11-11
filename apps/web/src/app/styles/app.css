@@ -371,3 +371,50 @@
   line-height: var(--md-sys-typescale-display-large-line);
   font-weight: 400;
 }
+
+/* Botanical collection surfaces, paired for readable text. */
+.collection-forest {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+.collection-sage {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+}
+.collection-sand {
+  background: var(--md-sys-color-tertiary-container);
+  color: var(--md-sys-color-on-tertiary-container);
+}
+.collection-sky {
+  background: #d6e8ed;
+  color: #203b43;
+}
+.collection-rose {
+  background: #f1dfdb;
+  color: #4d302b;
+}
+.collection-intro {
+  padding: 1.25rem 0 0.5rem;
+}
+.collection-intro h2 {
+  white-space: pre-line;
+  font-family: var(--font-display);
+  letter-spacing: -0.035em;
+}
+::view-transition-group(*) {
+  animation-timing-function: var(--md-sys-motion-easing-standard);
+  animation-duration: 240ms;
+}
+::view-transition-old(.page-transition) {
+  animation: closet-vt-fade-out 140ms ease-out;
+}
+::view-transition-new(.page-transition) {
+  animation: closet-vt-fade-in 180ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

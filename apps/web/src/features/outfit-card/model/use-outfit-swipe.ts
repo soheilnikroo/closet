@@ -11,16 +11,17 @@ type UseOutfitSwipeOptions = {
 export function useOutfitSwipe({ enabled, onLike, onDislike }: UseOutfitSwipeOptions) {
   const reduceMotion = useReducedMotion();
   const x = useMotionValue(0);
-  const rotate = useTransform(x, [-220, 0, 220], [-10, 0, 10]);
+  const rotate = useTransform(x, [-220, 0, 220], reduceMotion ? [0, 0, 0] : [-6, 0, 6]);
   const likeOpacity = useTransform(x, [40, SWIPE_THRESHOLD], [0, 1]);
   const dislikeOpacity = useTransform(x, [-SWIPE_THRESHOLD, -40], [1, 0]);
 
-  const canSwipe = Boolean(enabled && !reduceMotion && (onLike || onDislike));
+  const canSwipe = Boolean(enabled && (onLike || onDislike));
 
   function handleDragEnd(_: unknown, info: PanInfo) {
     if (!canSwipe) {
       return;
     }
+    x.set(0);
     if (info.offset.x > SWIPE_THRESHOLD) {
       onLike?.();
       return;

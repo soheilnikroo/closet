@@ -17,6 +17,7 @@ import {
   runSeeds,
   type Database,
 } from "@/infrastructure/index.js";
+import { registerCollectionsRoutes } from "@/modules/collections/collections-routes.js";
 import { registerExperienceRoutes } from "@/modules/experience/experience-routes.js";
 import {
   createDiscoverService,
@@ -162,6 +163,12 @@ export async function buildApp(deps: AppDeps) {
       });
     }
 
+    await registerCollectionsRoutes(protectedScope, {
+      db,
+      env: deps.env,
+      usersService,
+      wardrobeService,
+    });
     await registerExperienceRoutes(protectedScope, {
       db,
       env: deps.env,

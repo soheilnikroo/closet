@@ -127,7 +127,9 @@ describe("TodayPage interactions", () => {
     if (primaryLike) {
       await user.click(primaryLike);
     }
-    expect(mockApi.submitFeedback).toHaveBeenCalled();
+    expect(await screen.findByRole("dialog", { name: /save this look/i })).toBeInTheDocument();
+    expect(mockApi.submitFeedback).not.toHaveBeenCalled();
+    await user.keyboard("{Escape}");
 
     await user.click(screen.getByRole("button", { name: /^everyday$/i }));
     expect(mockApi.createRecommendations).toHaveBeenCalled();
