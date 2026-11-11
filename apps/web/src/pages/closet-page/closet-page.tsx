@@ -7,20 +7,26 @@ import { ClosetItemSheet } from "@/pages/closet-page/ui/closet-item-sheet.js";
 import { ClosetReviewSheet } from "@/pages/closet-page/ui/closet-review-sheet.js";
 import { SlotFilters } from "@/pages/closet-page/ui/slot-filters.js";
 import { fadeUp, Match } from "@/shared/lib";
-import { Button, Card, TextField, EmptyState, Fab, FAB_ABOVE_NAV_CLASS } from "@/shared/ui";
+import { Button, Card, TextField, EmptyState } from "@/shared/ui";
+import { PageSkeleton } from "@/shared/ui/skeleton.js";
 import { AppShell } from "@/widgets/app-shell";
 
 export function ClosetPage() {
   const page = useClosetPage();
 
   return (
-    <AppShell title={page.t("closet.title")}>
+    <AppShell onRefresh={page.busy ? undefined : page.reload} title={page.t("closet.title")}>
       <motion.div className="space-y-4" {...fadeUp}>
-        <p className="text-sm text-on-surface-variant">
-          {page.itemCount === 1
-            ? page.t("closet.countOne", { count: page.itemCount })
-            : page.t("closet.count", { count: page.itemCount })}
-        </p>
+        <section className="page-intro flex items-end justify-between gap-4">
+          <div>
+            <p className="eyebrow">{page.t("refine.wardrobeEyebrow")}</p>
+            <h2>{page.t("closet.title")}</h2>
+            <p className="intro-description">{page.t("closet.count", { count: page.itemCount })}</p>
+          </div>
+          <Button size="sm" onClick={page.addSheet.onOpen}>
+            {page.t("closet.add")}
+          </Button>
+        </section>
 
         <TextField
           type="search"
@@ -43,17 +49,7 @@ export function ClosetPage() {
         <Match
           value={page.viewMode}
           cases={{
-            loading: (
-              <div role="status" className="grid grid-cols-2 gap-3">
-                <span className="sr-only">{page.t("experience.loading")}</span>
-                {[0, 1, 2, 3].map((key) => (
-                  <div
-                    key={key}
-                    className="h-56 animate-pulse rounded-2xl bg-surface-container motion-reduce:animate-none"
-                  />
-                ))}
-              </div>
-            ),
+            loading: <PageSkeleton variant="grid" label={page.t("experience.loading")} />,
             empty: (
               <EmptyState
                 variant="closetEmpty"
@@ -89,17 +85,6 @@ export function ClosetPage() {
             ),
           }}
         />
-
-        {page.viewMode === "empty" ? null : (
-          <Fab
-            extended
-            label={page.t("closet.add")}
-            className={FAB_ABOVE_NAV_CLASS}
-            onClick={page.addSheet.onOpen}
-          >
-            +
-          </Fab>
-        )}
       </motion.div>
 
       <ClosetAddSheet
@@ -131,7 +116,7 @@ export function ClosetPage() {
         nameLabel={page.t("closet.name")}
         saveLabel={page.t("closet.confirm")}
         backLabel={page.t("closet.back")}
-        stepLabel={(step) => page.t("closet.step", { step, total: 4 })}
+        stepLabel={(step) => page.t("closet.step", { step, total: 2 })}
         colorLabel={(color) => page.t(`closet.colors.${color}`)}
         seasonLabel={(season) => page.t(`closet.seasons.${season}`)}
         slotLabel={(slot) => page.t(`closet.slots.${slot}`)}

@@ -2,13 +2,15 @@ import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-reac
 import { useTranslation } from "react-i18next";
 
 import { isClerkEnabled, POST_AUTH_REDIRECT } from "@/shared/config";
+import { useOfflineOnly } from "@/shared/lib/offline/offline-context.js";
 import { Button } from "@/shared/ui";
 
 /** Compact header auth — sign-in when signed out, avatar when signed in. No Get started here. */
 export function UserAuthControls() {
   const { t } = useTranslation();
+  const offlineOnly = useOfflineOnly();
 
-  if (!isClerkEnabled()) {
+  if (offlineOnly || !isClerkEnabled()) {
     return null;
   }
 

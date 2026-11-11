@@ -82,8 +82,9 @@ describe("OutfitCard", () => {
 
     expect(screen.getByText("Easy smart casual")).toBeInTheDocument();
     expect(screen.getByText(/neutral colours/i)).toBeInTheDocument();
-    expect(screen.getByText(/swipe right to like/i)).toBeInTheDocument();
+    expect(screen.getByText(/swipe to find/i)).toBeInTheDocument();
 
+    await user.click(screen.getByText("Details & more options"));
     await user.click(screen.getByRole("button", { name: /like/i }));
     await user.click(screen.getByRole("button", { name: /not for me/i }));
     await user.click(screen.getByRole("button", { name: /save/i }));

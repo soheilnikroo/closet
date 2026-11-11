@@ -75,13 +75,30 @@ import {
 } from "@closet/shared";
 import { z } from "zod";
 
+import {
+  readSnapshot,
+  peekSnapshot,
+  writeSnapshot,
+  snapshotScope,
+  snapshotGeneration,
+  invalidateSnapshots,
+  snapshotsDirty,
+  clearSnapshots,
+  offlineMessage,
+} from "@/shared/lib/offline/snapshot-cache.js";
+
 export type ApiClientOptions = {
   baseUrl: string;
   getToken: () => Promise<string | null>;
   fetchImpl?: typeof fetch;
+  offlineAccount?: string | null;
+  offlineOnly?: boolean;
+  fresh?: boolean;
 };
 
 export type ApiClient = {
+  fresh: () => ApiClient;
+  cached: <T>(path: string, parse: (data: unknown) => T) => T | undefined;
   listCollections: () => Promise<{ collections: OutfitCollection[] }>;
   createCollection: (input: CreateCollection) => Promise<{ collection: OutfitCollection }>;
   getCollection: (id: string) => Promise<CollectionDetail>;
@@ -125,8 +142,84 @@ export type ApiClient = {
 
 export function createApiClient(options: ApiClientOptions): ApiClient {
   const fetchImpl = options.fetchImpl ?? fetch;
-
+  const scope = options.offlineAccount
+    ? snapshotScope(options.baseUrl, options.offlineAccount)
+    : null;
+  function offline() {
+    return options.offlineOnly || (typeof navigator !== "undefined" && !navigator.onLine);
+  }
   async function requestJson<T>(
+    path: string,
+    init: RequestInit,
+    parse: (data: unknown) => T,
+    authenticated: boolean,
+  ): Promise<T> {
+    if (!scope || init.method !== "GET" || path === "/health") {
+      if (offline()) {
+        throw new Error(offlineMessage);
+      }
+      const result = await networkJson(path, init, parse, authenticated);
+      if (scope && init.method !== "GET") {
+        invalidateSnapshots(scope);
+      }
+      return result;
+    }
+    if (options.fresh && offline()) {
+      throw new Error(offlineMessage);
+    }
+    const cached = await readSnapshot(scope, path);
+    if (cached && (offline() || (!options.fresh && !snapshotsDirty(scope, cached.savedAt)))) {
+      try {
+        const parsed = parse(cached.payload);
+        if (!offline() && Date.now() - cached.savedAt >= 60_000) {
+          const generation = snapshotGeneration(scope);
+          void networkJson(
+            path,
+            init,
+            (payload) => {
+              parse(payload);
+              return payload;
+            },
+            authenticated,
+          )
+            .then((payload) => writeSnapshot(scope, path, payload, generation))
+            .catch(() => undefined);
+        }
+        return parsed;
+      } catch {
+        /* Schema changed; retrieve a current snapshot. */
+      }
+    }
+    if (offline()) {
+      throw new Error(offlineMessage);
+    }
+    const generation = snapshotGeneration(scope);
+    try {
+      const data = await networkJson(
+        path,
+        init,
+        (payload) => {
+          parse(payload);
+          return payload;
+        },
+        authenticated,
+      );
+      await writeSnapshot(scope, path, data, generation);
+      return parse(data);
+    } catch (error) {
+      // Authentication/validation errors must never resurrect an old account's data.
+      if (
+        !options.fresh &&
+        cached &&
+        (error instanceof TypeError ||
+          (error instanceof DOMException && error.name === "TimeoutError"))
+      ) {
+        return parse(cached.payload);
+      }
+      throw error;
+    }
+  }
+  async function networkJson<T>(
     path: string,
     init: RequestInit,
     parse: (data: unknown) => T,
@@ -149,11 +242,15 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
     const response = await fetchImpl(`${options.baseUrl}${path}`, {
       ...init,
       headers,
+      signal: init.signal ?? AbortSignal.timeout(init.method === "GET" ? 8_000 : 60_000),
     });
 
     const payload: unknown = await response.json().catch(() => null);
 
     if (!response.ok) {
+      if (scope && (response.status === 401 || response.status === 403)) {
+        await clearSnapshots(scope);
+      }
       const parsedError = apiErrorSchema.safeParse(payload);
       if (parsedError.success) {
         throw new Error(parsedError.data.error.message);
@@ -169,6 +266,9 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
     init: RequestInit,
     authenticated: boolean,
   ): Promise<void> {
+    if (offline()) {
+      throw new Error(offlineMessage);
+    }
     const headers = new Headers(init.headers);
     if (authenticated) {
       const token = await options.getToken();
@@ -181,9 +281,13 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
     const response = await fetchImpl(`${options.baseUrl}${path}`, {
       ...init,
       headers,
+      signal: init.signal ?? AbortSignal.timeout(init.method === "GET" ? 8_000 : 60_000),
     });
 
     if (!response.ok) {
+      if (scope && (response.status === 401 || response.status === 403)) {
+        await clearSnapshots(scope);
+      }
       const payload: unknown = await response.json().catch(() => null);
       const parsedError = apiErrorSchema.safeParse(payload);
       if (parsedError.success) {
@@ -191,9 +295,26 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
       }
       throw new Error(`Request failed with status ${response.status}`);
     }
+    if (scope) {
+      invalidateSnapshots(scope);
+    }
   }
 
   return {
+    cached(path, parse) {
+      const data = scope ? peekSnapshot(scope, path) : undefined;
+      if (data === undefined) {
+        return undefined;
+      }
+      try {
+        return parse(data);
+      } catch {
+        return undefined;
+      }
+    },
+    fresh() {
+      return createApiClient({ ...options, fresh: true });
+    },
     listCollections() {
       return requestJson(
         "/v1/collections",
@@ -425,6 +546,9 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
       await requestEmpty(`/v1/wardrobe/items/${id}`, { method: "DELETE" }, true);
     },
     async uploadMedia(file) {
+      if (offline()) {
+        throw new Error(offlineMessage);
+      }
       const token = await options.getToken();
       if (!token) {
         throw new Error("Authentication token is required");
@@ -435,9 +559,13 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
         method: "POST",
         headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
         body: form,
+        signal: AbortSignal.timeout(60_000),
       });
       const payload: unknown = await response.json().catch(() => null);
       if (!response.ok) {
+        if (scope && (response.status === 401 || response.status === 403)) {
+          await clearSnapshots(scope);
+        }
         const parsedError = apiErrorSchema.safeParse(payload);
         throw new Error(parsedError.success ? parsedError.data.error.message : "Upload failed");
       }

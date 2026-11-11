@@ -16,7 +16,12 @@ export function readStoredLocale(): SupportedLocale {
     return defaultLocale;
   }
 
-  const stored = window.localStorage.getItem(STORAGE_KEY);
+  let stored: string | null = null;
+  try {
+    stored = window.localStorage.getItem(STORAGE_KEY);
+  } catch {
+    return defaultLocale;
+  }
   if (stored && isSupportedLocale(stored)) {
     return stored;
   }
@@ -29,7 +34,11 @@ export function persistLocale(locale: SupportedLocale): void {
     return;
   }
 
-  window.localStorage.setItem(STORAGE_KEY, locale);
+  try {
+    window.localStorage.setItem(STORAGE_KEY, locale);
+  } catch {
+    /* Continue without persistence. */
+  }
 }
 
 export function applyDocumentLocale(locale: SupportedLocale): void {

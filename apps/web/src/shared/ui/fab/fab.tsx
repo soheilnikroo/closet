@@ -19,7 +19,7 @@ export function Fab({
       type={type}
       aria-label={label}
       className={cn(
-        "md-state-layer inline-flex touch-manipulation select-none items-center justify-center gap-2 bg-primary-container text-on-primary-container shadow-elevation-3",
+        "closet-fab md-state-layer inline-flex touch-manipulation select-none items-center justify-center gap-2 bg-primary-container text-on-primary-container shadow-elevation-3",
         extended ? "h-14 rounded-2xl px-5" : "size-14 rounded-2xl",
         className,
       )}

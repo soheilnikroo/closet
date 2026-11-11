@@ -1,3 +1,5 @@
+import { useGarmentImage } from "@/shared/hooks/use-garment-image.js";
+
 type Props = { slot: string; color?: string; imageUrl?: string | null; className?: string };
 const colors: Record<string, string> = {
   white: "#faf9ef",
@@ -23,18 +25,28 @@ const shapes: Record<string, string> = {
   one_piece: "M36 20 45 17Q50 26 55 17L64 20 60 45 80 90H20L40 45Z",
 };
 export function GarmentArt({ slot, color = "green", imageUrl, className = "" }: Props) {
-  if (imageUrl) {
+  const { source, observe } = useGarmentImage(imageUrl);
+  if (source) {
     return (
       <img
-        src={imageUrl}
+        ref={observe}
+        src={source}
         alt=""
         loading="lazy"
+        decoding="async"
+        width={320}
+        height={320}
         className={`aspect-square w-full object-contain ${className}`}
       />
     );
   }
   return (
-    <svg viewBox="0 0 100 110" aria-hidden="true" className={`aspect-square w-full ${className}`}>
+    <svg
+      ref={observe}
+      viewBox="0 0 100 110"
+      aria-hidden="true"
+      className={`aspect-square w-full ${className}`}
+    >
       <ellipse cx="50" cy="96" rx="29" ry="4" fill="currentColor" opacity=".07" />
       <path
         d={shapes[slot] ?? shapes.top}

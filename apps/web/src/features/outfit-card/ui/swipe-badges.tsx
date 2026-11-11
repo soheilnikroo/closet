@@ -11,6 +11,7 @@ export function SwipeBadges({
   return (
     <>
       <motion.div
+        aria-hidden="true"
         className="pointer-events-none absolute inset-x-4 top-5 z-20 flex justify-start"
         style={{ opacity: likeOpacity }}
       >
@@ -19,6 +20,7 @@ export function SwipeBadges({
         </span>
       </motion.div>
       <motion.div
+        aria-hidden="true"
         className="pointer-events-none absolute inset-x-4 top-5 z-20 flex justify-end"
         style={{ opacity: dislikeOpacity }}
       >

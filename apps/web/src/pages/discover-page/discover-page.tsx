@@ -6,6 +6,7 @@ import { GapList } from "@/pages/discover-page/ui/gap-list.js";
 import { ProductIdeas } from "@/pages/discover-page/ui/product-ideas.js";
 import { fadeUp, Match } from "@/shared/lib";
 import { Card, EmptyState } from "@/shared/ui";
+import { PageSkeleton } from "@/shared/ui/skeleton.js";
 import { AppShell } from "@/widgets/app-shell";
 
 export function DiscoverPage() {
@@ -13,13 +14,13 @@ export function DiscoverPage() {
   const navigate = useNavigate();
 
   return (
-    <AppShell title={page.t("discover.title")}>
+    <AppShell onRefresh={page.busy ? undefined : page.reload} title={page.t("discover.title")}>
       <motion.div className="space-y-4" {...fadeUp}>
-        <Card elevated>
-          <p className="text-sm leading-relaxed text-on-surface-variant">
-            {page.t("discover.intro")}
-          </p>
-        </Card>
+        <section className="page-intro">
+          <p className="eyebrow">{page.t("refine.discoverEyebrow")}</p>
+          <h2>{page.t("refine.discoverTitle")}</h2>
+          <p className="intro-description">{page.t("refine.discoverHint")}</p>
+        </section>
 
         <Card className="text-sm text-error empty:hidden">{page.error}</Card>
 
@@ -27,11 +28,7 @@ export function DiscoverPage() {
           value={page.viewMode}
           cases={{
             empty:
-              page.products.length > 0 ? (
-                <p className="rounded-2xl bg-secondary-container p-4 text-sm text-on-secondary-container">
-                  {page.t("discover.noGapsBody")}
-                </p>
-              ) : (
+              page.products.length > 0 ? null : (
                 <EmptyState
                   variant="balanced"
                   title={page.t("discover.noGapsTitle")}
@@ -50,17 +47,7 @@ export function DiscoverPage() {
                 }}
               />
             ),
-            loading: (
-              <div role="status" className="space-y-3">
-                <p>{page.t("experience.loading")}</p>
-                {[1, 2, 3].map((id) => (
-                  <div
-                    key={id}
-                    className="h-28 animate-pulse rounded-3xl bg-surface-container motion-reduce:animate-none"
-                  />
-                ))}
-              </div>
-            ),
+            loading: <PageSkeleton variant="list" label={page.t("experience.loading")} />,
           }}
         />
         <ProductIdeas products={page.products} />

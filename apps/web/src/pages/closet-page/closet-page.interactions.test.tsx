@@ -124,8 +124,7 @@ describe("ClosetPage interactions", () => {
     await user.click(screen.getByRole("button", { name: /add it myself/i }));
     await user.click(await screen.findByRole("button", { name: /^t-shirt$/i }));
     await user.click(screen.getByRole("button", { name: /^blue$/i }));
-    await user.click(screen.getByRole("button", { name: /all year/i }));
-    await user.click(screen.getByRole("button", { name: /^next$/i }));
+    await user.click(screen.getByText("Optional details"));
     const label = screen.getByRole("textbox", { name: /^label$/i });
     await user.type(label, "Office");
     await user.click(screen.getByRole("button", { name: /^add$/i }));

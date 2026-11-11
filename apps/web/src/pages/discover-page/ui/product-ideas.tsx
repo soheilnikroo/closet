@@ -53,8 +53,8 @@ export function ProductIdeas({ products }: { products: Product[] }) {
   return (
     <section className="space-y-4">
       <div>
-        <h2 className="font-display text-2xl">{t("experience.ideas")}</h2>
-        <p className="mt-2 text-sm text-on-surface-variant">{t("experience.ideasHint")}</p>
+        <h2 className="sr-only">{t("experience.ideas")}</h2>
+        <p className="sr-only">{t("experience.ideasHint")}</p>
       </div>
       <Button variant="tonal" aria-pressed={onlySaved} onClick={() => setOnlySaved(!onlySaved)}>
         {onlySaved ? t("experience.allIdeas") : t("experience.savedIdeas")}
@@ -65,14 +65,14 @@ export function ProductIdeas({ products }: { products: Product[] }) {
       {onlySaved && !visible.length ? <p className="text-sm">{t("experience.noSaved")}</p> : null}
       <div className="grid grid-cols-2 gap-3">
         {visible.map((product) => (
-          <Card key={product.id} className="space-y-3 !p-3">
+          <Card key={product.id} className="discovery-piece space-y-3 !p-0">
             <img
               src={product.imageUrl}
               alt=""
               loading="lazy"
-              className="aspect-square w-full rounded-2xl object-contain"
+              className="aspect-square w-full rounded-[22px] bg-surface-container-low object-contain p-3"
             />
-            <h3 className="text-sm font-semibold">
+            <h3 className="px-1 text-sm font-semibold">
               {i18n.language.startsWith("fa") ? product.nameFa : product.name}
             </h3>
             <Button
@@ -85,16 +85,19 @@ export function ProductIdeas({ products }: { products: Product[] }) {
             >
               {saved.includes(product.id) ? t("experience.saved") : t("experience.saveIdea")}
             </Button>
-            <Button
-              fullWidth
-              size="sm"
-              variant="text"
-              onClick={() => {
-                void navigate(`/closet?add=${product.categorySlug}`);
-              }}
-            >
-              {t("experience.ownThis")}
-            </Button>
+            <details className="product-details">
+              <summary>{t("refine.more")}</summary>
+              <Button
+                fullWidth
+                size="sm"
+                variant="text"
+                onClick={() => {
+                  void navigate(`/closet?add=${product.categorySlug}`);
+                }}
+              >
+                {t("experience.ownThis")}
+              </Button>
+            </details>
           </Card>
         ))}
       </div>

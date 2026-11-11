@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { CollectionForm } from "@/features/collection-picker/collection-form.js";
 import { useApiClient } from "@/shared/hooks";
 import { BottomSheet, Button, TextField } from "@/shared/ui";
+import { PageSkeleton } from "@/shared/ui/skeleton.js";
 
 export function CollectionPicker({
   recommendation,
@@ -114,7 +115,9 @@ export function CollectionPicker({
             <Button fullWidth variant="tonal" disabled={busy} onClick={() => setCreating(true)}>
               + {t("collections.new")}
             </Button>
-            {collections === null && !error ? <p role="status">{t("experience.loading")}</p> : null}
+            {collections === null && !error ? (
+              <PageSkeleton variant="list" label={t("experience.loading")} />
+            ) : null}
             {collections?.length === 0 ? (
               <p className="md-body-medium py-4 text-on-surface-variant">
                 {t("collections.first")}

@@ -2,9 +2,10 @@ import { SignUp } from "@clerk/clerk-react";
 import { useLocation, useSearchParams } from "react-router";
 
 import { ClerkGuestOnly, SsoCallbackPanel } from "@/features/auth-gate";
+import { authAppearance } from "@/features/auth-welcome/auth-appearance.js";
+import { AuthWelcome, DemoWelcome } from "@/features/auth-welcome/auth-welcome.js";
 import { SignUpContinueGuard } from "@/pages/sign-up-page/sign-up-continue-guard.js";
 import { buildSignInHref, isClerkEnabled, resolvePostAuthRedirect } from "@/shared/config";
-import { Card } from "@/shared/ui";
 
 export function SignUpPage() {
   const location = useLocation();
@@ -15,15 +16,7 @@ export function SignUpPage() {
   const isContinue = location.pathname.includes("/continue");
 
   if (!clerkEnabled) {
-    return (
-      <div className="mx-auto flex min-h-dvh max-w-lg items-center px-4 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]">
-        <Card elevated>
-          <p className="text-sm text-on-surface-variant">
-            Set <code>VITE_CLERK_PUBLISHABLE_KEY</code> in `.env` to enable Clerk sign-up.
-          </p>
-        </Card>
-      </div>
-    );
+    return <DemoWelcome signup={true} redirectTo={fallbackRedirectUrl} />;
   }
 
   if (isSsoCallback) {
@@ -35,14 +28,15 @@ export function SignUpPage() {
       {isContinue ? (
         <SignUpContinueGuard fallbackRedirectUrl={fallbackRedirectUrl} />
       ) : (
-        <div className="mx-auto flex min-h-dvh max-w-lg items-center justify-center px-4 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]">
+        <AuthWelcome signup={true}>
           <SignUp
+            appearance={authAppearance}
             routing="path"
             path="/sign-up"
             signInUrl={buildSignInHref(fallbackRedirectUrl)}
             fallbackRedirectUrl={fallbackRedirectUrl}
           />
-        </div>
+        </AuthWelcome>
       )}
     </ClerkGuestOnly>
   );

@@ -1,21 +1,22 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 
 import { AppProviders } from "@/app/providers";
+import { PerformanceDiagnostics } from "@/features/performance-diagnostics/performance-diagnostics.js";
 import { PwaReloadPrompt } from "@/features/pwa-reload-prompt";
+import { OfflineBoundary, OfflineStatus } from "@/features/pwa-reload-prompt/offline-status.js";
+import { ClosetSplash } from "@/shared/ui/closet-splash.js";
 
 import appStyles from "@/app/styles/app.css?url";
 
+export const meta = () => [
+  { title: "Closet — your personal wardrobe" },
+  {
+    name: "description",
+    content: "Your clothes, favourite outfits and personal style, together in one simple closet.",
+  },
+];
+
 export const links = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
-  },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Roboto:wght@400;500;600;700&family=Vazirmatn:wght@400;500;600;700&display=swap",
-  },
   { rel: "stylesheet", href: appStyles },
   { rel: "icon", href: "/favicon.ico", sizes: "48x48" },
   { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
@@ -33,8 +34,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
           content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
         />
         <meta name="color-scheme" content="light" />
-        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f9fbf6" />
-        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#f9fbf6" />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#fafbf7" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#fafbf7" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -52,24 +53,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export function HydrateFallback() {
-  return (
-    <div className="flex min-h-dvh items-center justify-center bg-surface text-on-surface">
-      <div className="flex flex-col items-center gap-3">
-        <div
-          className="size-11 animate-pulse rounded-full bg-primary/25 shadow-elevation-1"
-          aria-hidden
-        />
-        <p className="font-display text-sm font-medium text-on-surface-variant">Loading…</p>
-      </div>
-    </div>
-  );
+  return <ClosetSplash />;
 }
 
 export default function App() {
   return (
     <AppProviders>
-      <Outlet />
+      <OfflineBoundary>
+        <Outlet />
+      </OfflineBoundary>
+      <OfflineStatus />
       <PwaReloadPrompt />
+      <PerformanceDiagnostics />
     </AppProviders>
   );
 }

@@ -1,6 +1,7 @@
 import type { UpdateClothingItemRequest } from "@closet/shared";
 import type { ClothingCategory, Season } from "@closet/shared";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   CLOSET_SLOTS,
@@ -12,7 +13,7 @@ import type { ClosetManualWizardProps } from "@/pages/closet-page/ui/closet-manu
 import { ClothingDetails } from "@/pages/closet-page/ui/clothing-details.js";
 import { Button, TextField } from "@/shared/ui";
 
-type ManualStep = "type" | "color" | "season" | "details";
+type ManualStep = "type" | "details";
 
 function categoryName(category: ClothingCategory, language: string) {
   return language.toLowerCase().startsWith("fa") ? category.nameFa : category.name;
@@ -26,12 +27,10 @@ export function ClosetManualWizard({
   typeQuestion,
   colorQuestion,
   seasonQuestion,
-  nameQuestion,
   labelQuestion,
   labelHint,
   labelPlaceholder,
   addLabel,
-  nextLabel,
   nameLabel,
   saveLabel,
   backLabel,
@@ -42,10 +41,11 @@ export function ClosetManualWizard({
   onBack,
   onCreate,
 }: ClosetManualWizardProps) {
-  const [step, setStep] = useState<ManualStep>(initialCategory ? "color" : "type");
+  const { t } = useTranslation();
+  const [step, setStep] = useState<ManualStep>(initialCategory ? "details" : "type");
   const [category, setCategory] = useState<ClothingCategory | null>(initialCategory);
   const [color, setColor] = useState<string | null>(null);
-  const [seasons, setSeasons] = useState<Season[]>([]);
+  const [seasons, setSeasons] = useState<Season[]>(["all_season"]);
   const [name, setName] = useState(initialCategory ? categoryName(initialCategory, language) : "");
   const [details, setDetails] = useState<UpdateClothingItemRequest>({});
   const [labelDraft, setLabelDraft] = useState("");
@@ -54,7 +54,7 @@ export function ClosetManualWizard({
   function chooseCategory(next: ClothingCategory) {
     setCategory(next);
     setName(categoryName(next, language));
-    setStep("color");
+    setStep("details");
   }
 
   function toggleSeason(next: Season) {
@@ -82,7 +82,7 @@ export function ClosetManualWizard({
     setLabelDraft("");
   }
 
-  const stepIndex = step === "type" ? 1 : step === "color" ? 2 : step === "season" ? 3 : 4;
+  const stepIndex = step === "type" ? 1 : 2;
 
   return (
     <div className="space-y-4">
@@ -95,11 +95,7 @@ export function ClosetManualWizard({
               onBack();
               return;
             }
-            if (step === "color") {
-              setStep("type");
-              return;
-            }
-            setStep(step === "details" ? "season" : "color");
+            setStep("type");
           }}
         >
           {backLabel}
@@ -138,18 +134,24 @@ export function ClosetManualWizard({
         </div>
       ) : null}
 
-      {step === "color" ? (
+      {step === "details" && category ? (
         <div className="space-y-4">
+          <TextField
+            label={nameLabel}
+            value={name}
+            className="text-base"
+            onChange={(event) => setName(event.target.value)}
+          />
           <h3 className="font-display text-xl font-semibold text-on-surface">{colorQuestion}</h3>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-3 gap-2">
             {MANUAL_COLORS.map((swatch) => (
               <button
                 key={swatch}
+                aria-pressed={color === swatch}
                 type="button"
-                className="md-state-layer flex min-h-12 items-center gap-3 rounded-2xl border border-outline-variant/50 bg-surface px-3 text-start text-sm font-medium text-on-surface"
+                className="md-state-layer flex min-h-12 items-center gap-3 rounded-2xl border border-outline-variant/50 bg-surface px-3 text-start text-xs font-medium text-on-surface aria-pressed:border-primary aria-pressed:bg-secondary-container"
                 onClick={() => {
                   setColor(swatch);
-                  setStep("season");
                 }}
               >
                 <span
@@ -161,100 +163,84 @@ export function ClosetManualWizard({
               </button>
             ))}
           </div>
-        </div>
-      ) : null}
 
-      {step === "season" ? (
-        <div className="space-y-4">
-          <h3 className="font-display text-xl font-semibold text-on-surface">{seasonQuestion}</h3>
-          <div className="flex flex-wrap gap-2">
-            {MANUAL_SEASONS.map((season) => {
-              const selected = seasons.includes(season);
-              return (
-                <button
-                  key={season}
-                  type="button"
-                  aria-pressed={selected}
-                  className={
-                    selected
-                      ? "md-state-layer min-h-12 rounded-full bg-secondary-container px-4 text-sm font-medium text-on-secondary-container"
-                      : "md-state-layer min-h-12 rounded-full border border-outline-variant bg-surface px-4 text-sm font-medium text-on-surface"
-                  }
-                  onClick={() => toggleSeason(season)}
-                >
-                  {seasonLabel(season)}
-                </button>
-              );
-            })}
-          </div>
+          <details className="settings-group compact-details">
+            <summary>{t("refine.optionalDetails")}</summary>
+            <div className="space-y-4 pt-4">
+              <h3 className="font-display text-xl font-semibold text-on-surface">
+                {seasonQuestion}
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {MANUAL_SEASONS.map((season) => {
+                  const selected = seasons.includes(season);
+                  return (
+                    <button
+                      key={season}
+                      type="button"
+                      aria-pressed={selected}
+                      className={
+                        selected
+                          ? "md-state-layer min-h-12 rounded-full bg-secondary-container px-4 text-sm font-medium text-on-secondary-container"
+                          : "md-state-layer min-h-12 rounded-full border border-outline-variant bg-surface px-4 text-sm font-medium text-on-surface"
+                      }
+                      onClick={() => toggleSeason(season)}
+                    >
+                      {seasonLabel(season)}
+                    </button>
+                  );
+                })}
+              </div>
+              <ClothingDetails value={details} onChange={setDetails} />
+              <div className="space-y-2">
+                <h4 className="text-sm font-semibold text-on-surface">{labelQuestion}</h4>
+                <p className="text-sm text-on-surface-variant">{labelHint}</p>
+                <div className="flex items-end gap-2">
+                  <TextField
+                    label={labelPlaceholder}
+                    value={labelDraft}
+                    className="text-base"
+                    onChange={(event) => setLabelDraft(event.target.value)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        event.preventDefault();
+                        addCustomLabel();
+                      }
+                    }}
+                  />
+                  <Button
+                    size="lg"
+                    variant="tonal"
+                    disabled={labelDraft.trim().length === 0}
+                    onClick={addCustomLabel}
+                  >
+                    {addLabel}
+                  </Button>
+                </div>
+                <div className="flex flex-wrap gap-2 empty:hidden">
+                  {labels.map((label) => (
+                    <button
+                      key={label}
+                      type="button"
+                      className="md-state-layer min-h-12 rounded-full bg-surface-container px-4 text-sm text-on-surface"
+                      onClick={() =>
+                        setLabels((current) => current.filter((item) => item !== label))
+                      }
+                    >
+                      {label} ×
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </details>
           <Button
             fullWidth
             size="lg"
-            disabled={seasons.length === 0}
-            onClick={() => setStep("details")}
-          >
-            {nextLabel}
-          </Button>
-        </div>
-      ) : null}
-
-      {step === "details" && category && color ? (
-        <div className="space-y-4">
-          <h3 className="font-display text-xl font-semibold text-on-surface">{nameQuestion}</h3>
-          <p className="text-sm text-on-surface-variant">
-            {categoryName(category, language)} · {colorLabel(color)} ·{" "}
-            {seasons.map((season) => seasonLabel(season)).join(" · ")}
-          </p>
-          <TextField
-            label={nameLabel}
-            value={name}
-            className="text-base"
-            onChange={(event) => setName(event.target.value)}
-          />
-          <ClothingDetails value={details} onChange={setDetails} />
-          <div className="space-y-2">
-            <h4 className="text-sm font-semibold text-on-surface">{labelQuestion}</h4>
-            <p className="text-sm text-on-surface-variant">{labelHint}</p>
-            <div className="flex items-end gap-2">
-              <TextField
-                label={labelPlaceholder}
-                value={labelDraft}
-                className="text-base"
-                onChange={(event) => setLabelDraft(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault();
-                    addCustomLabel();
-                  }
-                }}
-              />
-              <Button
-                size="lg"
-                variant="tonal"
-                disabled={labelDraft.trim().length === 0}
-                onClick={addCustomLabel}
-              >
-                {addLabel}
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2 empty:hidden">
-              {labels.map((label) => (
-                <button
-                  key={label}
-                  type="button"
-                  className="md-state-layer min-h-12 rounded-full bg-surface-container px-4 text-sm text-on-surface"
-                  onClick={() => setLabels((current) => current.filter((item) => item !== label))}
-                >
-                  {label} ×
-                </button>
-              ))}
-            </div>
-          </div>
-          <Button
-            fullWidth
-            size="lg"
-            disabled={busy || name.trim().length === 0}
-            onClick={() =>
+            disabled={busy || !color || name.trim().length === 0}
+            onClick={() => {
+              if (!color) {
+                return;
+              }
               onCreate({
                 ...details,
                 categoryId: category.id,
@@ -262,8 +248,8 @@ export function ClosetManualWizard({
                 primaryColor: color,
                 seasons,
                 labels,
-              })
-            }
+              });
+            }}
           >
             {saveLabel}
           </Button>

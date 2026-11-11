@@ -8,8 +8,8 @@ export function Card({ children, className, elevated = false, ...props }: CardPr
   return (
     <div
       className={cn(
-        "rounded-md p-4 text-on-surface",
-        elevated ? "bg-surface-container-low shadow-elevation-1" : "bg-surface-container-highest",
+        "rounded-[24px] p-5 text-on-surface",
+        elevated ? "bg-surface-container-low shadow-elevation-1" : "bg-surface-container-lowest",
         className,
       )}
       {...props}

@@ -1,3 +1,5 @@
+import { useId } from "react";
+
 import { cn } from "@/shared/lib";
 import type { TextFieldProps } from "@/shared/ui/text-field/text-field.types.js";
 
@@ -10,9 +12,12 @@ export function TextField({
   errorText,
   className,
   id,
+  placeholder,
+  "aria-describedby": externalDescription,
   ...props
 }: TextFieldProps) {
-  const fieldId = id ?? props.name ?? label.toLowerCase().replace(/\s+/g, "-");
+  const generatedId = useId();
+  const fieldId = id ?? generatedId;
   const describedBy = errorText
     ? `${fieldId}-error`
     : supportingText
@@ -21,16 +26,17 @@ export function TextField({
 
   return (
     <label className="flex w-full flex-col gap-1">
-      <span className="md-body-medium px-1 text-on-surface-variant">{label}</span>
+      <span className={"md-body-medium px-1 text-on-surface-variant"}>{label}</span>
       <input
+        placeholder={placeholder || (props.type === "search" ? label : undefined)}
         id={fieldId}
         aria-invalid={Boolean(errorText)}
-        aria-describedby={describedBy}
+        aria-describedby={[externalDescription, describedBy].filter(Boolean).join(" ") || undefined}
         className={cn(
-          "h-14 rounded-xs border bg-surface px-4 text-on-surface outline-none transition-[border-color,box-shadow] duration-150",
+          "h-14 rounded-2xl border bg-surface-container-lowest px-4 text-on-surface outline-none transition-[border-color,box-shadow] duration-150",
           errorText
             ? "border-error focus:border-error focus:shadow-[inset_0_0_0_1px_var(--md-sys-color-error)]"
-            : "border-outline focus:border-primary focus:shadow-[inset_0_0_0_1px_var(--md-sys-color-primary)]",
+            : "border-outline-variant focus:border-primary focus:shadow-[inset_0_0_0_1px_var(--md-sys-color-primary)]",
           className,
         )}
         {...props}
@@ -40,7 +46,7 @@ export function TextField({
           {errorText}
         </span>
       ) : supportingText ? (
-        <span id={`${fieldId}-support`} className="md-body-medium px-1 text-on-surface-variant">
+        <span id={`${fieldId}-support`} className={"md-body-medium px-1 text-on-surface-variant"}>
           {supportingText}
         </span>
       ) : null}

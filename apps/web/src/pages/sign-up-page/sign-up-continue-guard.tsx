@@ -5,6 +5,8 @@ import { AuthLoading } from "@/features/auth-gate/auth-loading.js";
 import { completeStuckSignUp } from "@/features/auth-gate/complete-stuck-signup.js";
 import { isSatisfiedIncompleteSignUp } from "@/features/auth-gate/is-satisfied-incomplete-signup.js";
 import { SignUpContinueRecovery } from "@/features/auth-gate/signup-continue-recovery.js";
+import { authAppearance } from "@/features/auth-welcome/auth-appearance.js";
+import { AuthWelcome } from "@/features/auth-welcome/auth-welcome.js";
 import { buildSignInHref } from "@/shared/config";
 
 type SignUpContinueGuardProps = {
@@ -63,14 +65,15 @@ export function SignUpContinueGuard({ fallbackRedirectUrl }: SignUpContinueGuard
   }
 
   return (
-    <div className="mx-auto flex min-h-dvh max-w-lg flex-col items-center justify-center gap-4 px-4 pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]">
+    <AuthWelcome signup>
       <div id="clerk-captcha" />
       <SignUp
+        appearance={authAppearance}
         routing="path"
         path="/sign-up"
         signInUrl={buildSignInHref(fallbackRedirectUrl)}
         fallbackRedirectUrl={fallbackRedirectUrl}
       />
-    </div>
+    </AuthWelcome>
   );
 }

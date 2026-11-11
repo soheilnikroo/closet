@@ -15,9 +15,18 @@ import {
   isClerkEnabled,
   POST_AUTH_REDIRECT,
 } from "@/shared/index.js";
+import {
+  OfflineAccountContext,
+  OfflineOnlyContext,
+  readOfflineAccount,
+  useOffline,
+} from "@/shared/lib/offline/offline-context.js";
+import { ClosetSplash } from "@/shared/ui/closet-splash.js";
 
 export function AppProviders({ children }: AppProvidersProps) {
   useMaterialRipple();
+  const offline = useOffline();
+  const offlineAccount = offline ? readOfflineAccount() : null;
   const [ready, setReady] = useState(i18n.isInitialized);
   const publishableKey = getOptionalClerkPublishableKey();
   const clerkEnabled = isClerkEnabled();
@@ -37,7 +46,7 @@ export function AppProviders({ children }: AppProvidersProps) {
   }, []);
 
   if (!ready) {
-    return null;
+    return <ClosetSplash />;
   }
 
   const withI18n = (
@@ -48,7 +57,19 @@ export function AppProviders({ children }: AppProvidersProps) {
 
   if (!clerkEnabled || !publishableKey) {
     return (
-      <AuthTokenContext.Provider value={getNullAuthToken}>{withI18n}</AuthTokenContext.Provider>
+      <OfflineAccountContext.Provider value="mock:dev-user">
+        <AuthTokenContext.Provider value={getNullAuthToken}>{withI18n}</AuthTokenContext.Provider>
+      </OfflineAccountContext.Provider>
+    );
+  }
+
+  if (offline && offlineAccount) {
+    return (
+      <OfflineOnlyContext.Provider value={true}>
+        <OfflineAccountContext.Provider value={offlineAccount}>
+          {withI18n}
+        </OfflineAccountContext.Provider>
+      </OfflineOnlyContext.Provider>
     );
   }
 

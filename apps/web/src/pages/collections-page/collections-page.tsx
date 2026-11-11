@@ -1,4 +1,5 @@
 /* oxlint-disable jsx-a11y/anchor-is-valid -- React Router Link renders an anchor from its to prop. */
+import { collectionsResponseSchema, collectionDetailSchema } from "@closet/shared";
 import type { CollectionInput, OutfitCollection, Recommendation } from "@closet/shared";
 import { useEffect, useState, ViewTransition } from "react";
 import { useTranslation } from "react-i18next";
@@ -8,16 +9,27 @@ import { CollectionForm } from "@/features/collection-picker/collection-form.js"
 import { InteractiveOutfitCard } from "@/features/outfit-card/interactive-outfit-card.js";
 import { useApiClient } from "@/shared/hooks";
 import { BottomSheet, Button } from "@/shared/ui";
+import { PageSkeleton } from "@/shared/ui/skeleton.js";
 import { AppShell } from "@/widgets/app-shell";
 
-const summaries = new Map<string, OutfitCollection>();
+import { CollectionCover } from "./collection-cover.js";
+
 export function CollectionsPage() {
   const { collectionId } = useParams();
   const { t } = useTranslation();
   const api = useApiClient();
-  const [collections, setCollections] = useState<OutfitCollection[] | null>(null);
-  const [selected, setSelected] = useState<OutfitCollection | null>(null);
-  const [outfits, setOutfits] = useState<Recommendation[] | null>(null);
+  const initialDetail = collectionId
+    ? api.cached(`/v1/collections/${collectionId}`, (data) => collectionDetailSchema.parse(data))
+    : undefined;
+  const [collections, setCollections] = useState<OutfitCollection[] | null>(
+    () =>
+      api.cached("/v1/collections", (data) => collectionsResponseSchema.parse(data))?.collections ??
+      null,
+  );
+  const [selected, setSelected] = useState<OutfitCollection | null>(
+    initialDetail?.collection ?? null,
+  );
+  const [outfits, setOutfits] = useState<Recommendation[] | null>(initialDetail?.outfits ?? null);
   const [editing, setEditing] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -28,22 +40,21 @@ export function CollectionsPage() {
     }
     let active = true;
     setError("");
-    setOutfits(null);
-    setSelected(collectionId ? (summaries.get(collectionId) ?? null) : null);
+    const saved = collectionId
+      ? api.cached(`/v1/collections/${collectionId}`, (data) => collectionDetailSchema.parse(data))
+      : undefined;
+    setOutfits(saved?.outfits ?? null);
+    setSelected(saved?.collection ?? null);
     const request = collectionId
       ? api.getCollection(collectionId).then((result) => {
           if (active) {
             setSelected(result.collection);
             setOutfits(result.outfits);
-            summaries.set(result.collection.id, result.collection);
           }
         })
       : api.listCollections().then((result) => {
           if (active) {
             setCollections(result.collections);
-            for (const collection of result.collections) {
-              summaries.set(collection.id, collection);
-            }
           }
         });
     void request.catch(() => {
@@ -55,6 +66,22 @@ export function CollectionsPage() {
       active = false;
     };
   }, [api, collectionId, revision, t]);
+  async function reload() {
+    setError("");
+    try {
+      if (collectionId) {
+        const result = await api.fresh().getCollection(collectionId);
+        setSelected(result.collection);
+        setOutfits(result.outfits);
+      } else {
+        const result = await api.fresh().listCollections();
+        setCollections(result.collections);
+      }
+    } catch (err) {
+      setError(t("common.error"));
+      throw err;
+    }
+  }
   async function save(input: CollectionInput) {
     if (busy) {
       return;
@@ -75,10 +102,9 @@ export function CollectionsPage() {
       setBusy(false);
     }
   }
-  const current =
-    selected?.id === collectionId ? selected : collectionId ? summaries.get(collectionId) : null;
+  const current = selected?.id === collectionId ? selected : null;
   return (
-    <AppShell title={t("collections.title")}>
+    <AppShell onRefresh={busy || editing ? undefined : reload} title={t("collections.title")}>
       <div className="space-y-5">
         {collectionId ? (
           <Link
@@ -88,10 +114,10 @@ export function CollectionsPage() {
             {t("collections.back")}
           </Link>
         ) : (
-          <div className="collection-intro">
-            <p className="md-label-large text-primary">{t("collections.eyebrow")}</p>
-            <h2 className="md-headline-large mt-2">{t("collections.heading")}</h2>
-            <p className="md-body-large mt-3 text-on-surface-variant">{t("collections.intro")}</p>
+          <div className="page-intro">
+            <p className="eyebrow">{t("collections.eyebrow")}</p>
+            <h2 className="mt-2">{t("collections.heading")}</h2>
+            <p className="intro-description">{t("collections.intro")}</p>
           </div>
         )}
         {error ? (
@@ -130,7 +156,12 @@ export function CollectionsPage() {
         </Button>
         {collectionId ? (
           <>
-            {outfits === null && !error ? <p role="status">{t("experience.loading")}</p> : null}
+            {outfits === null && !error ? (
+              <PageSkeleton
+                variant={collectionId ? "outfit" : "grid"}
+                label={t("experience.loading")}
+              />
+            ) : null}
             {outfits?.length === 0 ? (
               <div className="rounded-2xl bg-surface-container-low p-6">
                 <p>{t("collections.empty")}</p>
@@ -145,24 +176,29 @@ export function CollectionsPage() {
           </>
         ) : (
           <>
-            {collections === null && !error ? <p role="status">{t("experience.loading")}</p> : null}
+            {collections === null && !error ? (
+              <PageSkeleton
+                variant={collectionId ? "outfit" : "grid"}
+                label={t("experience.loading")}
+              />
+            ) : null}
             {collections?.length === 0 ? (
               <p className="md-body-large rounded-2xl bg-surface-container-low p-6 text-on-surface-variant">
                 {t("collections.first")}
               </p>
             ) : null}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-4">
               {collections?.map((collection) => (
                 <ViewTransition key={collection.id} name={`collection-${collection.id}`}>
                   <Link
                     to={`/collections/${collection.id}`}
-                    className={`md-state-layer collection-${collection.color} flex min-h-44 flex-col justify-between rounded-[24px] p-5`}
+                    className="md-state-layer collection-row flex items-center gap-5 rounded-[24px] bg-surface-container-lowest p-3"
                   >
-                    <span aria-hidden className="md-headline-large opacity-70">
-                      {collection.name.slice(0, 1)}
-                    </span>
+                    <CollectionCover collection={collection} />
                     <span>
-                      <span className="md-title-medium block break-words">{collection.name}</span>
+                      <span className="block font-display text-lg font-semibold break-words">
+                        {collection.name}
+                      </span>
                       <span className="md-body-medium mt-1 block">
                         {t("collections.count", { count: collection.count })}
                       </span>

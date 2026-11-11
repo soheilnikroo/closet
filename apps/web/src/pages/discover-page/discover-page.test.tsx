@@ -33,6 +33,6 @@ describe("DiscoverPage", () => {
     );
 
     expect(await screen.findByText(/versatile jacket/i)).toBeInTheDocument();
-    expect(screen.getByText(/shopping stays optional/i)).toBeInTheDocument();
+    expect(screen.getByText(/thoughtful additions/i)).toBeInTheDocument();
   });
 });

@@ -19,6 +19,10 @@ vi.mock("@/features/user-auth-controls", () => ({
 
 describe("TodayPage", () => {
   beforeEach(async () => {
+    const response = await mockApi.getMe();
+    vi.mocked(mockApi.getMe).mockResolvedValue({
+      user: { ...response.user, displayName: "Alex Morgan" },
+    });
     await initI18n();
     await i18n.changeLanguage("en-GB");
   });
@@ -35,5 +39,6 @@ describe("TodayPage", () => {
     expect(
       await screen.findByText(/add a few clothing items to get your first outfit/i),
     ).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Hi, Alex" })).toBeInTheDocument();
   });
 });

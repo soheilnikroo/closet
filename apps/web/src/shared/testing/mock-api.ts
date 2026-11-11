@@ -4,6 +4,8 @@ import type { ApiClient } from "@/shared/lib";
 
 export function createMockApiClient(overrides: Partial<ApiClient> = {}): ApiClient {
   const client: ApiClient = {
+    fresh: () => client,
+    cached: () => undefined,
     listCollections: vi.fn().mockResolvedValue({ collections: [] }),
     createCollection: vi.fn(),
     getCollection: vi.fn(),

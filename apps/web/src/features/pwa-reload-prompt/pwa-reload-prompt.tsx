@@ -1,16 +1,44 @@
+import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useRegisterSW } from "virtual:pwa-register/react";
 
+import { useOffline } from "@/shared/lib/offline/offline-context.js";
 import { Button } from "@/shared/ui";
 
 export function PwaReloadPrompt() {
   const { t } = useTranslation();
+  const offline = useOffline();
+  const registration = useRef<ServiceWorkerRegistration | undefined>(undefined);
+  const checked = useRef(0);
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
   } = useRegisterSW({
     immediate: true,
+    onRegisteredSW(_url, worker) {
+      registration.current = worker;
+    },
   });
+
+  useEffect(() => {
+    function checkForUpdate() {
+      if (
+        !navigator.onLine ||
+        document.visibilityState !== "visible" ||
+        Date.now() - checked.current < 3_600_000
+      ) {
+        return;
+      }
+      checked.current = Date.now();
+      void registration.current?.update().catch(() => undefined);
+    }
+    window.addEventListener("online", checkForUpdate);
+    document.addEventListener("visibilitychange", checkForUpdate);
+    return () => {
+      window.removeEventListener("online", checkForUpdate);
+      document.removeEventListener("visibilitychange", checkForUpdate);
+    };
+  }, []);
 
   if (!needRefresh) {
     return null;
@@ -27,6 +55,7 @@ export function PwaReloadPrompt() {
         <Button
           size="sm"
           variant="tonal"
+          disabled={offline}
           onClick={() => {
             void updateServiceWorker(true);
           }}

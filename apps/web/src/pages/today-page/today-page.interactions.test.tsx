@@ -122,6 +122,11 @@ describe("TodayPage interactions", () => {
     expect(await screen.findByText(/tehran/i)).toBeInTheDocument();
     expect(screen.getAllByText(/a clean everyday combination/i).length).toBeGreaterThan(0);
 
+    const details = screen.getAllByText("Details & more options")[0];
+    expect(details).toBeDefined();
+    if (details) {
+      await user.click(details);
+    }
     const primaryLike = screen.getAllByRole("button", { name: /^like$/i })[0];
     await waitFor(() => expect(primaryLike).toBeEnabled());
     if (primaryLike) {

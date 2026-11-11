@@ -5,6 +5,7 @@ import { LocaleSwitcher } from "@/features/locale-switcher";
 import { UserAuthControls } from "@/features/user-auth-controls";
 import type { HomeHeaderProps } from "@/pages/home-page/ui/home-header.types.js";
 import { softSpring } from "@/shared/lib";
+import { ClosetBrand } from "@/shared/ui/closet-brand.js";
 
 export function HomeHeader({ brand, clerkEnabled }: HomeHeaderProps) {
   return (
@@ -16,9 +17,9 @@ export function HomeHeader({ brand, clerkEnabled }: HomeHeaderProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={softSpring}
       >
-        {brand}
+        <ClosetBrand label={brand} />
       </motion.p>
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-3">
         <LocaleSwitcher />
         {clerkEnabled ? (
           <SignedIn>

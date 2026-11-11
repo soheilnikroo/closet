@@ -1,3 +1,4 @@
+import { clothingItemsResponseSchema, clothingCategoriesResponseSchema } from "@closet/shared";
 import type { UpdateClothingItemRequest } from "@closet/shared";
 import type { ClothingCategory, ClothingItem } from "@closet/shared";
 import { useEffect, useState, useTransition } from "react";
@@ -28,10 +29,20 @@ export function useClosetPage() {
   const addSheet = useDisclosure();
   const [searchParams, setSearchParams] = useSearchParams();
   const [presetSlug, setPresetSlug] = useState<string | null>(null);
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(() =>
+    Boolean(api.cached("/v1/wardrobe/items", (data) => clothingItemsResponseSchema.parse(data))),
+  );
   const [query, setQuery] = useState("");
-  const [items, setItems] = useState<ClothingItem[]>([]);
-  const [categories, setCategories] = useState<ClothingCategory[]>([]);
+  const [items, setItems] = useState<ClothingItem[]>(
+    () =>
+      api.cached("/v1/wardrobe/items", (data) => clothingItemsResponseSchema.parse(data))?.items ??
+      [],
+  );
+  const [categories, setCategories] = useState<ClothingCategory[]>(
+    () =>
+      api.cached("/v1/wardrobe/categories", (data) => clothingCategoriesResponseSchema.parse(data))
+        ?.categories ?? [],
+  );
   const [slotFilter, setSlotFilter] = useState<ClosetSlot | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [review, setReview] = useState<{ mediaId: string; garments: ReviewGarment[] } | null>(null);
@@ -105,6 +116,16 @@ export function useClosetPage() {
     next.delete("add");
     setSearchParams(next, { replace: true });
   }, [addSheet, categories.length, searchParams, setSearchParams]);
+
+  async function reload() {
+    setError(null);
+    try {
+      setItems((await api.fresh().listItems()).items);
+    } catch (err) {
+      setError(t("common.error"));
+      throw err;
+    }
+  }
 
   function onUpload(files: FileList | null) {
     const file = files?.[0];
@@ -265,6 +286,7 @@ export function useClosetPage() {
     t,
     query,
     setQuery,
+    reload,
     busy: isPending,
     error,
     slots: CLOSET_SLOTS,

@@ -13,7 +13,7 @@ export function NavigationBar({ items, className }: NavigationBarProps) {
     <nav
       aria-label="Primary"
       className={cn(
-        "fixed inset-x-0 bottom-0 z-30 bg-surface-container",
+        "fixed inset-x-0 bottom-0 z-30 border-t border-outline-variant/50 bg-surface-container-lowest",
         "pb-[env(safe-area-inset-bottom,0px)]",
         className,
       )}
@@ -36,7 +36,7 @@ export function NavigationBar({ items, className }: NavigationBarProps) {
                   <span className="relative flex h-8 w-14 items-center justify-center">
                     {isActive ? (
                       <motion.span
-                        className="absolute inset-x-0 inset-y-0 rounded-full bg-secondary-container"
+                        className="absolute inset-x-0 inset-y-0 rounded-full bg-primary"
                         layoutId={navIndicator.layoutId}
                         transition={navIndicator.transition}
                       />
@@ -44,7 +44,7 @@ export function NavigationBar({ items, className }: NavigationBarProps) {
                     <span
                       className={cn(
                         "relative z-10 size-6 transition-transform duration-100",
-                        isActive && "scale-105",
+                        isActive && "scale-105 text-on-primary",
                       )}
                     >
                       {item.icon}
@@ -53,7 +53,7 @@ export function NavigationBar({ items, className }: NavigationBarProps) {
                   <span
                     className={cn(
                       "relative z-10 md-label-medium max-w-full truncate",
-                      isActive ? "text-secondary" : "text-on-surface-variant",
+                      isActive ? "font-semibold text-primary" : "text-on-surface-variant",
                     )}
                   >
                     {item.label}

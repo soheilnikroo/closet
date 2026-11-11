@@ -7,7 +7,8 @@ import { UserAuthControls } from "@/features/user-auth-controls";
 import { isClerkEnabled } from "@/shared/config";
 import { useApiClient } from "@/shared/hooks";
 import { changeLocale } from "@/shared/i18n";
-import { Button, Card } from "@/shared/ui";
+import { Button } from "@/shared/ui";
+import { PageSkeleton } from "@/shared/ui/skeleton.js";
 import { AppShell } from "@/widgets/app-shell";
 
 const styles: StyleTag[] = [
@@ -90,9 +91,9 @@ export function SettingsPage() {
   return (
     <AppShell title={t("experience.settings")}>
       <div className="space-y-5">
-        <div className="py-3">
-          <h1 className="font-display text-3xl">{t("experience.makeItYours")}</h1>
-          <p className="mt-2 text-sm text-on-surface-variant">{t("experience.settingsHint")}</p>
+        <div className="page-intro">
+          <h2>{t("experience.makeItYours")}</h2>
+          <p className="intro-description">{t("experience.settingsHint")}</p>
         </div>
         <p role="alert" className="text-sm text-error empty:hidden">
           {error}
@@ -101,149 +102,167 @@ export function SettingsPage() {
           <Button onClick={() => setRevision(revision + 1)}>{t("experience.retry")}</Button>
         ) : null}
         {!profile || !style || !preferences ? (
-          <p role="status">{error ? null : t("experience.loading")}</p>
+          error ? null : (
+            <PageSkeleton variant="form" label={t("experience.loading")} />
+          )
         ) : (
           <>
-            <Card className="space-y-5">
-              <label className="block text-sm font-semibold">
-                {t("experience.city")}
-                <select
-                  className={selectClass}
-                  value={profile.cityId ?? ""}
-                  onChange={(e) => setProfile({ ...profile, cityId: e.target.value || null })}
-                >
-                  <option value="">{t("experience.noCity")}</option>
-                  {cities.map((city) => (
-                    <option key={city.id} value={city.id}>
-                      {i18n.language.startsWith("fa") ? city.nameFa : city.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="block text-sm font-semibold">
-                {t("experience.units")}
-                <select
-                  className={selectClass}
-                  value={profile.temperaturePreference}
-                  onChange={(e) =>
-                    setProfile({
-                      ...profile,
-                      temperaturePreference:
-                        e.target.value === "fahrenheit" ? "fahrenheit" : "celsius",
-                    })
-                  }
-                >
-                  <option value="celsius">°C</option>
-                  <option value="fahrenheit">°F</option>
-                </select>
-              </label>
-              <label className="block text-sm font-semibold">
-                {t("experience.language")}
-                <select
-                  className={selectClass}
-                  value={preferences.locale}
-                  onChange={(e) =>
-                    setPreferences({
-                      ...preferences,
-                      locale: preferencesSchema.shape.locale.parse(e.target.value),
-                    })
-                  }
-                >
-                  <option value="en-GB">English</option>
-                  <option value="fa-IR">فارسی</option>
-                </select>
-              </label>
-            </Card>
-            <Card className="space-y-4">
-              <h2 className="font-display text-xl">{t("experience.yourStyle")}</h2>
-              <div className="flex flex-wrap gap-2">
-                {styles.map((value) => (
-                  <Button
-                    key={value}
-                    variant={style.preferredStyles.includes(value) ? "filled" : "outlined"}
-                    size="sm"
-                    aria-pressed={style.preferredStyles.includes(value)}
-                    onClick={() =>
-                      setStyle({
-                        ...style,
-                        preferredStyles: style.preferredStyles.includes(value)
-                          ? style.preferredStyles.filter((s) => s !== value)
-                          : [...style.preferredStyles, value],
+            <details className="settings-group">
+              <summary>
+                {t("refine.everydaySettings")}
+                <span>{t("refine.everydayHint")}</span>
+              </summary>
+              <div className="space-y-5 pt-4">
+                <label className="block text-sm font-semibold">
+                  {t("experience.city")}
+                  <select
+                    className={selectClass}
+                    value={profile.cityId ?? ""}
+                    onChange={(e) => setProfile({ ...profile, cityId: e.target.value || null })}
+                  >
+                    <option value="">{t("experience.noCity")}</option>
+                    {cities.map((city) => (
+                      <option key={city.id} value={city.id}>
+                        {i18n.language.startsWith("fa") ? city.nameFa : city.name}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="block text-sm font-semibold">
+                  {t("experience.units")}
+                  <select
+                    className={selectClass}
+                    value={profile.temperaturePreference}
+                    onChange={(e) =>
+                      setProfile({
+                        ...profile,
+                        temperaturePreference:
+                          e.target.value === "fahrenheit" ? "fahrenheit" : "celsius",
                       })
                     }
                   >
-                    {t(`onboarding.styles.${value}`, value.replaceAll("_", " "))}
-                  </Button>
-                ))}
+                    <option value="celsius">°C</option>
+                    <option value="fahrenheit">°F</option>
+                  </select>
+                </label>
+                <label className="block text-sm font-semibold">
+                  {t("experience.language")}
+                  <select
+                    className={selectClass}
+                    value={preferences.locale}
+                    onChange={(e) =>
+                      setPreferences({
+                        ...preferences,
+                        locale: preferencesSchema.shape.locale.parse(e.target.value),
+                      })
+                    }
+                  >
+                    <option value="en-GB">English</option>
+                    <option value="fa-IR">فارسی</option>
+                  </select>
+                </label>
               </div>
-              <label className="block text-sm font-semibold">
-                {t("experience.fit")}
-                <select
-                  className={selectClass}
-                  value={style.preferredFits[0] ?? "regular"}
-                  onChange={(e) =>
-                    setStyle({
-                      ...style,
-                      preferredFits: [fitPreferenceSchema.parse(e.target.value)],
-                    })
-                  }
-                >
-                  {["regular", "oversized", "fitted"].map((fit) => (
-                    <option key={fit} value={fit}>
-                      {t(`experience.${fit}`)}
-                    </option>
+            </details>
+            <details className="settings-group">
+              <summary>
+                {t("experience.yourStyle")}
+                <span>{t("refine.styleHint")}</span>
+              </summary>
+              <div className="space-y-4 pt-4">
+                <div className="flex flex-wrap gap-2">
+                  {styles.map((value) => (
+                    <Button
+                      key={value}
+                      variant={style.preferredStyles.includes(value) ? "filled" : "outlined"}
+                      size="sm"
+                      aria-pressed={style.preferredStyles.includes(value)}
+                      onClick={() =>
+                        setStyle({
+                          ...style,
+                          preferredStyles: style.preferredStyles.includes(value)
+                            ? style.preferredStyles.filter((s) => s !== value)
+                            : [...style.preferredStyles, value],
+                        })
+                      }
+                    >
+                      {t(`onboarding.styles.${value}`, value.replaceAll("_", " "))}
+                    </Button>
                   ))}
-                </select>
-              </label>
-              <label className="flex min-h-12 items-center gap-3 text-sm">
-                <input
-                  type="checkbox"
-                  checked={style.comfortPriority ?? false}
-                  onChange={(e) => setStyle({ ...style, comfortPriority: e.target.checked })}
-                  className="size-5"
-                />
-                {t("experience.comfort")}
-              </label>
-            </Card>
-            <Card className="space-y-4">
-              <h2 className="font-display text-xl">{t("experience.previewProfile")}</h2>
-              <p className="text-sm text-on-surface-variant">{t("experience.bodyHint")}</p>
-              <label className="block text-sm font-semibold">
-                {t("experience.height")}
-                <select
-                  className={selectClass}
-                  value={preferences.heightBand}
-                  onChange={(e) =>
-                    setPreferences({
-                      ...preferences,
-                      heightBand: preferencesSchema.shape.heightBand.parse(e.target.value),
-                    })
-                  }
-                >
-                  {["unspecified", "petite", "average", "tall"].map((height) => (
-                    <option key={height} value={height}>
-                      {t(`experience.${height}`)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label className="block text-sm font-semibold">
-                {t("experience.silhouette")}
-                <select
-                  className={selectClass}
-                  value={preferences.silhouette}
-                  onChange={(e) =>
-                    setPreferences({
-                      ...preferences,
-                      silhouette: preferencesSchema.shape.silhouette.parse(e.target.value),
-                    })
-                  }
-                >
-                  <option value="straight">{t("experience.straight")}</option>
-                  <option value="relaxed">{t("experience.relaxed")}</option>
-                </select>
-              </label>
-            </Card>
+                </div>
+                <label className="block text-sm font-semibold">
+                  {t("experience.fit")}
+                  <select
+                    className={selectClass}
+                    value={style.preferredFits[0] ?? "regular"}
+                    onChange={(e) =>
+                      setStyle({
+                        ...style,
+                        preferredFits: [fitPreferenceSchema.parse(e.target.value)],
+                      })
+                    }
+                  >
+                    {["regular", "oversized", "fitted"].map((fit) => (
+                      <option key={fit} value={fit}>
+                        {t(`experience.${fit}`)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex min-h-12 items-center gap-3 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={style.comfortPriority ?? false}
+                    onChange={(e) => setStyle({ ...style, comfortPriority: e.target.checked })}
+                    className="size-5"
+                  />
+                  {t("experience.comfort")}
+                </label>
+              </div>
+            </details>
+            <details className="settings-group">
+              <summary>
+                {t("experience.previewProfile")}
+                <span>{t("refine.optional")}</span>
+              </summary>
+              <div className="space-y-4 pt-4">
+                <p className="text-sm text-on-surface-variant">{t("experience.bodyHint")}</p>
+                <label className="block text-sm font-semibold">
+                  {t("experience.height")}
+                  <select
+                    className={selectClass}
+                    value={preferences.heightBand}
+                    onChange={(e) =>
+                      setPreferences({
+                        ...preferences,
+                        heightBand: preferencesSchema.shape.heightBand.parse(e.target.value),
+                      })
+                    }
+                  >
+                    {["unspecified", "petite", "average", "tall"].map((height) => (
+                      <option key={height} value={height}>
+                        {t(`experience.${height}`)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="block text-sm font-semibold">
+                  {t("experience.silhouette")}
+                  <select
+                    className={selectClass}
+                    value={preferences.silhouette}
+                    onChange={(e) =>
+                      setPreferences({
+                        ...preferences,
+                        silhouette: preferencesSchema.shape.silhouette.parse(e.target.value),
+                      })
+                    }
+                  >
+                    <option value="straight">{t("experience.straight")}</option>
+                    <option value="relaxed">{t("experience.relaxed")}</option>
+                  </select>
+                </label>
+              </div>
+            </details>
             <Button fullWidth size="lg" disabled={pending} onClick={save}>
               {pending ? t("experience.saving") : t("experience.saveSettings")}
             </Button>
@@ -253,29 +272,34 @@ export function SettingsPage() {
           {message ? t(`experience.${message}`) : null}
         </p>
         {!isClerkEnabled() ? (
-          <Card className="space-y-3">
-            <h2 className="font-display text-xl">{t("experience.demo")}</h2>
-            <p className="text-sm text-on-surface-variant">{t("experience.demoHint")}</p>
-            <Button
-              variant="tonal"
-              fullWidth
-              disabled={pending}
-              onClick={() =>
-                startTransition(async () => {
-                  setError("");
-                  try {
-                    await api.seedDemo();
-                    setMessage("demoReady");
-                    setRevision(revision + 1);
-                  } catch (err) {
-                    setError(err instanceof Error ? err.message : t("common.error"));
-                  }
-                })
-              }
-            >
-              {t("experience.demoButton")}
-            </Button>
-          </Card>
+          <details className="settings-group">
+            <summary>
+              {t("experience.demo")}
+              <span>{t("refine.optional")}</span>
+            </summary>
+            <div className="space-y-3 pt-4">
+              <p className="text-sm text-on-surface-variant">{t("experience.demoHint")}</p>
+              <Button
+                variant="tonal"
+                fullWidth
+                disabled={pending}
+                onClick={() =>
+                  startTransition(async () => {
+                    setError("");
+                    try {
+                      await api.seedDemo();
+                      setMessage("demoReady");
+                      setRevision(revision + 1);
+                    } catch (err) {
+                      setError(err instanceof Error ? err.message : t("common.error"));
+                    }
+                  })
+                }
+              >
+                {t("experience.demoButton")}
+              </Button>
+            </div>
+          </details>
         ) : (
           <UserAuthControls />
         )}

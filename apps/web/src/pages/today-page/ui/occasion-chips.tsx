@@ -13,7 +13,7 @@ export function OccasionChips({
       {occasions.map((occasion) => (
         <Chip
           key={occasion.id}
-          selected={selectedOccasion === occasion.slug}
+          selected={(selectedOccasion ?? "everyday") === occasion.slug}
           onClick={() => onSelect(occasion.slug)}
         >
           {localeLabel(language, occasion.name, occasion.nameFa)}

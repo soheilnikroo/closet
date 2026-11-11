@@ -7,14 +7,26 @@ import { TodayMessageCard } from "@/pages/today-page/ui/today-message-card.js";
 import { TodayWeatherCard } from "@/pages/today-page/ui/today-weather-card.js";
 import { fadeUp, Match } from "@/shared/lib";
 import { Button, Card, CelebrationBurst, EmptyState } from "@/shared/ui";
+import { PageSkeleton } from "@/shared/ui/skeleton.js";
 import { AppShell } from "@/widgets/app-shell";
 
 export function TodayPage() {
   const page = useTodayPage();
 
   return (
-    <AppShell title={page.t("today.title")}>
+    <AppShell onRefresh={page.busy ? undefined : page.reload} title={page.t("today.title")}>
       <motion.div className="space-y-4" {...fadeUp}>
+        <section className="page-intro today-intro">
+          <h2 className="greeting-line">
+            {page.t(page.displayName ? "greeting.named" : "greeting.hello", {
+              name: page.displayName,
+            })}{" "}
+            <span className="friendly-wave" aria-hidden="true">
+              👋
+            </span>
+          </h2>
+          <p className="daily-title">{page.t("greeting.subtitle")}</p>
+        </section>
         <div className="empty:hidden">
           {page.weather ? <TodayWeatherCard weather={page.weather} /> : null}
         </div>
@@ -31,13 +43,7 @@ export function TodayPage() {
         <Match
           value={page.viewMode}
           cases={{
-            loading: (
-              <div role="status" className="space-y-4">
-                <span className="sr-only">{page.t("experience.loading")}</span>
-                <div className="h-24 animate-pulse rounded-2xl bg-surface-container motion-reduce:animate-none" />
-                <div className="h-96 animate-pulse rounded-2xl bg-surface-container motion-reduce:animate-none" />
-              </div>
-            ),
+            loading: <PageSkeleton variant="outfit" label={page.t("experience.loading")} />,
             message: page.message ? (
               <TodayMessageCard
                 message={page.message}

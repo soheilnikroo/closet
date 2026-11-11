@@ -19,8 +19,7 @@ export async function rebuildPwaServiceWorker() {
   const indexPath = join(clientDir, "index.html");
 
   if (!existsSync(indexPath)) {
-    console.warn("[pwa] skip SW rebuild: index.html not found");
-    return;
+    throw new Error("[pwa] index.html is missing; refusing to ship an incomplete offline shell");
   }
 
   // Drop SW artifacts from the earlier (pre-index.html) vite-plugin-pwa pass.
@@ -40,15 +39,17 @@ export async function rebuildPwaServiceWorker() {
     cleanupOutdatedCaches: true,
     // Matches vite-plugin-pwa registerType: "prompt"
     skipWaiting: false,
-    clientsClaim: false,
+    clientsClaim: true,
+    // Never cache API JSON globally: private data lives in account-scoped snapshots.
+    maximumFileSizeToCacheInBytes: 2 * 1024 * 1024,
   });
 
   for (const warning of warnings) {
-    console.warn(`[pwa] ${warning}`);
+    throw new Error(`[pwa] incomplete precache: ${warning}`);
   }
 
-  console.log(
-    `[pwa] rebuilt service worker — ${String(count)} precached files (${(size / 1024).toFixed(2)} KiB)`,
+  process.stdout.write(
+    `[pwa] rebuilt service worker — ${String(count)} precached files (${(size / 1024).toFixed(2)} KiB)\n`,
   );
 }
 

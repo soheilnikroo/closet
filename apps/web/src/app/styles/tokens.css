@@ -1,8 +1,8 @@
 :root {
   /* —— Color (Material 3 botanical green — light scheme) —— */
-  --md-sys-color-primary: #235b42;
+  --md-sys-color-primary: #20543b;
   --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: #c9ebd5;
+  --md-sys-color-primary-container: #dcebd6;
   --md-sys-color-on-primary-container: #082c1b;
 
   --md-sys-color-secondary: #536454;
@@ -20,10 +20,10 @@
   --md-sys-color-error-container: #ffdad6;
   --md-sys-color-on-error-container: #410002;
 
-  --md-sys-color-background: #f9fbf6;
-  --md-sys-color-on-background: #19221c;
-  --md-sys-color-surface: #f9fbf6;
-  --md-sys-color-on-surface: #19221c;
+  --md-sys-color-background: #fafbf7;
+  --md-sys-color-on-background: #172d22;
+  --md-sys-color-surface: #fafbf7;
+  --md-sys-color-on-surface: #172d22;
   --md-sys-color-surface-variant: #dfe6dc;
   --md-sys-color-on-surface-variant: #465248;
   --md-sys-color-surface-container-lowest: #ffffff;
@@ -32,8 +32,8 @@
   --md-sys-color-surface-container-high: #e5ebdf;
   --md-sys-color-surface-container-highest: #dfe6d9;
   --md-sys-color-surface-dim: #d7dfd2;
-  --md-sys-color-surface-bright: #f9fbf6;
-  --md-sys-color-surface-tint: #235b42;
+  --md-sys-color-surface-bright: #fafbf7;
+  --md-sys-color-surface-tint: #20543b;
 
   --md-sys-color-outline: #737e72;
   --md-sys-color-outline-variant: #c3cdbf;

@@ -1,16 +1,29 @@
 {
-  "id": "/",
   "name": "Closet",
   "short_name": "Closet",
   "description": "Your personal AI stylist and digital closet",
-  "theme_color": "#f7fbf2",
-  "background_color": "#f7fbf2",
+  "start_url": "/today",
   "display": "standalone",
-  "orientation": "portrait-primary",
-  "start_url": "/",
-  "scope": "/",
+  "background_color": "#fafbf7",
+  "theme_color": "#fafbf7",
   "lang": "en-GB",
-  "categories": ["lifestyle", "utilities"],
+  "scope": "/",
+  "id": "/",
+  "orientation": "portrait-primary",
+  "shortcuts": [
+    {
+      "name": "My closet",
+      "url": "/closet"
+    },
+    {
+      "name": "Saved outfits",
+      "url": "/collections"
+    }
+  ],
+  "categories": [
+    "lifestyle",
+    "utilities"
+  ],
   "icons": [
     {
       "src": "pwa-64x64.png",

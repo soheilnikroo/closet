@@ -1,3 +1,4 @@
+import { todayResponseSchema, occasionsResponseSchema, meResponseSchema } from "@closet/shared";
 import type { Occasion, Recommendation, TodayResponse } from "@closet/shared";
 import { useEffect, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
@@ -9,8 +10,21 @@ import type { CelebrationKind } from "@/shared/ui";
 export function useTodayPage() {
   const { t, i18n } = useTranslation();
   const api = useApiClient();
-  const [data, setData] = useState<TodayResponse | null>(null);
-  const [occasions, setOccasions] = useState<Occasion[]>([]);
+  const [displayName, setDisplayName] = useState(() => {
+    const name =
+      api
+        .cached("/v1/users/me", (payload) => meResponseSchema.parse(payload))
+        ?.user.displayName?.trim() ?? "";
+    return name.toLowerCase() === "my closet" ? "" : (name.split(/\s+/)[0] ?? "");
+  });
+  const [data, setData] = useState<TodayResponse | null>(
+    () => api.cached("/v1/styling/today", (payload) => todayResponseSchema.parse(payload)) ?? null,
+  );
+  const [occasions, setOccasions] = useState<Occasion[]>(
+    () =>
+      api.cached("/v1/occasions", (payload) => occasionsResponseSchema.parse(payload))?.occasions ??
+      [],
+  );
   const [error, setError] = useState<string | null>(null);
   const [selectedOccasion, setSelectedOccasion] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -41,6 +55,37 @@ export function useTodayPage() {
       cancelled = true;
     };
   }, [api, t]);
+
+  useEffect(() => {
+    let active = true;
+    void api
+      .getMe()
+      .then(({ user }) => {
+        if (active) {
+          const name = user.displayName?.trim() ?? "";
+          setDisplayName(name.toLowerCase() === "my closet" ? "" : (name.split(/\s+/)[0] ?? ""));
+        }
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, [api]);
+  async function reload() {
+    setError(null);
+    try {
+      const [today, occasionList] = await Promise.all([
+        api.fresh().getToday(),
+        api.fresh().listOccasions(),
+      ]);
+      setData(today);
+      setOccasions(occasionList.occasions);
+      setSelectedOccasion(null);
+    } catch (err) {
+      setError(t("common.error"));
+      throw err;
+    }
+  }
 
   function celebrate(kind: CelebrationKind, label: string) {
     setCelebration({ open: true, kind, label });
@@ -112,6 +157,8 @@ export function useTodayPage() {
   return {
     t,
     i18n,
+    displayName,
+    reload,
     busy: isPending,
     error,
     weather,

@@ -1,4 +1,5 @@
 import { cn } from "@/shared/lib";
+import { ClosetBrand } from "@/shared/ui/closet-brand.js";
 import type { TopAppBarProps } from "@/shared/ui/top-app-bar/top-app-bar.types.js";
 
 /**
@@ -8,19 +9,17 @@ export function TopAppBar({ title, leading, trailing, className }: TopAppBarProp
   return (
     <header
       className={cn(
-        "sticky top-0 z-20 flex h-16 shrink-0 items-center gap-1 bg-surface px-1",
+        "sticky top-0 z-20 flex h-16 shrink-0 items-center gap-3 bg-surface px-5",
         "pt-[env(safe-area-inset-top,0px)]",
         className,
       )}
       style={{ height: "calc(var(--md-comp-top-app-bar-height) + env(safe-area-inset-top, 0px))" }}
     >
-      {leading ? (
-        <div className="flex w-12 shrink-0 justify-start ps-1">{leading}</div>
-      ) : (
-        <span className="w-2 shrink-0" />
-      )}
-      <h1 className="md-title-large flex-1 truncate text-on-surface">{title}</h1>
-      <div className="flex w-auto shrink-0 items-center justify-end gap-0.5 pe-1">{trailing}</div>
+      {leading ? <div className="flex w-12 shrink-0 justify-start ps-1">{leading}</div> : null}
+      <h1 className="flex-1 truncate font-display text-xl font-semibold tracking-tight text-primary">
+        <ClosetBrand label={title} />
+      </h1>
+      <div className="flex w-auto shrink-0 items-center justify-end gap-3">{trailing}</div>
     </header>
   );
 }

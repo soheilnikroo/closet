@@ -6,14 +6,11 @@ import { GarmentArt } from "@/shared/ui/garment-art.js";
 
 export function OutfitItemsGrid({ items }: OutfitItemsGridProps) {
   return (
-    <motion.ul
-      className={`grid ${items.length === 4 ? "grid-cols-2" : "grid-cols-3"} gap-2`}
-      {...staggerContainer}
-    >
+    <motion.ul className="outfit-flatlay grid grid-cols-2 gap-3" {...staggerContainer}>
       {items.map((entry) => (
         <motion.li
           key={`${entry.clothingItemId}-${entry.role}`}
-          className="rounded-lg bg-surface-container px-2 py-2"
+          className="outfit-piece min-w-0"
           variants={staggerItem.variants}
           whileHover={{ y: -1 }}
           transition={softSpring}
@@ -22,9 +19,9 @@ export function OutfitItemsGrid({ items }: OutfitItemsGridProps) {
             slot={entry.role}
             color={entry.item?.primaryColor}
             imageUrl={entry.item?.imageUrl}
-            className="max-h-16"
+            className="garment-drawing max-h-28"
           />
-          <p className="mt-0.5 line-clamp-2 text-xs font-semibold text-on-surface">
+          <p className="mt-1 line-clamp-1 text-center text-[11px] leading-4 text-on-surface-variant">
             {entry.item?.name ?? entry.clothingItemId.slice(0, 8)}
           </p>
         </motion.li>
